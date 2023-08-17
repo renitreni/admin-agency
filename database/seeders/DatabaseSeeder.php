@@ -23,9 +23,13 @@ class DatabaseSeeder extends Seeder
                 'name' => 'admin',
                 'email' => 'admin@example.com',
             ]);
-            Worker::factory(10)->create();
-            Concern::factory(10)->has(ConcernReport::factory(5))->create();
-            Agency::factory(10)->create();
+
+            $agencies = Agency::factory(10)->create();
+
+            foreach ($agencies as $agency) {
+                Worker::factory(10)->create(['agency_id' => $agency->id]);
+                Concern::factory(10)->has(ConcernReport::factory(5))->create(['agency_id' => $agency->id]);
+            }
         }
     }
 }
