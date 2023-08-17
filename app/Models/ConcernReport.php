@@ -21,4 +21,8 @@ class ConcernReport extends Model
     {
         return $this->belongsTo(ConcernReport::class);
     }
+    public function worker(): BelongsTo
+    {
+        return $this->belongsTo(Worker::class);
+    }
 }
