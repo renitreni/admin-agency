@@ -5,6 +5,9 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Concern;
+use App\Models\ConcernReport;
+use App\Models\User;
+use App\Models\Worker;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,16 +17,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
-        if(app()->environment(['local']))
-        {
-            Concern::factory(10)->create();
+        if (app()->environment(['local'])) {
+            User::factory()->create([
+                'name' => 'admin',
+                'email' => 'admin@example.com',
+            ]);
+            Worker::factory(10)->create();
+            Concern::factory(10)->has(ConcernReport::factory(5))->create();
         }
     }
 }
