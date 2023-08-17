@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Agency;
 use App\Models\Concern;
 use App\Models\ConcernReport;
 use App\Models\User;
@@ -24,6 +25,7 @@ class DatabaseSeeder extends Seeder
             ]);
             Worker::factory(10)->create();
             Concern::factory(10)->has(ConcernReport::factory(5))->create();
+            Agency::factory(10)->create();
         }
     }
 }
