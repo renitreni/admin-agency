@@ -40,7 +40,7 @@ class ConcernResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('title')->sortable(),
+                TextColumn::make('title')->sortable()->searchable(),
                 TextColumn::make('status')->sortable(),
                 TextColumn::make('created_at')->sortable(),
             ])

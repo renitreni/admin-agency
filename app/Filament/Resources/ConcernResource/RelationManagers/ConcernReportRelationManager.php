@@ -29,7 +29,7 @@ class ConcernReportRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('worker_id')
             ->columns([
-                Tables\Columns\TextColumn::make('worker.fullname'),
+                Tables\Columns\TextColumn::make('worker.fullname')->searchable(),
                 Tables\Columns\TextColumn::make('status'),
             ])
             ->filters([
