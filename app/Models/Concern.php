@@ -15,11 +15,11 @@ class Concern extends Model
     protected $fillable = [
         'title',
         'description',
-        'status'
+        'status',
     ];
 
     protected $casts = [
-        'status' => ConcernStatusEnum::class
+        'status' => ConcernStatusEnum::class,
     ];
 
     public function concernReport(): HasMany

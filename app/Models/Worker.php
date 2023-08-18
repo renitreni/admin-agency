@@ -17,6 +17,6 @@ class Worker extends Model
 
     public function fullname(): Attribute
     {
-        return Attribute::make(get: fn ($v, $attr) => $attr['first_name'] . ' ' . $attr['last_name']);
+        return Attribute::make(get: fn ($v, $attr) => $attr['first_name'].' '.$attr['last_name']);
     }
 }

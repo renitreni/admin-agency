@@ -4,15 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Enums\ConcernStatusEnum;
 use App\Filament\Resources\ConcernResource\Pages;
-use App\Filament\Resources\ConcernResource\RelationManagers;
 use App\Filament\Resources\ConcernResource\RelationManagers\ConcernReportRelationManager;
 use App\Models\Agency;
 use App\Models\Concern;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Filament\Forms;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -20,10 +17,7 @@ use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\Blade;
 
 class ConcernResource extends Resource
 {
@@ -37,9 +31,9 @@ class ConcernResource extends Resource
             ->schema([
                 TextInput::make('title')->columnSpanFull(),
                 Select::make('agency.name')
-                ->searchable()
-                ->options(Agency::all()->pluck('name', 'id'))
-                ->relationship('agency', 'name'),
+                    ->searchable()
+                    ->options(Agency::all()->pluck('name', 'id'))
+                    ->relationship('agency', 'name'),
                 Select::make('status')->options(ConcernStatusEnum::class)->required(),
                 RichEditor::make('description')->required()->columnSpanFull(),
             ]);
@@ -63,7 +57,7 @@ class ConcernResource extends Resource
                     ->label('PDF')
                     ->icon('heroicon-o-arrow-down-tray')
                     ->action(function (Model $record) {
-                        
+
                         $record->load('concernReport');
 
                         return response()->streamDownload(function () use ($record) {
@@ -86,7 +80,7 @@ class ConcernResource extends Resource
     public static function getRelations(): array
     {
         return [
-            ConcernReportRelationManager::class
+            ConcernReportRelationManager::class,
         ];
     }
 

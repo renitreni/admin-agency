@@ -20,7 +20,7 @@ class ConcernFactory extends Factory
         return [
             'title' => $this->faker->sentence(),
             'description' => $this->faker->paragraph(),
-            'status' => $this->faker->randomElement(collect(ConcernStatusEnum::cases())->pluck('value'))
+            'status' => $this->faker->randomElement(collect(ConcernStatusEnum::cases())->pluck('value')),
         ];
     }
 }

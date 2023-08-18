@@ -3,18 +3,15 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\WorkerResource\Pages;
-use App\Filament\Resources\WorkerResource\RelationManagers;
 use App\Models\Worker;
-use Filament\Forms;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class WorkerResource extends Resource
 {
@@ -26,11 +23,11 @@ class WorkerResource extends Resource
     {
         return $form
             ->schema([
-                Card::make()
+                Section::make()
                     ->schema([
                         TextInput::make('first_name'),
-                        TextInput::make('last_name')
-                    ])
+                        TextInput::make('last_name'),
+                    ]),
             ]);
     }
 
@@ -41,7 +38,7 @@ class WorkerResource extends Resource
                 TextColumn::make('id')->sortable()->searchable(),
                 TextColumn::make('first_name')->sortable()->searchable(),
                 TextColumn::make('last_name')->sortable()->searchable(),
-                TextColumn::make('created_at')->dateTime()
+                TextColumn::make('created_at')->dateTime(),
             ])
             ->filters([
                 //

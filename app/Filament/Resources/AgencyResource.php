@@ -3,18 +3,15 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\AgencyResource\Pages;
-use App\Filament\Resources\AgencyResource\RelationManagers;
 use App\Models\Agency;
-use Filament\Forms;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AgencyResource extends Resource
 {
@@ -26,10 +23,10 @@ class AgencyResource extends Resource
     {
         return $form
             ->schema([
-                Card::make()
+                Section::make()
                     ->schema([
-                        TextInput::make('name')
-                    ])
+                        TextInput::make('name'),
+                    ]),
             ]);
     }
 
@@ -38,7 +35,7 @@ class AgencyResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')->sortable()->searchable(),
-                TextColumn::make('name')->sortable()->searchable()
+                TextColumn::make('name')->sortable()->searchable(),
             ])
             ->filters([
                 //

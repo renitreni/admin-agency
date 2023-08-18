@@ -21,7 +21,7 @@ class ConcernReportFactory extends Factory
         return [
             'worker_id' => Worker::inRandomOrder()->first()->id,
             'feedback' => $this->faker->paragraph(),
-            'status' => $this->faker->randomElement(collect(ConcernStatusEnum::cases())->pluck('value'))
+            'status' => $this->faker->randomElement(collect(ConcernStatusEnum::cases())->pluck('value')),
         ];
     }
 }
