@@ -3,9 +3,11 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\WorkerResource\Pages;
+use App\Models\Agency;
 use App\Models\Worker;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -29,6 +31,10 @@ class WorkerResource extends Resource
                     ->schema([
                         TextInput::make('first_name'),
                         TextInput::make('last_name'),
+                        Select::make('agency.name')
+                            ->searchable()
+                            ->options(Agency::all()->pluck('name', 'id'))
+                            ->relationship('agency', 'name'),
                     ]),
             ]);
     }
@@ -40,6 +46,7 @@ class WorkerResource extends Resource
                 TextColumn::make('id')->sortable()->searchable(),
                 TextColumn::make('first_name')->sortable()->searchable(),
                 TextColumn::make('last_name')->sortable()->searchable(),
+                TextColumn::make('agency.name')->sortable()->searchable(),
                 TextColumn::make('created_at')->dateTime(),
             ])
             ->filters([
