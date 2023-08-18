@@ -26,4 +26,9 @@ class Concern extends Model
     {
         return $this->hasMany(ConcernReport::class);
     }
+
+    public function agency(): BelongsTo
+    {
+        return $this->BelongsTo(Agency::class);
+    }
 }

@@ -6,7 +6,9 @@ use App\Enums\ConcernStatusEnum;
 use App\Filament\Resources\ConcernResource\Pages;
 use App\Filament\Resources\ConcernResource\RelationManagers;
 use App\Filament\Resources\ConcernResource\RelationManagers\ConcernReportRelationManager;
+use App\Models\Agency;
 use App\Models\Concern;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -15,10 +17,13 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Blade;
 
 class ConcernResource extends Resource
 {
@@ -30,7 +35,11 @@ class ConcernResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('title')->required(),
+                TextInput::make('title')->columnSpanFull(),
+                Select::make('agency.name')
+                ->searchable()
+                ->options(Agency::all()->pluck('name', 'id'))
+                ->relationship('agency', 'name'),
                 Select::make('status')->options(ConcernStatusEnum::class)->required(),
                 RichEditor::make('description')->required()->columnSpanFull(),
             ]);
@@ -41,6 +50,7 @@ class ConcernResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('title')->sortable()->searchable(),
+                TextColumn::make('agency.name')->sortable()->searchable(),
                 TextColumn::make('status')->sortable(),
                 TextColumn::make('created_at')->sortable(),
             ])
@@ -49,6 +59,19 @@ class ConcernResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Action::make('pdf')
+                    ->label('PDF')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->action(function (Model $record) {
+                        
+                        $record->load('concernReport');
+
+                        return response()->streamDownload(function () use ($record) {
+                            echo Pdf::loadHtml(
+                                view('downloadables.concern', ['record' => $record])
+                            )->stream();
+                        }, "{$record->created_at->format('F j, Y')} Concern of Agency {$record->agency->name} .pdf");
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
