@@ -25,6 +25,8 @@ class ConcernResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-scale';
 
+    protected static ?string $navigationGroup = 'Reporting';
+
     public static function form(Form $form): Form
     {
         return $form
