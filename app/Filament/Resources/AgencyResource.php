@@ -4,7 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\AgencyResource\Pages;
 use App\Models\Agency;
-use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -20,10 +19,6 @@ class AgencyResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
     protected static ?string $navigationGroup = 'Master Data';
-
-
-
-
 
     public static function form(Form $form): Form
     {

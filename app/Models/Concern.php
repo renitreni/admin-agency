@@ -16,6 +16,7 @@ class Concern extends Model
         'title',
         'description',
         'status',
+        'agency_id',
     ];
 
     protected $casts = [

@@ -14,13 +14,13 @@ class Worker extends Model
     protected $fillable = [
         'agency_id',
         'first_name',
-        'last_name'
+        'last_name',
 
     ];
 
     public function fullname(): Attribute
     {
-        return Attribute::make(get: fn ($v, $attr) => $attr['first_name'] . ' ' . $attr['last_name']);
+        return Attribute::make(get: fn ($v, $attr) => $attr['first_name'].' '.$attr['last_name']);
     }
 
     public function agency(): BelongsTo

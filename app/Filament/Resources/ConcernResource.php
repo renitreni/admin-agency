@@ -32,7 +32,7 @@ class ConcernResource extends Resource
         return $form
             ->schema([
                 TextInput::make('title')->columnSpanFull(),
-                Select::make('agency.name')
+                Select::make('agency_id')
                     ->searchable()
                     ->options(Agency::all()->pluck('name', 'id'))
                     ->relationship('agency', 'name'),

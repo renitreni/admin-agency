@@ -5,7 +5,6 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\WorkerResource\Pages;
 use App\Models\Agency;
 use App\Models\Worker;
-use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
