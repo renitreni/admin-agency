@@ -30,10 +30,10 @@ class WorkerResource extends Resource
                     ->schema([
                         TextInput::make('first_name'),
                         TextInput::make('last_name'),
-                        Select::make('agency.name')
-                            ->searchable()
-                            ->options(Agency::all()->pluck('name', 'id'))
-                            ->relationship('agency', 'name'),
+                        Select::make('agency_id')
+                            ->options(function () {
+                                return Agency::all()->pluck('name', 'id');
+                            })
                     ]),
             ]);
     }
