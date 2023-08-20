@@ -1,4 +1,7 @@
 <html>
+<div class="text-center">
+    <img style="width: 250px; height: 150px;" src="{{ asset('images/1010-logo.jpg')}}" alt="">
+</div>
 <hr>
 <strong>{{ $record->title }}</strong>
 <br>

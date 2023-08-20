@@ -33,7 +33,7 @@ class ConcernResource extends Resource
             ->schema([
                 TextInput::make('title')->columnSpanFull(),
                 Select::make('agency_id')
-                    ->searchable()
+
                     ->options(Agency::all()->pluck('name', 'id'))
                     ->relationship('agency', 'name'),
                 Select::make('status')->options(ConcernStatusEnum::class)->required(),
