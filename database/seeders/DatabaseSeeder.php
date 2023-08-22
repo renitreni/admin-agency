@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Agency;
+use App\Models\Applicant;
 use App\Models\Concern;
 use App\Models\ConcernReport;
 use App\Models\User;
@@ -25,6 +26,8 @@ class DatabaseSeeder extends Seeder
             ]);
 
             $agencies = Agency::factory(10)->create();
+
+            Applicant::factory(10)->create();
 
             foreach ($agencies as $agency) {
                 Worker::factory(10)->create(['agency_id' => $agency->id]);
