@@ -24,7 +24,9 @@ class ApplicantResource extends Resource
 {
     protected static ?string $model = Applicant::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    protected static ?string $navigationGroup = 'Master Data';
 
     public static function form(Form $form): Form
     {
