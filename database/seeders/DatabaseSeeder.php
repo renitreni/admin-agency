@@ -2,14 +2,12 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-
 use App\Models\Agency;
-use App\Models\Applicant;
 use App\Models\Concern;
 use App\Models\ConcernReport;
 use App\Models\User;
 use App\Models\Worker;
+use App\Models\WorkerInformation;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -20,14 +18,12 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         if (app()->environment(['local'])) {
-            User::factory()->create([
+            $agencies = Agency::factory(10)->has(Worker::factory(10)->has(WorkerInformation::factory()))->create();
+
+            User::factory()->has(Agency::factory())->create([
                 'name' => 'admin',
                 'email' => 'admin@example.com',
             ]);
-
-            $agencies = Agency::factory(10)->create();
-
-            Applicant::factory(10)->create();
 
             foreach ($agencies as $agency) {
                 Worker::factory(10)->create(['agency_id' => $agency->id]);

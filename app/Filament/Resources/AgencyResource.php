@@ -35,7 +35,7 @@ class AgencyResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')->sortable()->searchable(),
+                TextColumn::make('created_at')->sortable()->searchable(),
                 TextColumn::make('name')->sortable()->searchable(),
             ])
             ->filters([

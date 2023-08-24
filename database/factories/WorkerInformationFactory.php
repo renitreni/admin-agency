@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Applicant>
  */
-class ApplicantFactory extends Factory
+class WorkerInformationFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,8 +17,6 @@ class ApplicantFactory extends Factory
     public function definition(): array
     {
         return [
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
             'contact_number' => $this->faker->phoneNumber,
             'date_hired' => $this->faker->date,
             'address' => $this->faker->address,
@@ -44,8 +42,6 @@ class ApplicantFactory extends Factory
             'height' => $this->faker->randomFloat(2, 150, 200),
             'weight' => $this->faker->randomFloat(2, 50, 150),
             'objectives' => $this->faker->paragraph,
-            'pic_face' => 'default_face.jpg',
-            'pic_body' => 'default_body.jpg',
         ];
     }
 }

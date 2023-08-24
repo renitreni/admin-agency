@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Applicant extends Model
+class WorkerInformation extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'worker_id',
         'first_name',
         'last_name',
         'contact_number',
@@ -37,7 +40,10 @@ class Applicant extends Model
         'height',
         'weight',
         'objectives',
-        'pic_face',
-        'pic_body'
     ];
+
+    public function worker(): BelongsTo
+    {
+        return $this->belongsTo(Worker::class);
+    }
 }

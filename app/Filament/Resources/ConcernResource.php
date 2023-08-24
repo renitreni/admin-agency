@@ -25,15 +25,12 @@ class ConcernResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-scale';
 
-    protected static ?string $navigationGroup = 'Reporting';
-
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('title')->columnSpanFull(),
                 Select::make('agency_id')
-
                     ->options(Agency::all()->pluck('name', 'id'))
                     ->relationship('agency', 'name'),
                 Select::make('status')->options(ConcernStatusEnum::class)->required(),
