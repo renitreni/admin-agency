@@ -51,7 +51,6 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Action::make('New Agency'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -76,7 +75,6 @@ class UserResource extends Resource
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
-            'register' => Pages\RegisterAgency::route('/register/agency'),
         ];
     }
 }
