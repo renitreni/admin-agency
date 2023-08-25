@@ -20,6 +20,8 @@ class AgencyResource extends Resource
 
     protected static ?string $navigationGroup = 'Master Data';
 
+    protected static ?string $tenantOwnershipRelationshipName = 'worker';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -65,7 +67,6 @@ class AgencyResource extends Resource
     {
         return [
             'index' => Pages\ListAgencies::route('/'),
-            'create' => Pages\CreateAgency::route('/create'),
             'edit' => Pages\EditAgency::route('/{record}/edit'),
         ];
     }

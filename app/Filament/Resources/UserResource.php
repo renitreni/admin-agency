@@ -10,6 +10,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -30,6 +31,7 @@ class UserResource extends Resource
                 TextInput::make('password')->password()->confirmed()->hiddenOn('edit'),
                 TextInput::make('password_confirmation')->password()->hiddenOn('edit'),
                 Select::make('agency_id')
+                    ->required()
                     ->options(Agency::all()->pluck('name', 'id'))
                     ->relationship('agency', 'name')
                     ->multiple(),
@@ -49,6 +51,7 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Action::make('New Agency'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -73,6 +76,7 @@ class UserResource extends Resource
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
+            'register' => Pages\RegisterAgency::route('/register/agency'),
         ];
     }
 }
