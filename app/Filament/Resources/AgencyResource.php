@@ -11,6 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class AgencyResource extends Resource
 {
@@ -18,9 +19,12 @@ class AgencyResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
-    protected static ?string $navigationGroup = 'Master Data';
+    protected static ?string $navigationGroup = 'General Settings';
 
-    protected static ?string $tenantOwnershipRelationshipName = 'worker';
+    public static function getEloquentQuery(): Builder
+    {
+        return static::getModel()::query();
+    }
 
     public static function form(Form $form): Form
     {
