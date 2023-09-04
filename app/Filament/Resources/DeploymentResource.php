@@ -74,11 +74,21 @@ class DeploymentResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('worker.fullname')->sortable(['first_name'])->searchable(['first_name', 'last_name']),
-                TextColumn::make('position')->sortable()->searchable(),
-                TextColumn::make('country')->sortable()->searchable(),
-                TextColumn::make('date_deployed')->sortable(),
-                TextColumn::make('status')->sortable()->searchable(),
+                TextColumn::make('worker.fullname')
+                    ->sortable(['first_name'])
+                    ->searchable(['first_name', 'last_name']),
+                TextColumn::make('position')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('country')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('date_deployed')
+                    ->sortable()
+                    ->date(),
+                TextColumn::make('status')
+                    ->sortable()
+                    ->searchable(),
             ])
             ->filters([
                 //
