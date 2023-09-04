@@ -22,6 +22,10 @@ class Deployment extends Model
         'handler_id',
     ];
 
+    protected $casts = [
+        'date_deployed' => 'date',
+    ];
+
     public function agency(): BelongsTo
     {
         return $this->belongsTo(Agency::class);
@@ -30,5 +34,15 @@ class Deployment extends Model
     public function worker(): BelongsTo
     {
         return $this->belongsTo(Worker::class);
+    }
+
+    public function foreignAgency(): BelongsTo
+    {
+        return $this->belongsTo(ForeignAgency::class);
+    }
+
+    public function handler(): BelongsTo
+    {
+        return $this->belongsTo(Handler::class);
     }
 }

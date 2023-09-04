@@ -19,6 +19,8 @@ class Worker extends Model
         'last_name',
     ];
 
+    protected $with = ['workerInformation'];
+
     public function fullname(): Attribute
     {
         return Attribute::make(get: fn ($v, $attr) => $attr['first_name'].' '.$attr['last_name']);

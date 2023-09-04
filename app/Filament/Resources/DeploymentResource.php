@@ -9,14 +9,19 @@ use App\Models\Deployment;
 use App\Models\ForeignAgency;
 use App\Models\Handler;
 use App\Models\Worker;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class DeploymentResource extends Resource
 {
@@ -91,13 +96,38 @@ class DeploymentResource extends Resource
                     ->searchable(),
             ])
             ->filters([
-                //
+                Filter::make('date_deployed')
+                    ->form([
+                        DatePicker::make('date_deployed_from')->default(now()),
+                        DatePicker::make('date_deployed_to')->default(now()),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['date_deployed_from'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('date_deployed', '>=', $date),
+                            )
+                            ->when(
+                                $data['date_deployed_to'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('date_deployed', '<=', $date),
+                            );
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    BulkAction::make('Export')
+                        ->icon('heroicon-o-cloud-arrow-down')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            return response()->streamDownload(function () use ($records) {
+                                echo Pdf::loadHtml(
+                                    view('downloadables.deployment-pdf', ['records' => $records])
+                                )->setPaper('a4', 'landscape')->stream();
+                            }, "Concern of Agency {$records->first()->date_deployed } .pdf");
+                        }),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
