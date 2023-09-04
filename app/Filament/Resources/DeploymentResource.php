@@ -5,12 +5,10 @@ namespace App\Filament\Resources;
 use App\Enums\CountryEnum;
 use App\Enums\PositionEnum;
 use App\Filament\Resources\DeploymentResource\Pages;
-use App\Filament\Resources\DeploymentResource\RelationManagers;
 use App\Models\Deployment;
 use App\Models\ForeignAgency;
 use App\Models\Handler;
 use App\Models\Worker;
-use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -19,8 +17,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class DeploymentResource extends Resource
 {
@@ -34,7 +30,6 @@ class DeploymentResource extends Resource
         foreach (PositionEnum::cases() as $item) {
             $positions[$item->value] = $item->value;
         }
-
 
         $countries = [];
         foreach (CountryEnum::cases() as $item) {
@@ -51,6 +46,7 @@ class DeploymentResource extends Resource
                     ->label('Worker')
                     ->options(Worker::all()->pluck('fullname', 'id'))
                     ->required()
+                    ->unique()
                     ->searchable(),
                 Select::make('foreign_agency_id')
                     ->label('F.R.A')

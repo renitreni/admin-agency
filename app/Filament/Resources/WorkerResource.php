@@ -6,7 +6,6 @@ use App\Filament\Resources\WorkerResource\Pages;
 use App\Models\Worker;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -100,8 +99,8 @@ class WorkerResource extends Resource
                                         ->image()
                                         ->imageResizeMode('cover'),
                                 ]),
-                        ])
-                    ])
+                        ]),
+                    ]),
             ]);
     }
 

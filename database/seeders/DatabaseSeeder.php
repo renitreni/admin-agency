@@ -34,8 +34,7 @@ class DatabaseSeeder extends Seeder
                 Worker::factory(100)->create(['agency_id' => $agency->id]);
                 Concern::factory(10)->has(ConcernReport::factory(5))->create(['agency_id' => $agency->id]);
 
-                foreach(Worker::query()->inRandomOrder()->limit(50)->get() as $worker)
-                {
+                foreach (Worker::query()->inRandomOrder()->limit(50)->get() as $worker) {
                     Deployment::factory()->create([
                         'agency_id' => $agency->id,
                         'worker_id' => $worker->id,

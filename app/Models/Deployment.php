@@ -19,7 +19,7 @@ class Deployment extends Model
         'agency_id',
         'worker_id',
         'foreign_agency_id',
-        'handler_id'
+        'handler_id',
     ];
 
     public function agency(): BelongsTo

@@ -12,6 +12,6 @@ class ForeignAgency extends Model
 
     protected $fillable = [
         'agency_id',
-        'name'
+        'name',
     ];
 }

@@ -11,6 +11,6 @@ class Handler extends Model
 
     protected $fillable = [
         'agency_id',
-        'name'
+        'name',
     ];
 }
