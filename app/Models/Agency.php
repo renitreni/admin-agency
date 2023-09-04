@@ -24,14 +24,6 @@ class Agency extends Model
     {
         return ['uuid'];
     }
-    
-    // public static function boot()
-    // {
-    //     parent::boot();
-    //     self::creating(
-    //         fn ($model) => $model->uuid = Str::uuid()
-    //     );
-    // }
 
     public function worker(): HasMany
     {
@@ -41,5 +33,10 @@ class Agency extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class);
+    }
+
+    public function deployments(): HasMany
+    {
+        return $this->hasMany(Deployment::class);
     }
 }

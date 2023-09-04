@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
 
                 foreach(Worker::query()->inRandomOrder()->limit(50)->get() as $worker)
                 {
-                    Deployment::factory(50)->create([
+                    Deployment::factory()->create([
                         'agency_id' => $agency->id,
                         'worker_id' => $worker->id,
                         'foreign_agency_id' => ForeignAgency::query()->inRandomOrder()->first()->id,
