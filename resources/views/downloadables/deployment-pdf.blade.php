@@ -42,7 +42,7 @@
             <td style="width: 6.281%; border: 2px solid rgb(0, 0, 0); text-align: center;">{{ $key + 1 }}</td>
             <td style="width: 13.0755%; border: 2px solid rgb(0, 0, 0); text-align: center;">{{ $item->worker->fullname }}</td>
             <td style="width: 11.1111%; border: 2px solid rgb(0, 0, 0); text-align: center;">{{ $item->position }}</td>
-            <td style="width: 11.1111%; border: 2px solid rgb(0, 0, 0); text-align: center;">{{ $item->worker->worker_information?->passport_number }}</td>
+            <td style="width: 11.1111%; border: 2px solid rgb(0, 0, 0); text-align: center;">{{ $item->worker->workerInformation?->passport_number }}</td>
             <td style="width: 13.8476%; border: 2px solid rgb(0, 0, 0); text-align: center;">{{ $item->foreignAgency->name }}</td>
             <td style="width: 11.1111%; border: 2px solid rgb(0, 0, 0); text-align: center;">{{ $item->country }}</td>
             <td style="width: 11.1111%; border: 2px solid rgb(0, 0, 0); text-align: center;">{{ $item->date_deployed->format('F j, Y') }}</td>

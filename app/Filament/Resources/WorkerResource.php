@@ -18,7 +18,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
 
 class WorkerResource extends Resource
 {
@@ -45,74 +44,74 @@ class WorkerResource extends Resource
                                 Tab::make('Passport')
                                     ->schema([
                                         Fieldset::make('')
-                                        ->relationship('workerInformation')
-                                        ->schema([
-                                            TextInput::make('passport_number'),
-                                            TextInput::make('passport_place_issue'),
-                                            DatePicker::make('passport_date_issue'),
-                                            DatePicker::make('passport_date_expired'),
-                                        ])
+                                            ->relationship('workerInformation')
+                                            ->schema([
+                                                TextInput::make('passport_number'),
+                                                TextInput::make('passport_place_issue'),
+                                                DatePicker::make('passport_date_issue'),
+                                                DatePicker::make('passport_date_expired'),
+                                            ]),
                                     ]),
                                 Tab::make('Location')
                                     ->schema([
                                         Fieldset::make('')
-                                        ->relationship('workerInformation')
-                                        ->schema([
-                                            TextInput::make('contact_number'),
-                                            DatePicker::make('date_hired'),
-                                            TextInput::make('address'),
-                                            DatePicker::make('date_birth'),
-                                            TextInput::make('place_birth'),
+                                            ->relationship('workerInformation')
+                                            ->schema([
+                                                TextInput::make('contact_number'),
+                                                DatePicker::make('date_hired'),
+                                                TextInput::make('address'),
+                                                DatePicker::make('date_birth'),
+                                                TextInput::make('place_birth'),
 
-                                        ])
+                                            ]),
                                     ]),
                                 Tab::make('Education')
                                     ->schema([
                                         Fieldset::make('')
-                                        ->relationship('workerInformation')
-                                        ->schema([
-                                            TextInput::make('elementary'),
-                                            TextInput::make('high_school'),
-                                            TextInput::make('vocational'),
-                                            TextInput::make('college'),
-                                        ])
+                                            ->relationship('workerInformation')
+                                            ->schema([
+                                                TextInput::make('elementary'),
+                                                TextInput::make('high_school'),
+                                                TextInput::make('vocational'),
+                                                TextInput::make('college'),
+                                            ]),
                                     ]),
                                 Tab::make('Relative Info')
                                     ->schema([
                                         Fieldset::make('')
-                                        ->relationship('workerInformation')
-                                        ->schema([
-                                            TextInput::make('father_name'),
-                                            TextInput::make('father_occupation'),
-                                            TextInput::make('mother_name'),
-                                            TextInput::make('mother_occupation'),
-                                            TextInput::make('spouse_name'),
-                                            TextInput::make('spouse_occupation'),
+                                            ->relationship('workerInformation')
+                                            ->schema([
+                                                TextInput::make('father_name'),
+                                                TextInput::make('father_occupation'),
+                                                TextInput::make('mother_name'),
+                                                TextInput::make('mother_occupation'),
+                                                TextInput::make('spouse_name'),
+                                                TextInput::make('spouse_occupation'),
 
-                                        ])
+                                            ]),
                                     ]),
                                 Tab::make('Profile Status')
                                     ->schema([
                                         Fieldset::make('')
-                                        ->relationship('workerInformation')
-                                        ->schema([
-                                            Select::make('gender')->options([
-                                                'male' => 'Male',
-                                                'female' => 'Female',
+                                            ->relationship('workerInformation')
+                                            ->schema([
+                                                Select::make('gender')->options([
+                                                    'male' => 'Male',
+                                                    'female' => 'Female',
+                                                ]),
+                                                TextInput::make('religion'),
+                                                Select::make('civil_status')->options([
+                                                    'single' => 'Single',
+                                                    'married' => 'Married',
+                                                    'divorced' => 'Divorced',
+                                                    'widowed' => 'Widowed',
+                                                ]),
+                                                TextInput::make('height')->numeric(),
+                                                TextInput::make('weight')->numeric(),
+                                                Textarea::make('objectives')
+                                                    ->rows(10)
+                                                    ->cols(20),
                                             ]),
-                                            TextInput::make('religion'),
-                                            Select::make('civil_status')->options([
-                                                'single' => 'Single',
-                                                'married' => 'Married',
-                                                'divorced' => 'Divorced',
-                                                'widowed' => 'Widowed',
-                                            ]),
-                                            TextInput::make('height')->numeric(),
-                                            TextInput::make('weight')->numeric(),
-                                            Textarea::make('objectives')
-                                                ->rows(10)
-                                                ->cols(20),
-                                        ])
                                     ]),
                                 Tab::make('File Upload')
                                     ->schema([
@@ -132,10 +131,11 @@ class WorkerResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('created_at')->dateTime(),
                 TextColumn::make('first_name')->sortable()->searchable(),
                 TextColumn::make('last_name')->sortable()->searchable(),
+                TextColumn::make('middle_name')->sortable()->searchable(),
                 TextColumn::make('agency.name')->sortable()->searchable(),
+                TextColumn::make('created_at')->dateTime(),
             ])
             ->filters([
                 //

@@ -124,7 +124,7 @@ class DeploymentResource extends Resource
                         ->action(function (Collection $records) {
                             return response()->streamDownload(function () use ($records) {
                                 echo Pdf::loadHtml(
-                                    view('downloadables.deployment-pdf', ['records' => $records])
+                                    view('downloadables.deployment-pdf', ['records' => $records->load('worker.workerInformation')])
                                 )->setPaper('a4', 'landscape')->stream();
                             }, "Concern of Agency {$records->first()->date_deployed } .pdf");
                         }),
