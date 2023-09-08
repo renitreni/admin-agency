@@ -2,17 +2,13 @@
 
 namespace App\Filament\Resources\WorkerDocumentResource\RelationManagers;
 
-use App\Models\WorkerDocuments;
 use Filament\Forms;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class WorkerDocumentRelationManager extends RelationManager
 {
@@ -37,8 +33,8 @@ class WorkerDocumentRelationManager extends RelationManager
             ->recordTitleAttribute('name')
             ->columns([
                 Tables\Columns\TextColumn::make('text')->label('Document Name (Click to View)')
-                ->url(fn (Model $record) => $record->getFirstMediaUrl('files'))
-                ->openUrlInNewTab(),
+                    ->url(fn (Model $record) => $record->getFirstMediaUrl('files'))
+                    ->openUrlInNewTab(),
 
             ])
             ->filters([

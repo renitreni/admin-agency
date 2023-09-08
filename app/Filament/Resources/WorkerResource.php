@@ -7,10 +7,9 @@ use App\Filament\Resources\WorkerResource\Pages;
 use App\Models\Worker;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\Textarea;
@@ -44,6 +43,20 @@ class WorkerResource extends Resource
                                         TextInput::make('middle_name')->required(),
                                         TextInput::make('code')->readOnly()->default('Auto generated after creation.'),
                                     ]),
+                                Tab::make('Contact & Address')
+                                    ->schema([
+                                        Fieldset::make('')
+                                            ->relationship('workerInformation')
+                                            ->schema([
+                                                TextInput::make('email')->required(),
+                                                TextInput::make('contact_number'),
+                                                DatePicker::make('date_hired'),
+                                                TextInput::make('address'),
+                                                DatePicker::make('date_birth'),
+                                                TextInput::make('place_birth'),
+
+                                            ]),
+                                    ]),
                                 Tab::make('Passport')
                                     ->schema([
                                         Fieldset::make('')
@@ -53,19 +66,6 @@ class WorkerResource extends Resource
                                                 TextInput::make('passport_place_issue'),
                                                 DatePicker::make('passport_date_issue'),
                                                 DatePicker::make('passport_date_expired'),
-                                            ]),
-                                    ]),
-                                Tab::make('Location')
-                                    ->schema([
-                                        Fieldset::make('')
-                                            ->relationship('workerInformation')
-                                            ->schema([
-                                                TextInput::make('contact_number'),
-                                                DatePicker::make('date_hired'),
-                                                TextInput::make('address'),
-                                                DatePicker::make('date_birth'),
-                                                TextInput::make('place_birth'),
-
                                             ]),
                                     ]),
                                 Tab::make('Education')
@@ -159,7 +159,7 @@ class WorkerResource extends Resource
     public static function getRelations(): array
     {
         return [
-            WorkerDocumentRelationManager::class
+            WorkerDocumentRelationManager::class,
         ];
     }
 

@@ -12,7 +12,6 @@ use App\Models\User;
 use App\Models\Voucher;
 use App\Models\Worker;
 use App\Models\WorkerInformation;
-use Database\Factories\WorkerFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -43,7 +42,7 @@ class DatabaseSeeder extends Seeder
                         'foreign_agency_id' => $foreignAgency->random()->id,
                     ]);
                 }
-                
+
                 $filteredWorker = Worker::query()
                     ->where(['agency_id' => $agency->id])
                     ->inRandomOrder()

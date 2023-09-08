@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use App\Notifications\WorkerRegisteredNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 
 class WorkerInformation extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Notifiable;
 
     protected $fillable = [
         'worker_id',
@@ -17,6 +19,7 @@ class WorkerInformation extends Model
         'last_name',
         'contact_number',
         'date_hired',
+        'email',
         'address',
         'date_birth',
         'place_birth',
@@ -41,6 +44,15 @@ class WorkerInformation extends Model
         'weight',
         'objectives',
     ];
+
+    protected static function booted(): void
+    {
+        static::created(function (Model $model) {
+            if ($model->email) {
+                $model->notify(new WorkerRegisteredNotification($model));
+            }
+        });
+    }
 
     public function worker(): BelongsTo
     {

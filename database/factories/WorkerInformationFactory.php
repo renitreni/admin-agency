@@ -17,6 +17,7 @@ class WorkerInformationFactory extends Factory
     public function definition(): array
     {
         return [
+            'email' => $this->faker->email(),
             'contact_number' => $this->faker->phoneNumber,
             'date_hired' => $this->faker->date,
             'address' => $this->faker->address,

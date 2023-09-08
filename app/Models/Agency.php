@@ -24,6 +24,11 @@ class Agency extends Model
         return ['uuid'];
     }
 
+    public function workers(): HasMany
+    {
+        return $this->hasMany(Worker::class);
+    }
+
     public function worker(): HasMany
     {
         return $this->hasMany(Worker::class);

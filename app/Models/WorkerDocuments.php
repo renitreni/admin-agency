@@ -13,6 +13,6 @@ class WorkerDocuments extends Model implements HasMedia
 
     protected $fillable = [
         'text',
-        'worker_id'
+        'worker_id',
     ];
 }

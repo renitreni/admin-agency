@@ -33,6 +33,7 @@ class AgencyResource extends Resource
                 Section::make()
                     ->schema([
                         TextInput::make('name'),
+                        TextInput::make('email'),
                     ]),
             ]);
     }
@@ -43,6 +44,7 @@ class AgencyResource extends Resource
             ->columns([
                 TextColumn::make('created_at')->sortable()->searchable(),
                 TextColumn::make('name')->sortable()->searchable(),
+                TextColumn::make('email')->sortable()->searchable(),
             ])
             ->filters([
                 //

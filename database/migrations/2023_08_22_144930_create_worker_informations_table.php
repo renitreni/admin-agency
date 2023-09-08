@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('worker_information', function (Blueprint $table) {
             $table->id();
             $table->foreignId('worker_id')->constrained();
+            $table->string('email')->nullable();
             $table->string('contact_number')->nullable();
             $table->date('date_hired')->nullable();
             $table->string('address')->nullable();
