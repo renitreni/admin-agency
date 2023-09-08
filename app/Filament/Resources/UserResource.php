@@ -20,6 +20,11 @@ class UserResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $navigationGroup = 'General Settings';
+    
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->email == config('app.allowed_email');
+    }
 
     public static function form(Form $form): Form
     {

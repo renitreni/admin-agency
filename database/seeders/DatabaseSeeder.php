@@ -10,6 +10,7 @@ use App\Models\ForeignAgency;
 use App\Models\Handler;
 use App\Models\User;
 use App\Models\Voucher;
+use App\Models\VoucherTypes;
 use App\Models\Worker;
 use App\Models\WorkerInformation;
 use Illuminate\Database\Seeder;
@@ -30,6 +31,7 @@ class DatabaseSeeder extends Seeder
             ]);
 
             foreach ($agencies as $agency) {
+                VoucherTypes::factory(5)->create(['agency_id' => $agency->id]);
                 Handler::factory(10)->create(['agency_id' => $agency->id]);
                 $foreignAgency = ForeignAgency::factory(10)->create(['agency_id' => $agency->id]);
                 $workers = Worker::factory(100)->create(['agency_id' => $agency->id]);

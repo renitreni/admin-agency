@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Voucher extends Model
@@ -48,5 +49,10 @@ class Voucher extends Model
     public function foreignAgency(): BelongsTo
     {
         return $this->belongsTo(ForeignAgency::class);
+    }
+
+    public function voucherType(): HasMany
+    {
+        return $this->hasMany(VoucherTypes::class);
     }
 }

@@ -43,8 +43,8 @@ class VoucherResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('worker.fullname')->searchable(['first_name', 'last_name']),
-                TextColumn::make('foreignAgency.name')->searchable(),
+                TextColumn::make('worker.fullname')->searchable(['first_name', 'last_name'])->sortable(['first_name', 'last_name']),
+                TextColumn::make('foreignAgency.name')->searchable()->sortable(),
                 TextColumn::make('source')->searchable(),
                 TextColumn::make('created_by')->searchable(),
                 TextColumn::make('updated_by')->searchable(),
