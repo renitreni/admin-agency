@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
 
             User::factory()->has(Agency::factory())->create([
                 'name' => 'admin',
-                'email' => 'yaramayservices@gmail.com',
+                'email' => config('app.allowed_email'),
             ]);
 
             foreach ($agencies as $agency) {

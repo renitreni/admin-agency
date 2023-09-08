@@ -21,6 +21,11 @@ class AgencyResource extends Resource
 
     protected static ?string $navigationGroup = 'General Settings';
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->email == config('app.allowed_email');
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return static::getModel()::query();
