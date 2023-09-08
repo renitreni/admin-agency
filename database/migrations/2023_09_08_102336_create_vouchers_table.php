@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('foreign_agencies', function (Blueprint $table) {
+        Schema::create('vouchers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('agency_id')->constrained();
-            $table->string('name');
+            $table->foreignId('worker_id')->constrained(); // 'worker_id',
+            $table->foreignId('foreign_agency_id')->nullable()->constrained(); // 'foreign_agency_id',
+            $table->text('source'); // 'source',
+            $table->string('created_by')->nullable(); // 'created_by',
+            $table->string('updated_by')->nullable(); // 'updated_by',
             $table->softDeletes();
             $table->timestamps();
         });
@@ -25,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('foreign_agencies');
+        Schema::dropIfExists('vouchers');
     }
 };

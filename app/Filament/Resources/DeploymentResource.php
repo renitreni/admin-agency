@@ -51,7 +51,7 @@ class DeploymentResource extends Resource
                     ->label('Worker')
                     ->options(Worker::tenant()->get()->pluck('fullname', 'id'))
                     ->required()
-                    ->unique()
+                    ->unique(ignorable: fn ($record) => $record)
                     ->searchable(),
                 Select::make('foreign_agency_id')
                     ->label('F.R.A')
