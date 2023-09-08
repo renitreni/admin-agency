@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\WorkerDocumentResource\RelationManagers\WorkerDocumentRelationManager;
 use App\Filament\Resources\WorkerResource\Pages;
 use App\Models\Worker;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs;
@@ -40,6 +42,7 @@ class WorkerResource extends Resource
                                         TextInput::make('first_name')->required(),
                                         TextInput::make('last_name')->required(),
                                         TextInput::make('middle_name')->required(),
+                                        TextInput::make('code')->readOnly()->default('Auto generated after creation.'),
                                     ]),
                                 Tab::make('Passport')
                                     ->schema([
@@ -115,12 +118,12 @@ class WorkerResource extends Resource
                                     ]),
                                 Tab::make('File Upload')
                                     ->schema([
-                                        FileUpload::make('pic_face')
-                                            ->image()
-                                            ->imageResizeMode('cover'),
-                                        FileUpload::make('pic_body')
-                                            ->image()
-                                            ->imageResizeMode('cover'),
+                                        SpatieMediaLibraryFileUpload::make('pic_face')
+                                            ->collection('pic_face')->image(),
+                                        SpatieMediaLibraryFileUpload::make('pic_body')
+                                            ->collection('pic_body')->image(),
+                                        SpatieMediaLibraryFileUpload::make('cv')
+                                            ->collection('cv'),
                                     ]),
                             ]),
                     ]),
@@ -156,7 +159,7 @@ class WorkerResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            WorkerDocumentRelationManager::class
         ];
     }
 

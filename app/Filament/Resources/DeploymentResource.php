@@ -49,18 +49,18 @@ class DeploymentResource extends Resource
                     ->readOnly(),
                 Select::make('worker_id')
                     ->label('Worker')
-                    ->options(Worker::all()->pluck('fullname', 'id'))
+                    ->options(Worker::tenant()->get()->pluck('fullname', 'id'))
                     ->required()
                     ->unique()
                     ->searchable(),
                 Select::make('foreign_agency_id')
                     ->label('F.R.A')
-                    ->options(ForeignAgency::all()->pluck('name', 'id'))
+                    ->options(ForeignAgency::tenant()->get()->pluck('name', 'id'))
                     ->required()
                     ->searchable(),
                 Select::make('handler_id')
                     ->label('Handler')
-                    ->options(Handler::all()->pluck('name', 'id'))
+                    ->options(Handler::tenant()->get()->pluck('name', 'id'))
                     ->required()
                     ->searchable(),
                 Select::make('position')
@@ -81,7 +81,7 @@ class DeploymentResource extends Resource
             ->columns([
                 TextColumn::make('worker.fullname')
                     ->sortable(['first_name'])
-                    ->searchable(['first_name', 'last_name']),
+                    ->searchable(['workers.first_name', 'workers.last_name']),
                 TextColumn::make('position')
                     ->sortable()
                     ->searchable(),
@@ -94,11 +94,13 @@ class DeploymentResource extends Resource
                 TextColumn::make('status')
                     ->sortable()
                     ->searchable(),
+                TextColumn::make('agency.name')
+                    ->sortable(),
             ])
             ->filters([
                 Filter::make('date_deployed')
                     ->form([
-                        DatePicker::make('date_deployed_from')->default(now()),
+                        DatePicker::make('date_deployed_from')->default(now()->startOfMonth()),
                         DatePicker::make('date_deployed_to')->default(now()),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
