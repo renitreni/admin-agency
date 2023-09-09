@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\VoucherItemResource\RelationManagers\VoucherItemRelationManager;
+use App\Filament\Resources\VoucherItemResource\RelationManagers\VoucherRelationManager;
 use App\Filament\Resources\VoucherResource\Pages;
 use App\Models\ForeignAgency;
 use App\Models\Voucher;
@@ -68,7 +70,7 @@ class VoucherResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            VoucherItemRelationManager::class
         ];
     }
 

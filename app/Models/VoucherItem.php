@@ -7,22 +7,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class VoucherTypes extends Model
+class VoucherItem extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'agency_id'
+        'voucher_id',
+        'voucher_type',
+        'remarks',
+        'amount'
     ];
 
-    public function agency(): BelongsTo
+    public function voucher(): BelongsTo
     {
-        return $this->belongsTo(Agency::class);
-    }
-
-    public function scopeTenant($query)
-    {
-        return $query->where('agency_id', Filament::getTenant()->id);
+        return $this->belongsTo(Voucher::class);
     }
 }
