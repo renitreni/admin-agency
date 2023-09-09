@@ -10,30 +10,25 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Livewire\Component;
 
 class VoucherItemRelationManager extends RelationManager
 {
     protected static string $relationship = 'voucherItems';
-
-    public function getHeaderWidgets(): array
-    {
-        return [
-            VoucherItemOverview
-        ];
-    }
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Select::make('voucher_type')
-                ->required()
-                ->options(VoucherTypes::tenant()->get()->pluck('name', 'name'))
-                ->unique(ignorable: fn ($record) => $record),
+                    ->required()
+                    ->options(VoucherTypes::tenant()->get()->pluck('name', 'name'))
+                    ->unique(ignorable: fn ($record) => $record),
                 Forms\Components\TextInput::make('remarks')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('amount')
                     ->required()
+                    ->numeric()
                     ->maxLength(255),
             ]);
     }
@@ -51,19 +46,34 @@ class VoucherItemRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->after(function (Component $livewire) {
+                        $livewire->dispatch('refreshVoucher');
+                    }),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->after(function (Component $livewire) {
+                        $livewire->dispatch('refreshVoucher');
+                    }),
+                Tables\Actions\DeleteAction::make()
+                    ->after(function (Component $livewire) {
+                        $livewire->dispatch('refreshVoucher');
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->after(function (Component $livewire) {
+                            $livewire->dispatch('refreshVoucher');
+                        }),
                 ]),
             ])
             ->emptyStateActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->after(function (Component $livewire) {
+                        $livewire->dispatch('refreshProducts');
+                    }),
             ]);
     }
 }

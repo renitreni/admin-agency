@@ -8,6 +8,7 @@ use App\Filament\Resources\VoucherResource\Pages;
 use App\Models\ForeignAgency;
 use App\Models\Voucher;
 use App\Models\Worker;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -15,6 +16,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Livewire\Attributes\On;
 
 class VoucherResource extends Resource
 {
@@ -26,6 +28,9 @@ class VoucherResource extends Resource
     {
         return $form
             ->schema([
+                Placeholder::make('payments_count')
+                ->label('Total payments')
+                ->content(fn (Voucher $record) => $record->voucherItems->sum('amount')),
                 Select::make('worker_id')
                     ->label('Worker')
                     ->options(Worker::tenant()->get()->pluck('fullname', 'id'))
@@ -82,4 +87,5 @@ class VoucherResource extends Resource
             'edit' => Pages\EditVoucher::route('/{record}/edit'),
         ];
     }
+
 }
