@@ -22,13 +22,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        if (app()->environment(['local'])) {
-            $agencies = Agency::factory(10)->has(Worker::factory(10)->has(WorkerInformation::factory()))->create();
-
-            User::factory()->has(Agency::factory())->create([
-                'name' => 'admin',
+        User::factory()
+            ->has(Agency::factory()->state([
+                'name' => 'Yaramay',
+                'email' => config('app.allowed_email'),
+            ]))
+            ->create([
+                'name' => 'Yaramay',
                 'email' => config('app.allowed_email'),
             ]);
+
+        if (app()->environment(['local'])) {
+            $agencies = Agency::factory(10)->has(Worker::factory(10)->has(WorkerInformation::factory()))->create();
 
             foreach ($agencies as $agency) {
                 VoucherTypes::factory(5)->create(['agency_id' => $agency->id]);
