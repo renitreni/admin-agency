@@ -12,7 +12,7 @@ class Agency extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $fillable = ['name', 'uuid'];
+    protected $fillable = ['name', 'email', 'uuid'];
 
     public function getRouteKeyName()
     {

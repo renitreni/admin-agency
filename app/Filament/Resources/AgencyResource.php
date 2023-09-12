@@ -77,6 +77,7 @@ class AgencyResource extends Resource
     public static function getPages(): array
     {
         return [
+            'create' => Pages\CreateAgency::route('/create'),
             'index' => Pages\ListAgencies::route('/'),
             'edit' => Pages\EditAgency::route('/{record}/edit'),
         ];
