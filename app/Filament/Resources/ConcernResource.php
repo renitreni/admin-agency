@@ -32,7 +32,8 @@ class ConcernResource extends Resource
                 TextInput::make('title')->columnSpanFull(),
                 Select::make('agency_id')
                     ->options(Agency::all()->pluck('name', 'id'))
-                    ->relationship('agency', 'name'),
+                    ->relationship('agency', 'name')
+                    ->required(),
                 Select::make('status')->options(ConcernStatusEnum::class)->required(),
                 RichEditor::make('description')->required()->columnSpanFull(),
             ]);

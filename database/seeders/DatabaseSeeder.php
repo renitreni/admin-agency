@@ -3,11 +3,13 @@
 namespace Database\Seeders;
 
 use App\Models\Agency;
+use App\Models\Application;
 use App\Models\Concern;
 use App\Models\ConcernReport;
 use App\Models\Deployment;
 use App\Models\ForeignAgency;
 use App\Models\Handler;
+use App\Models\JobPost;
 use App\Models\User;
 use App\Models\Voucher;
 use App\Models\VoucherTypes;
@@ -33,9 +35,15 @@ class DatabaseSeeder extends Seeder
             ]);
 
         if (app()->environment(['local'])) {
-            $agencies = Agency::factory(10)->has(Worker::factory(10)->has(WorkerInformation::factory()))->create();
+            Agency::factory(10)->has(Worker::factory(10)->has(WorkerInformation::factory()))->create();
+
+            $agencies = Agency::all();
 
             foreach ($agencies as $agency) {
+                JobPost::factory(10)
+                    ->has(Application::factory(5)->state(['agency_id' => $agency->id]))
+                    ->create(['agency_id' => $agency->id]);
+
                 VoucherTypes::factory(5)->create(['agency_id' => $agency->id]);
                 Handler::factory(10)->create(['agency_id' => $agency->id]);
                 $foreignAgency = ForeignAgency::factory(10)->create(['agency_id' => $agency->id]);

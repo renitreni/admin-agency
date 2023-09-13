@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,7 +14,7 @@ class VoucherItem extends Model
         'voucher_id',
         'voucher_type',
         'remarks',
-        'amount'
+        'amount',
     ];
 
     public function voucher(): BelongsTo

@@ -11,12 +11,10 @@ use Illuminate\Notifications\Notifiable;
 
 class WorkerInformation extends Model
 {
-    use HasFactory, SoftDeletes, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
     protected $fillable = [
         'worker_id',
-        'first_name',
-        'last_name',
         'contact_number',
         'date_hired',
         'email',

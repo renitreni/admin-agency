@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\VoucherItemResource\RelationManagers\VoucherItemRelationManager;
-use App\Filament\Resources\VoucherItemResource\RelationManagers\VoucherRelationManager;
 use App\Filament\Resources\VoucherResource\Pages;
 use App\Models\ForeignAgency;
 use App\Models\Voucher;
@@ -16,21 +15,20 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Livewire\Attributes\On;
 
 class VoucherResource extends Resource
 {
     protected static ?string $model = Voucher::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-credit-card';
+    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Placeholder::make('payments_count')
-                ->label('Total payments')
-                ->content(fn (Voucher $record) => $record->voucherItems->sum('amount')),
+                    ->label('Total payments')
+                    ->content(fn (Voucher $record) => $record->voucherItems->sum('amount')),
                 Select::make('worker_id')
                     ->label('Worker')
                     ->options(Worker::tenant()->get()->pluck('fullname', 'id'))
@@ -75,7 +73,7 @@ class VoucherResource extends Resource
     public static function getRelations(): array
     {
         return [
-            VoucherItemRelationManager::class
+            VoucherItemRelationManager::class,
         ];
     }
 
@@ -87,5 +85,4 @@ class VoucherResource extends Resource
             'edit' => Pages\EditVoucher::route('/{record}/edit'),
         ];
     }
-
 }

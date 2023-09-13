@@ -13,7 +13,7 @@ class VoucherTypes extends Model
 
     protected $fillable = [
         'name',
-        'agency_id'
+        'agency_id',
     ];
 
     public function agency(): BelongsTo

@@ -34,6 +34,7 @@ class WorkerRegisteredNotification extends Notification
     {
         $agency = $this->worker->worker->agency;
         $worker = $this->worker->worker;
+
         return (new MailMessage)
             ->from($agency->email)
             ->subject("{$agency->name} Viewed Your Application")

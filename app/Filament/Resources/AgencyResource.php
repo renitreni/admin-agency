@@ -39,6 +39,7 @@ class AgencyResource extends Resource
                     ->schema([
                         TextInput::make('name'),
                         TextInput::make('email'),
+                        TextInput::make('uuid')->readOnly(),
                     ]),
             ]);
     }
@@ -47,7 +48,6 @@ class AgencyResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('created_at')->sortable()->searchable(),
                 TextColumn::make('name')->sortable()->searchable(),
                 TextColumn::make('email')->sortable()->searchable(),
             ])

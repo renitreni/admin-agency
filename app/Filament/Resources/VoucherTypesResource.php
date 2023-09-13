@@ -3,17 +3,13 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\VoucherTypesResource\Pages;
-use App\Filament\Resources\VoucherTypesResource\RelationManagers;
 use App\Models\VoucherTypes;
-use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class VoucherTypesResource extends Resource
 {
@@ -27,7 +23,7 @@ class VoucherTypesResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
+                TextInput::make('name'),
             ]);
     }
 
@@ -35,7 +31,7 @@ class VoucherTypesResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->sortable()->searchable()
+                TextColumn::make('name')->sortable()->searchable(),
             ])
             ->filters([
                 //

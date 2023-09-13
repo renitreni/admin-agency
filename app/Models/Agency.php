@@ -48,4 +48,9 @@ class Agency extends Model
     {
         return $this->hasMany(Voucher::class);
     }
+
+    public function applications(): HasMany
+    {
+        return $this->hasMany(Application::class);
+    }
 }
