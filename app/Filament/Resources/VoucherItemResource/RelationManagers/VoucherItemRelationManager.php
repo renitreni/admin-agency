@@ -20,8 +20,7 @@ class VoucherItemRelationManager extends RelationManager
             ->schema([
                 Forms\Components\Select::make('voucher_type')
                     ->required()
-                    ->options(VoucherTypes::tenant()->get()->pluck('name', 'name'))
-                    ->unique(ignorable: fn ($record) => $record),
+                    ->options(VoucherTypes::tenant()->get()->pluck('name', 'name')),
                 Forms\Components\TextInput::make('remarks')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('amount')
@@ -70,7 +69,7 @@ class VoucherItemRelationManager extends RelationManager
             ->emptyStateActions([
                 Tables\Actions\CreateAction::make()
                     ->after(function (Component $livewire) {
-                        $livewire->dispatch('refreshProducts');
+                        $livewire->dispatch('refreshVoucher');
                     }),
             ]);
     }
