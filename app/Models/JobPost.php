@@ -62,4 +62,9 @@ class JobPost extends Model
             }
         );
     }
+
+    public function scopePublished($query)
+    {
+        $query->where('is_published', 1);
+    }
 }
