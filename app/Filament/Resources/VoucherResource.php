@@ -28,7 +28,8 @@ class VoucherResource extends Resource
             ->schema([
                 Placeholder::make('payments_count')
                     ->label('Total payments')
-                    ->content(fn (Voucher $record) => $record->voucherItems->sum('amount')),
+                    ->content(fn (Voucher $record) => $record->voucherItems->sum('amount'))
+                    ->hiddenOn('create'),
                 Select::make('worker_id')
                     ->label('Worker')
                     ->options(Worker::tenant()->get()->pluck('fullname', 'id'))
