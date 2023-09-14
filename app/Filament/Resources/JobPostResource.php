@@ -51,8 +51,8 @@ class JobPostResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('title'),
-                TextColumn::make('country'),
+                TextColumn::make('title')->searchable(),
+                TextColumn::make('country')->searchable(),
                 ToggleColumn::make('is_published'),
             ])
             ->filters([

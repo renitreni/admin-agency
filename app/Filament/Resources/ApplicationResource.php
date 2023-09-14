@@ -30,6 +30,7 @@ class ApplicationResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('id', 'desc')
             ->columns([
                 TextColumn::make('id')->sortable()->searchable(),
                 TextColumn::make('first_name')->sortable()->searchable(),

@@ -48,7 +48,14 @@ class VoucherResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('id', 'desc')
             ->columns([
+                TextColumn::make('id')->sortable()->sort(),
+                TextColumn::make('voucherItems.amount')
+                    ->label('Total')
+                    ->formatStateUsing(function ($state, $record) {
+                        return number_format($record->voucherItems->sum('amount'));
+                    }),
                 TextColumn::make('worker.fullname')->searchable(['first_name', 'last_name'])->sortable(['first_name', 'last_name']),
                 TextColumn::make('foreignAgency.name')->searchable()->sortable(),
                 TextColumn::make('source')->searchable(),
