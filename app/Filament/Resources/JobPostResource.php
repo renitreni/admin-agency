@@ -43,7 +43,7 @@ class JobPostResource extends Resource
                 RichEditor::make('description')->columnSpanFull(),
                 Placeholder::make('access_link')
                     ->columnSpanFull()
-                    ->content(fn (JobPost $record): string => $record->access_link)
+                    ->content(fn (JobPost $record): string => $record->access_link ?? '')
                     ->hiddenOn('edit'),
             ]);
     }
