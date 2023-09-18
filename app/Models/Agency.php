@@ -53,4 +53,9 @@ class Agency extends Model
     {
         return $this->hasMany(Application::class);
     }
+
+    public function jobPosts(): HasMany
+    {
+        return $this->hasMany(JobPost::class);
+    }
 }
