@@ -42,9 +42,9 @@ class JobPostResource extends Resource
                 Toggle::make('is_published'),
                 RichEditor::make('description')->columnSpanFull(),
                 Placeholder::make('access_link')
-                    ->hiddenOn('edit')
                     ->columnSpanFull()
-                    ->content(fn (JobPost $record): string => $record->access_link),
+                    ->content(fn (JobPost $record): string => $record->access_link)
+                    ->hiddenOn('edit'),
             ]);
     }
 
