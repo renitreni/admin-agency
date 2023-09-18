@@ -7,6 +7,7 @@ use App\Filament\Resources\ConcernResource\Pages;
 use App\Filament\Resources\ConcernResource\RelationManagers\ConcernReportRelationManager;
 use App\Models\Agency;
 use App\Models\Concern;
+use App\Models\ForeignAgency;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -30,10 +31,11 @@ class ConcernResource extends Resource
         return $form
             ->schema([
                 TextInput::make('title')->columnSpanFull(),
-                Select::make('agency_id')
-                    ->options(Agency::all()->pluck('name', 'id'))
-                    ->relationship('agency', 'name')
-                    ->required(),
+                Select::make('foreign_agency_id')
+                    ->label('F.R.A')
+                    ->options(ForeignAgency::tenant()->get()->pluck('name', 'id'))
+                    ->required()
+                    ->searchable(),
                 Select::make('status')->options(ConcernStatusEnum::class)->required(),
                 RichEditor::make('description')->required()->columnSpanFull(),
             ]);

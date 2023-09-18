@@ -134,6 +134,7 @@ class WorkerResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('id')->sortable()->searchable(),
                 TextColumn::make('first_name')->sortable()->searchable(),
                 TextColumn::make('last_name')->sortable()->searchable(),
                 TextColumn::make('middle_name')->sortable()->searchable(),
