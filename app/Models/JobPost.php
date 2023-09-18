@@ -25,15 +25,6 @@ class JobPost extends Model
         'is_published',
     ];
 
-    protected static function booted(): void
-    {
-        static::created(function (JobPost $model) {
-            $voucher = JobPost::find($model->id);
-            $voucher->posted_by = auth()->user()->name ?? 'admin';
-            $voucher->save();
-        });
-    }
-
     public function getRouteKeyName()
     {
         return 'uuid';
