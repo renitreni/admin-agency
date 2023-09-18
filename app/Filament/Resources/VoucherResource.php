@@ -50,7 +50,7 @@ class VoucherResource extends Resource
         return $table
             ->defaultSort('id', 'desc')
             ->columns([
-                TextColumn::make('id')->sortable()->sort(),
+                TextColumn::make('id')->sortable()->sortable(),
                 TextColumn::make('voucherItems.amount')
                     ->label('Total')
                     ->formatStateUsing(function ($state, $record) {
