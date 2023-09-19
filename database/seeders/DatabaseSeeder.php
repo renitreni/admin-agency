@@ -6,6 +6,7 @@ use App\Models\Agency;
 use App\Models\Application;
 use App\Models\Concern;
 use App\Models\ConcernReport;
+use App\Models\Country;
 use App\Models\Deployment;
 use App\Models\ForeignAgency;
 use App\Models\Handler;
@@ -40,14 +41,20 @@ class DatabaseSeeder extends Seeder
             $agencies = Agency::all();
 
             foreach ($agencies as $agency) {
+                Country::factory(10)->create(['agency_id' => $agency->id]);
+
                 JobPost::factory(10)
                     ->has(Application::factory(5)->state(['agency_id' => $agency->id]))
                     ->create(['agency_id' => $agency->id]);
 
                 VoucherTypes::factory(5)->create(['agency_id' => $agency->id]);
+
                 Handler::factory(10)->create(['agency_id' => $agency->id]);
+
                 $foreignAgency = ForeignAgency::factory(10)->create(['agency_id' => $agency->id]);
+
                 $workers = Worker::factory(100)->create(['agency_id' => $agency->id]);
+                
                 Concern::factory(10)->has(ConcernReport::factory(5))->create(['agency_id' => $agency->id]);
 
                 foreach ($workers as $worker) {

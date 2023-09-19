@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Country extends Model
 {
@@ -19,5 +19,10 @@ class Country extends Model
     public function agency(): BelongsTo
     {
         return $this->belongsTo(Agency::class);
+    }
+
+    public function scopeTenant($query)
+    {
+        return $query->where('agency_id', Filament::getTenant()->id);
     }
 }

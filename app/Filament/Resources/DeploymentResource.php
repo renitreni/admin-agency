@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Enums\CountryEnum;
 use App\Enums\PositionEnum;
 use App\Filament\Resources\DeploymentResource\Pages;
+use App\Models\Country;
 use App\Models\Deployment;
 use App\Models\ForeignAgency;
 use App\Models\Handler;
@@ -36,11 +36,6 @@ class DeploymentResource extends Resource
             $positions[$item->value] = $item->value;
         }
 
-        $countries = [];
-        foreach (CountryEnum::cases() as $item) {
-            $countries[$item->value] = $item->value;
-        }
-
         return $form
             ->schema([
                 TextInput::make('status')
@@ -68,7 +63,7 @@ class DeploymentResource extends Resource
                     ->options($positions),
                 Select::make('country')
                     ->required()
-                    ->options($countries)
+                    ->options(Country::tenant()->get()->pluck('name', 'id'))
                     ->searchable(),
                 DatePicker::make('date_deployed')
                     ->required(),

@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Enums\CountryEnum;
 use App\Filament\Resources\JobPostResource\Pages;
+use App\Models\Country;
 use App\Models\JobPost;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\RichEditor;
@@ -27,17 +27,12 @@ class JobPostResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $countries = [];
-        foreach (CountryEnum::cases() as $item) {
-            $countries[$item->value] = $item->value;
-        }
-
         return $form
             ->schema([
                 TextInput::make('title'),
                 Select::make('country')
                     ->required()
-                    ->options($countries)
+                    ->options(Country::tenant()->get()->pluck('name', 'id'))
                     ->searchable(),
                 Toggle::make('is_published'),
                 RichEditor::make('description')->columnSpanFull(),

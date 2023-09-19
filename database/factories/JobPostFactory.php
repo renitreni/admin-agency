@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Enums\CountryEnum;
+use App\Models\Country;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +21,7 @@ class JobPostFactory extends Factory
             'posted_by' => 1,
             'title' => $this->faker->jobTitle(),
             'description' => $this->faker->paragraph(30),
-            'country' => CountryEnum::KSA,
+            'country' => Country::query()->inRandomOrder()->first()->country_name,
         ];
     }
 }

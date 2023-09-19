@@ -3,23 +3,19 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CountryResource\Pages;
-use App\Filament\Resources\CountryResource\RelationManagers;
 use App\Models\Country;
-use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CountryResource extends Resource
 {
     protected static ?string $model = Country::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-globe-asia-australia';
 
     protected static ?string $navigationGroup = 'Master Data';
 
@@ -27,7 +23,7 @@ class CountryResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('country_name')
+                TextInput::make('country_name'),
             ]);
     }
 
@@ -35,7 +31,7 @@ class CountryResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('country_name')->sortable()->searchable()
+                TextColumn::make('country_name')->sortable()->searchable(),
             ])
             ->filters([
                 //
