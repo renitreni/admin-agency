@@ -17,15 +17,15 @@ class ApplicationController extends Controller
 
     public function store(ApplicationStoreRequest $request, Agency $agency)
     {
-        NewApplicationAction::process($request, $agency);
+        $application = NewApplicationAction::process($request, $agency);
 
-        return response()->json(['message' => 'success']);
+        return response()->json($application);
     }
 
     public function storeWithJob(ApplicationStoreRequest $request, Agency $agency, JobPost $jobPost)
     {
-        NewApplicationAction::process($request, $agency, $jobPost->id);
+        $application = NewApplicationAction::process($request, $agency, $jobPost->id);
 
-        return response()->json(['message' => 'success']);
+        return response()->json($application);
     }
 }

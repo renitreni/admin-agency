@@ -54,7 +54,7 @@ class DatabaseSeeder extends Seeder
                 $foreignAgency = ForeignAgency::factory(10)->create(['agency_id' => $agency->id]);
 
                 $workers = Worker::factory(100)->create(['agency_id' => $agency->id]);
-                
+
                 Concern::factory(10)->has(ConcernReport::factory(5))->create(['agency_id' => $agency->id]);
 
                 foreach ($workers as $worker) {

@@ -19,5 +19,7 @@ class NewApplicationAction
             ]);
 
         $application->addMediaFromRequest('resume')->toMediaCollection('resumes');
+
+        return $application;
     }
 }

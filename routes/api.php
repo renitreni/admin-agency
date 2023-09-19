@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\API\ApplicationController;
+use App\Http\Controllers\API\InquiryController;
 use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -22,4 +24,6 @@ Route::middleware('api')->group(function () {
 
     Route::apiResource('job-post/{agency}', JobController::class)->only('index');
     Route::get('/job-post/get/{jobPost}', [JobController::class, 'show']);
+
+    Route::post('/inquiry/{agency}', [InquiryController::class, 'store']);
 });
