@@ -58,4 +58,9 @@ class Agency extends Model
     {
         return $this->hasMany(JobPost::class);
     }
+
+    public function country(): HasMany
+    {
+        return $this->hasMany(Country::class);
+    }
 }

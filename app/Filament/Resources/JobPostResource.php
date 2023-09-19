@@ -23,7 +23,7 @@ class JobPostResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-check-badge';
 
-    protected static ?string $navigationGroup = 'Job Posting';
+    protected static ?string $navigationGroup = 'APIs';
 
     public static function form(Form $form): Form
     {

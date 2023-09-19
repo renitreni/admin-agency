@@ -18,7 +18,7 @@ class ApplicationResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-archive-box';
 
-    protected static ?string $navigationGroup = 'Job Posting';
+    protected static ?string $navigationGroup = 'APIs';
 
     public static function canCreate(): bool
     {
