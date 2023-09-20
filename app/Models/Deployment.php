@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -44,5 +45,10 @@ class Deployment extends Model
     public function handler(): BelongsTo
     {
         return $this->belongsTo(Handler::class);
+    }
+
+    public function scopeTenant($query)
+    {
+        return $query->where('agency_id', Filament::getTenant()->id);
     }
 }

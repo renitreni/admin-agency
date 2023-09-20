@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -33,5 +34,10 @@ class Application extends Model implements HasMedia
     public function jobPost(): BelongsTo
     {
         return $this->belongsTo(JobPost::class);
+    }
+
+    public function scopeTenant($query)
+    {
+        return $query->where('agency_id', Filament::getTenant()->id);
     }
 }
