@@ -23,6 +23,7 @@ class Worker extends Model implements HasMedia
         'first_name',
         'last_name',
         'middle_name',
+        'position',
         'code',
     ];
 

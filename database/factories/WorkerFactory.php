@@ -20,6 +20,7 @@ class WorkerFactory extends Factory
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
             'middle_name' => $this->faker->lastName(),
+            'position' => $this->faker->jobTitle(),
         ];
     }
 }

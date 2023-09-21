@@ -7,7 +7,6 @@ use App\Filament\Resources\WorkerDocumentResource\RelationManagers\WorkerDocumen
 use App\Filament\Resources\WorkerResource\Pages;
 use App\Models\Worker;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
@@ -15,7 +14,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -39,15 +37,20 @@ class WorkerResource extends Resource
                             ->tabs([
                                 Tab::make('Name')
                                     ->schema([
-                                        TextInput::make('first_name')->required(),
-                                        TextInput::make('last_name')->required(),
-                                        TextInput::make('middle_name')->required(),
-                                        TextInput::make('code')->readOnly()->default('Auto generated after creation.'),
                                         Grid::make()
-                                        ->relationship('workerInformation')
+                                        ->columns(2)
                                         ->schema([
-                                            RichEditor::make('cover_letter')->columnSpanFull()->required(),
-                                        ])
+                                            TextInput::make('first_name')->required()->columns(1),
+                                            TextInput::make('last_name')->required()->columns(1),
+                                            TextInput::make('middle_name')->required()->columns(1),
+                                            TextInput::make('position')->required(),
+                                            TextInput::make('code')->readOnly()->default('Auto generated after creation.'),
+                                        ]),
+                                        Grid::make()
+                                            ->relationship('workerInformation')
+                                            ->schema([
+                                                RichEditor::make('cover_letter')->columnSpanFull()->required(),
+                                            ]),
 
                                     ]),
                                 Tab::make('Contact & Address')
@@ -154,7 +157,7 @@ class WorkerResource extends Resource
     {
         return [
             WorkerDocumentRelationManager::class,
-            EducationRelationManager::class
+            EducationRelationManager::class,
         ];
     }
 

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('agency_id')->constrained();
             $table->string('first_name');
+            $table->string('position');
             $table->string('last_name')->nullable();
             $table->string('middle_name')->nullable();
             $table->string('code')->nullable()->unique();
