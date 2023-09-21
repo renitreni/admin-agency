@@ -36,8 +36,7 @@ class DatabaseSeeder extends Seeder
             ]);
 
         if (app()->environment(['local'])) {
-            Agency::factory(10)->has(Worker::factory(10)->has(WorkerInformation::factory()))->create();
-
+            Agency::factory(10)->create();
             $agencies = Agency::all();
 
             foreach ($agencies as $agency) {
@@ -53,7 +52,7 @@ class DatabaseSeeder extends Seeder
 
                 $foreignAgency = ForeignAgency::factory(10)->create(['agency_id' => $agency->id]);
 
-                $workers = Worker::factory(100)->create(['agency_id' => $agency->id]);
+                $workers = Worker::factory(100)->has(WorkerInformation::factory())->create(['agency_id' => $agency->id]);
 
                 Concern::factory(10)->has(ConcernReport::factory(5))->create(['agency_id' => $agency->id]);
 

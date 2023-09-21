@@ -27,10 +27,6 @@ class WorkerInformationFactory extends Factory
             'passport_place_issue' => $this->faker->city,
             'passport_date_issue' => $this->faker->date,
             'passport_date_expired' => $this->faker->date,
-            'elementary' => $this->faker->sentence,
-            'high_school' => $this->faker->sentence,
-            'vocational' => $this->faker->sentence,
-            'college' => $this->faker->sentence,
             'father_name' => $this->faker->name('male'),
             'father_occupation' => $this->faker->jobTitle,
             'mother_name' => $this->faker->name('female'),
@@ -42,7 +38,7 @@ class WorkerInformationFactory extends Factory
             'civil_status' => $this->faker->randomElement(['single', 'married', 'divorced', 'widowed']),
             'height' => $this->faker->randomFloat(2, 150, 200),
             'weight' => $this->faker->randomFloat(2, 50, 150),
-            'objectives' => $this->faker->paragraph,
+            'cover_letter' => $this->faker->paragraph,
         ];
     }
 }

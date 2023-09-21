@@ -2,11 +2,14 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\EducationResource\RelationManagers\EducationRelationManager;
 use App\Filament\Resources\WorkerDocumentResource\RelationManagers\WorkerDocumentRelationManager;
 use App\Filament\Resources\WorkerResource\Pages;
 use App\Models\Worker;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -40,10 +43,16 @@ class WorkerResource extends Resource
                                         TextInput::make('last_name')->required(),
                                         TextInput::make('middle_name')->required(),
                                         TextInput::make('code')->readOnly()->default('Auto generated after creation.'),
+                                        Grid::make()
+                                        ->relationship('workerInformation')
+                                        ->schema([
+                                            RichEditor::make('cover_letter')->columnSpanFull()->required(),
+                                        ])
+
                                     ]),
                                 Tab::make('Contact & Address')
                                     ->schema([
-                                        Fieldset::make('')
+                                        Grid::make()
                                             ->relationship('workerInformation')
                                             ->schema([
                                                 TextInput::make('email')->required(),
@@ -57,7 +66,7 @@ class WorkerResource extends Resource
                                     ]),
                                 Tab::make('Passport')
                                     ->schema([
-                                        Fieldset::make('')
+                                        Grid::make()
                                             ->relationship('workerInformation')
                                             ->schema([
                                                 TextInput::make('passport_number'),
@@ -66,20 +75,9 @@ class WorkerResource extends Resource
                                                 DatePicker::make('passport_date_expired'),
                                             ]),
                                     ]),
-                                Tab::make('Education')
-                                    ->schema([
-                                        Fieldset::make('')
-                                            ->relationship('workerInformation')
-                                            ->schema([
-                                                TextInput::make('elementary'),
-                                                TextInput::make('high_school'),
-                                                TextInput::make('vocational'),
-                                                TextInput::make('college'),
-                                            ]),
-                                    ]),
                                 Tab::make('Relative Info')
                                     ->schema([
-                                        Fieldset::make('')
+                                        Grid::make()
                                             ->relationship('workerInformation')
                                             ->schema([
                                                 TextInput::make('father_name'),
@@ -93,7 +91,7 @@ class WorkerResource extends Resource
                                     ]),
                                 Tab::make('Profile Status')
                                     ->schema([
-                                        Fieldset::make('')
+                                        Grid::make()
                                             ->relationship('workerInformation')
                                             ->schema([
                                                 Select::make('gender')->options([
@@ -109,9 +107,6 @@ class WorkerResource extends Resource
                                                 ]),
                                                 TextInput::make('height')->numeric(),
                                                 TextInput::make('weight')->numeric(),
-                                                Textarea::make('objectives')
-                                                    ->rows(10)
-                                                    ->cols(20),
                                             ]),
                                     ]),
                                 Tab::make('File Upload')
@@ -159,6 +154,7 @@ class WorkerResource extends Resource
     {
         return [
             WorkerDocumentRelationManager::class,
+            EducationRelationManager::class
         ];
     }
 

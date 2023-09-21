@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\InquiryStoreRequest;
 use App\Models\Agency;
 use App\Models\Inquiry;
-use Illuminate\Http\Request;
 
 class InquiryController extends Controller
 {
@@ -21,7 +20,7 @@ class InquiryController extends Controller
             'company_no' => $validated['company_no'],
             'description' => $validated['description'],
             'is_read' => 0,
-            'agency_id' => $agency->id
+            'agency_id' => $agency->id,
         ]);
 
         return response()->json($inquiry);

@@ -25,10 +25,6 @@ class WorkerInformation extends Model
         'passport_place_issue',
         'passport_date_issue',
         'passport_date_expired',
-        'elementary',
-        'high_school',
-        'vocational',
-        'college',
         'father_name',
         'father_occupation',
         'mother_name',
@@ -40,7 +36,7 @@ class WorkerInformation extends Model
         'civil_status',
         'height',
         'weight',
-        'objectives',
+        'cover_letter',
     ];
 
     protected static function booted(): void

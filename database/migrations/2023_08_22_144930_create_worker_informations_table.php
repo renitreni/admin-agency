@@ -24,10 +24,6 @@ return new class extends Migration
             $table->string('passport_place_issue')->nullable();
             $table->date('passport_date_issue')->nullable();
             $table->date('passport_date_expired')->nullable();
-            $table->string('elementary')->nullable();
-            $table->string('high_school')->nullable();
-            $table->string('vocational')->nullable();
-            $table->string('college')->nullable();
             $table->string('father_name')->nullable();
             $table->string('father_occupation')->nullable();
             $table->string('mother_name')->nullable();
@@ -39,7 +35,7 @@ return new class extends Migration
             $table->enum('civil_status', ['single', 'married', 'divorced', 'widowed'])->nullable();
             $table->float('height', 8, 2)->nullable();
             $table->float('weight', 8, 2)->nullable();
-            $table->text('objectives')->nullable();
+            $table->text('cover_letter')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

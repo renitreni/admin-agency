@@ -52,7 +52,7 @@ class InquiryResource extends Resource
                 //
             ])
             ->actions([
-             //   Tables\Actions\EditAction::make(),
+                //   Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -60,7 +60,7 @@ class InquiryResource extends Resource
                 ]),
             ])
             ->emptyStateActions([
-             //   Tables\Actions\CreateAction::make(),
+                //   Tables\Actions\CreateAction::make(),
             ]);
     }
 

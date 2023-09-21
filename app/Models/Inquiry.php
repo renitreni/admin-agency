@@ -18,7 +18,7 @@ class Inquiry extends Model
         'company_no',
         'description',
         'is_read',
-        'agency_id'
+        'agency_id',
     ];
 
     public function agency(): BelongsTo

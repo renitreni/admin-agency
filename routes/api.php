@@ -5,7 +5,6 @@ use App\Http\Controllers\API\InquiryController;
 use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Route;
 
-
 /*
 |--------------------------------------------------------------------------
 | API Routes

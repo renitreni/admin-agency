@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
@@ -25,6 +26,8 @@ class Worker extends Model implements HasMedia
         'code',
     ];
 
+    protected $with = ['workerInformation'];
+
     protected static function booted(): void
     {
         static::created(function (Model $model) {
@@ -38,14 +41,14 @@ class Worker extends Model implements HasMedia
         return Attribute::make(get: fn ($v, $attr) => $attr['first_name'].' '.$attr['last_name']);
     }
 
-    public function agency(): BelongsTo
-    {
-        return $this->BelongsTo(Agency::class);
-    }
-
     public function workerInformation(): HasOne
     {
         return $this->hasOne(WorkerInformation::class);
+    }
+
+    public function agency(): BelongsTo
+    {
+        return $this->belongsTo(Agency::class);
     }
 
     public function scopeTenant($query)
@@ -53,8 +56,13 @@ class Worker extends Model implements HasMedia
         return $query->where('agency_id', Filament::getTenant()->id);
     }
 
-    public function document()
+    public function document(): HasMany
     {
         return $this->hasMany(WorkerDocuments::class);
+    }
+
+    public function education(): HasOne
+    {
+        return $this->hasOne(Education::class);
     }
 }
