@@ -15,6 +15,6 @@ class WorkHistory extends Model
         'address',
         'from_date',
         'to_date',
-        'position'
+        'position',
     ];
 }

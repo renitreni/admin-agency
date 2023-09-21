@@ -67,7 +67,7 @@ class Worker extends Model implements HasMedia
         return $this->hasMany(Education::class);
     }
 
-    public function WorkHistory(): HasMany
+    public function workHistory(): HasMany
     {
         return $this->hasMany(WorkHistory::class);
     }

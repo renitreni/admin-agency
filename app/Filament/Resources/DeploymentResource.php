@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources;
 
-use App\Enums\PositionEnum;
 use App\Filament\Resources\DeploymentResource\Pages;
 use App\Models\Country;
 use App\Models\Deployment;
@@ -31,11 +30,6 @@ class DeploymentResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $positions = [];
-        foreach (PositionEnum::cases() as $item) {
-            $positions[$item->value] = $item->value;
-        }
-
         return $form
             ->schema([
                 TextInput::make('status')
@@ -58,12 +52,11 @@ class DeploymentResource extends Resource
                     ->options(Handler::tenant()->get()->pluck('name', 'id'))
                     ->required()
                     ->searchable(),
-                Select::make('position')
-                    ->required()
-                    ->options($positions),
+                TextInput::make('position')
+                    ->required(),
                 Select::make('country')
                     ->required()
-                    ->options(Country::tenant()->get()->pluck('name', 'id'))
+                    ->options(Country::tenant()->get()->pluck('country_name', 'id'))
                     ->searchable(),
                 DatePicker::make('date_deployed')
                     ->required(),

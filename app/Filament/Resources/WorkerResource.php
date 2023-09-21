@@ -5,7 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\EducationResource\RelationManagers\EducationRelationManager;
 use App\Filament\Resources\WorkerDocumentResource\RelationManagers\WorkerDocumentRelationManager;
 use App\Filament\Resources\WorkerResource\Pages;
+use App\Filament\Resources\WorkHistoryResource\RelationManagers\WorkHistoryRelationManager;
 use App\Models\Worker;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\RichEditor;
@@ -18,8 +20,10 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class WorkerResource extends Resource
 {
@@ -38,14 +42,14 @@ class WorkerResource extends Resource
                                 Tab::make('Name')
                                     ->schema([
                                         Grid::make()
-                                        ->columns(2)
-                                        ->schema([
-                                            TextInput::make('first_name')->required()->columns(1),
-                                            TextInput::make('last_name')->required()->columns(1),
-                                            TextInput::make('middle_name')->required()->columns(1),
-                                            TextInput::make('position')->required(),
-                                            TextInput::make('code')->readOnly()->default('Auto generated after creation.'),
-                                        ]),
+                                            ->columns(2)
+                                            ->schema([
+                                                TextInput::make('first_name')->required()->columns(1),
+                                                TextInput::make('last_name')->required()->columns(1),
+                                                TextInput::make('middle_name')->required()->columns(1),
+                                                TextInput::make('position')->required(),
+                                                TextInput::make('code')->readOnly()->default('Auto generated after creation.'),
+                                            ]),
                                         Grid::make()
                                             ->relationship('workerInformation')
                                             ->schema([
@@ -142,6 +146,18 @@ class WorkerResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Action::make('generate_cv')
+                    ->icon('heroicon-o-cloud-arrow-down')
+                    ->requiresConfirmation()
+                    ->action(function (Model $records) {
+                        return response()->streamDownload(function () use ($records) {
+                            $records = $records->load(['education', 'workHistory']);
+                            $cvTemplate = $records->agency->getFirstMediaUrl('cv_template');
+
+                            echo Pdf::loadHtml(view('downloadables.cv', compact('records', 'cvTemplate')))
+                                ->stream();
+                        }, "CV {$records->last_name}, {$records->first_name}.pdf");
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -158,6 +174,7 @@ class WorkerResource extends Resource
         return [
             WorkerDocumentRelationManager::class,
             EducationRelationManager::class,
+            WorkHistoryRelationManager::class,
         ];
     }
 

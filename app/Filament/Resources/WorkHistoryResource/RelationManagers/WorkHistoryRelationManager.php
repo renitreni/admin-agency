@@ -3,12 +3,11 @@
 namespace App\Filament\Resources\WorkHistoryResource\RelationManagers;
 
 use Filament\Forms;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class WorkHistoryRelationManager extends RelationManager
 {
@@ -18,9 +17,23 @@ class WorkHistoryRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('WorkHistory')
-                    ->required()
-                    ->maxLength(255),
+                Grid::make()
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\TextInput::make('company_name')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('address')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\DatePicker::make('from_date')
+                            ->required(),
+                        Forms\Components\DatePicker::make('to_date')
+                            ->required(),
+                        Forms\Components\TextInput::make('position')
+                            ->required()
+                            ->maxLength(255),
+                    ]),
             ]);
     }
 
@@ -29,7 +42,8 @@ class WorkHistoryRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('WorkHistory')
             ->columns([
-                Tables\Columns\TextColumn::make('WorkHistory'),
+                Tables\Columns\TextColumn::make('company_name'),
+                Tables\Columns\TextColumn::make('position'),
             ])
             ->filters([
                 //

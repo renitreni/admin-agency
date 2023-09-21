@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('worker_id')->constrained(); // 'worker_id',
             $table->string('company_name'); // 'company_name',
-            $table->text('address');// 'address',
-            $table->date('from_date');// 'from_date',
-            $table->date('to_date');// 'to_date',
-            $table->string('position');// 'position'
+            $table->text('address');    // 'address',
+            $table->date('from_date');  // 'from_date',
+            $table->date('to_date');    // 'to_date',
+            $table->string('position'); // 'position'
             $table->timestamps();
         });
     }
