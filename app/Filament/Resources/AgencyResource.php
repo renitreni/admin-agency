@@ -4,9 +4,13 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\AgencyResource\Pages;
 use App\Models\Agency;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -35,11 +39,18 @@ class AgencyResource extends Resource
     {
         return $form
             ->schema([
-                Section::make()
+                Grid::make()
+                    ->columns(2)
                     ->schema([
-                        TextInput::make('name'),
-                        TextInput::make('email'),
-                        TextInput::make('uuid')->readOnly(),
+                        TextInput::make('name')->columnSpan(1),
+                        TextInput::make('email')->columnSpan(1),
+                        Placeholder::make('uuid')
+                            ->hiddenOn('create')
+                            ->content(fn ($record): string => $record->uuid ?? '')
+                            ->columnSpan(2),
+                        SpatieMediaLibraryFileUpload::make('cv_template')
+                            ->columnSpan(2)
+                            ->collection('cv_template'),
                     ]),
             ]);
     }
