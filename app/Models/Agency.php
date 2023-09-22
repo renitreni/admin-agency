@@ -65,4 +65,9 @@ class Agency extends Model implements HasMedia
     {
         return $this->hasMany(Country::class);
     }
+
+    public function foreignAgencies()
+    {
+        return $this->hasMany(ForeignAgency::class);
+    }
 }
