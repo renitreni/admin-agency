@@ -71,4 +71,9 @@ class Worker extends Model implements HasMedia
     {
         return $this->hasMany(WorkHistory::class);
     }
+
+    public function skills(): HasMany
+    {
+        return $this->hasMany(Skill::class);
+    }
 }

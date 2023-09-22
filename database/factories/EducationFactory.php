@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\EducationLevelEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,11 @@ class EducationFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'level' => EducationLevelEnum::COLLEGE,
+            'title' => $this->faker->company(),
+            'description'=> $this->faker->paragraph(),
+            'from_date' => $this->faker->date(),
+            'to_date' => $this->faker->date(),
         ];
     }
 }

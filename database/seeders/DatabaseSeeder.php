@@ -8,14 +8,17 @@ use App\Models\Concern;
 use App\Models\ConcernReport;
 use App\Models\Country;
 use App\Models\Deployment;
+use App\Models\Education;
 use App\Models\ForeignAgency;
 use App\Models\Handler;
 use App\Models\JobPost;
+use App\Models\Skill;
 use App\Models\User;
 use App\Models\Voucher;
 use App\Models\VoucherTypes;
 use App\Models\Worker;
 use App\Models\WorkerInformation;
+use App\Models\WorkHistory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -52,7 +55,12 @@ class DatabaseSeeder extends Seeder
 
                 $foreignAgency = ForeignAgency::factory(10)->create(['agency_id' => $agency->id]);
 
-                $workers = Worker::factory(100)->has(WorkerInformation::factory())->create(['agency_id' => $agency->id]);
+                $workers = Worker::factory(100)
+                    ->has(WorkHistory::factory(5))
+                    ->has(Education::factory(5))
+                    ->has(Skill::factory(5))
+                    ->has(WorkerInformation::factory())
+                    ->create(['agency_id' => $agency->id]);
 
                 Concern::factory(10)->has(ConcernReport::factory(5))->create(['agency_id' => $agency->id]);
 

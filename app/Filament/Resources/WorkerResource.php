@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EducationResource\RelationManagers\EducationRelationManager;
+use App\Filament\Resources\SkillsResource\RelationManagers\SkillRelationManager;
 use App\Filament\Resources\WorkerDocumentResource\RelationManagers\WorkerDocumentRelationManager;
 use App\Filament\Resources\WorkerResource\Pages;
 use App\Filament\Resources\WorkHistoryResource\RelationManagers\WorkHistoryRelationManager;
@@ -48,12 +49,16 @@ class WorkerResource extends Resource
                                                 TextInput::make('last_name')->required()->columns(1),
                                                 TextInput::make('middle_name')->required()->columns(1),
                                                 TextInput::make('position')->required(),
-                                                TextInput::make('code')->readOnly()->default('Auto generated after creation.'),
+                                                TextInput::make('code')->readOnly()
+                                                    ->default('Auto generated after creation.'),
                                             ]),
                                         Grid::make()
                                             ->relationship('workerInformation')
                                             ->schema([
-                                                RichEditor::make('cover_letter')->columnSpanFull()->required(),
+                                                RichEditor::make('cover_letter')
+                                                    ->label('Cover Letter / Objective')
+                                                    ->columnSpanFull()
+                                                    ->required(),
                                             ]),
 
                                     ]),
@@ -172,9 +177,10 @@ class WorkerResource extends Resource
     public static function getRelations(): array
     {
         return [
-            WorkerDocumentRelationManager::class,
             EducationRelationManager::class,
             WorkHistoryRelationManager::class,
+            SkillRelationManager::class,
+            WorkerDocumentRelationManager::class,
         ];
     }
 
