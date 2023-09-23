@@ -39,7 +39,6 @@ class VoucherResource extends Resource
                 Select::make('foreign_agency_id')
                     ->label('F.R.A')
                     ->options(ForeignAgency::tenant()->get()->pluck('name', 'id'))
-                    ->required()
                     ->searchable(),
                 TextInput::make('source'),
             ]);
