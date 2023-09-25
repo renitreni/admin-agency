@@ -3,7 +3,8 @@
 <head>
     <style>
         html {
-            margin: .5px
+            margin-left: .5px;
+            margin-right: .5px;
         }
 
         body {
@@ -11,21 +12,18 @@
             background-size: cover;
             background-repeat: no-repeat;
             font-family: "Arial Black", Gadget, sans-serif;
-        }
-
-        .page-break {
-            page-break-after: always;
+            padding-top: 19%;
         }
     </style>
 </head>
 
 <body>
 
-    <span style="float: right; margin-top: 15%; margin-right: 10%">
+    <span style="float: right; margin-right: 10%; margin-top: -30px;">
         <img src="{!! $records->getFirstMediaUrl('pic_face') !!}" width="120" height="120px" alt="">
     </span>
 
-    <p style="text-align: center; margin-top: 23%">
+    <p style="text-align: center; margin-top: 3%">
         <strong>
             <span style='font-size: 22px;'>
                 {!! $records->first_name !!} {!! $records->last_name !!}
@@ -58,7 +56,7 @@
             @endforeach
         </ul>
 
-        <p style="text-align: left;"><strong><span
+        <p style="text-align: left; margin-top: 7%;"><strong><span
                     style='font-family: "Arial Black", Gadget, sans-serif; font-size: 19px;'><strong><span
                             style="color: rgb(0, 0, 0); font-size: 14px;">
                             <u>EDUCATION:</u></span></strong></span></strong></p>
@@ -79,9 +77,7 @@
             @endforeach
         </ul>
 
-        <div class="page-break"></div>
-
-        <p style="text-align: center; margin-top: 20%; text-align: left;"><strong><span
+        <p style="text-align: center; margin-top: 7%; text-align: left;"><strong><span
                     style='font-family: "Arial Black", Gadget, sans-serif; font-size: 19px;'><strong><span
                             style="color: rgb(0, 0, 0); font-size: 14px;"><u>WORK EXPERIENCE
                                 :</u></span></strong></span></strong></p>
