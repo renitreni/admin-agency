@@ -9,6 +9,7 @@ use App\Models\ForeignAgency;
 use App\Models\Handler;
 use App\Models\Worker;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -114,7 +115,7 @@ class DeploymentResource extends Resource
                         ->action(function (Collection $records) {
                             return response()->streamDownload(function () use ($records) {
                                 echo Pdf::loadHtml(
-                                    view('downloadables.deployment-pdf', ['records' => $records->load('worker.workerInformation')])
+                                    view('downloadables.deployment-pdf', ['records' => $records->load('worker.workerInformation'), 'agency' => Filament::getTenant()])
                                 )->setPaper('a4', 'landscape')->stream();
                             }, "Concern of Agency {$records->first()->date_deployed } .pdf");
                         }),

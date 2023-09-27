@@ -20,7 +20,7 @@ class EducationFactory extends Factory
         return [
             'level' => EducationLevelEnum::COLLEGE,
             'title' => $this->faker->company(),
-            'description'=> $this->faker->paragraph(),
+            'description' => $this->faker->paragraph(),
             'from_date' => $this->faker->date(),
             'to_date' => $this->faker->date(),
         ];
