@@ -31,11 +31,12 @@ class JobPostResource extends Resource
             ->schema([
                 TextInput::make('title'),
                 Select::make('country')
+                    ->options(Country::tenant()->get()->pluck('country_name', 'id'))
                     ->required()
-                    ->options(Country::tenant()->get()->pluck('name', 'id'))
                     ->searchable(),
                 Toggle::make('is_published'),
-                RichEditor::make('description')->columnSpanFull(),
+                RichEditor::make('description')
+                    ->columnSpanFull(),
                 Placeholder::make('access_link')
                     ->columnSpanFull()
                     ->content(fn ($record): string => $record->access_link ?? '')
