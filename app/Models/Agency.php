@@ -61,7 +61,7 @@ class Agency extends Model implements HasMedia
         return $this->hasMany(JobPost::class);
     }
 
-    public function country(): HasMany
+    public function countries(): HasMany
     {
         return $this->hasMany(Country::class);
     }
