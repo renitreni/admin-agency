@@ -31,7 +31,7 @@ class JobPostResource extends Resource
             ->schema([
                 TextInput::make('title'),
                 Select::make('country')
-                    ->options(Country::tenant()->get()->pluck('country_name', 'id'))
+                    ->options(Country::tenant()->get()->pluck('country_name', 'country_name'))
                     ->required()
                     ->searchable(),
                 Toggle::make('is_published'),
