@@ -43,6 +43,7 @@ class InquiryResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('id'),
                 TextColumn::make('name'),
                 TextColumn::make('phone'),
                 TextColumn::make('email'),
