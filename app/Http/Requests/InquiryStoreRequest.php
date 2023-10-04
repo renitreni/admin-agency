@@ -27,6 +27,7 @@ class InquiryStoreRequest extends FormRequest
             'email' => 'required|max:200|email',
             'company_no' => 'required|max:200',
             'description' => 'required|max:300',
+            'inquiry_document' => 'nullable|file',
         ];
     }
 }
