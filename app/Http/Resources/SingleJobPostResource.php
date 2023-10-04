@@ -21,7 +21,7 @@ class SingleJobPostResource extends JsonResource
             'country' => $this->country,
             'is_published' => $this->is_published,
             'created_at' => $this->created_at->format('F j, Y'),
-            'desription' => $this->description,
+            'description' => $this->description,
         ];
     }
 }
