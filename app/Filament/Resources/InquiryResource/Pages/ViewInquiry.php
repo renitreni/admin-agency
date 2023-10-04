@@ -15,12 +15,12 @@ class ViewInquiry extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\EditAction::make(),
             Action::make('download')
-                ->label('Download CV')
+                ->label('Download Attachment')
                 ->icon('heroicon-m-arrow-down-tray')
                 ->requiresConfirmation()
                 ->action(fn (Inquiry $record) => redirect()->to($record->getFirstMediaUrl('*'))),
+            Actions\DeleteAction::make(),
         ];
     }
 }
