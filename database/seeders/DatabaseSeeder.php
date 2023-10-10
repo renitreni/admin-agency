@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
+     * php artisan migrate
      */
     public function run(): void
     {

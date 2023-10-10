@@ -4,13 +4,17 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ApplicationResource\Pages;
 use App\Models\Application;
+use Filament\Facades\Filament;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
+use Filament\Notifications\Collection;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection as DBCollection;
 
 class ApplicationResource extends Resource
 {
@@ -28,8 +32,7 @@ class ApplicationResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-            ]);
+            ->schema([]);
     }
 
     public static function table(Table $table): Table
@@ -37,13 +40,13 @@ class ApplicationResource extends Resource
         return $table
             ->defaultSort('id', 'desc')
             ->columns([
+                TextColumn::make('jobPost.title')->label('Position Applied')->sortable()->searchable(),
                 TextColumn::make('id')->sortable()->searchable(),
                 TextColumn::make('first_name')->sortable()->searchable(),
                 TextColumn::make('last_name')->sortable()->searchable(),
                 TextColumn::make('middle_name')->sortable()->searchable(),
                 TextColumn::make('contact_number')->sortable()->searchable(),
                 TextColumn::make('email')->sortable()->searchable(),
-                TextColumn::make('jobPost.title')->sortable()->searchable(),
             ])
             ->filters([
                 //
@@ -53,6 +56,19 @@ class ApplicationResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    BulkAction::make('Export')
+                        ->icon('heroicon-o-cloud-arrow-down')
+                        ->requiresConfirmation()
+                        ->action(function (DBCollection $records) {
+                            return response()->streamDownload(function () use ($records) {
+                                echo \Barryvdh\DomPDF\Facade\Pdf::loadHtml(
+                                    view(
+                                        'downloadables.applications-pdf',
+                                        ['records' => $records, 'agency' => Filament::getTenant()]
+                                    )
+                                )->setPaper('a4', 'landscape')->stream();
+                            }, "Applications ".now()->format('F j, Y')." .pdf");
+                        }),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
