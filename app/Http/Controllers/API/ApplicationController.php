@@ -17,7 +17,9 @@ class ApplicationController extends Controller
 
     public function store(ApplicationStoreRequest $request, Agency $agency)
     {
-        $application = NewApplicationAction::process($request, $agency);
+        $jobId = JobPost::where('uuid', $request->get('job_id'))->first();
+
+        $application = NewApplicationAction::process($request, $agency, $jobId->id ?? null);
 
         return response()->json($application);
     }

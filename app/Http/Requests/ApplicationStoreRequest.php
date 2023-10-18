@@ -30,6 +30,7 @@ class ApplicationStoreRequest extends FormRequest
             'cover_letter' => 'max:300|required',
             'accepted_terms_and_condition' => 'max:1|required|in:1',
             'resume' => 'required|file',
+            'job_id' => 'nullable',
         ];
     }
 }
