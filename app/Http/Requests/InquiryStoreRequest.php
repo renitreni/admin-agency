@@ -28,6 +28,9 @@ class InquiryStoreRequest extends FormRequest
             'company_no' => 'required|max:200',
             'description' => 'required|max:300',
             'inquiry_document' => 'nullable|file',
+            'national_id' => 'nullable|file',
+            'company_registration' => 'nullable|file',
+            'other_document' => 'nullable|file',
         ];
     }
 }
