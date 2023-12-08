@@ -23,9 +23,14 @@ class InquiryController extends Controller
             'agency_id' => $agency->id,
         ]);
 
-        if($inquiryStoreRequest->has('inquiry_document')){
-            $inquiry->addMediaFromRequest('inquiry_document')->toMediaCollection('inquiry_document');
+        $documentTypes = ['inquiry_document','company_registration', 'national_id', 'other_document'];
+
+        foreach ($documentTypes as $documentType) {
+            if ($inquiryStoreRequest->has($documentType)) {
+                $inquiry->addMediaFromRequest($documentType)->toMediaCollection($documentType);
+            }
         }
+
 
         return response()->json($inquiry);
     }
