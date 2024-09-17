@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserResource extends Resource
 {
@@ -21,11 +22,14 @@ class UserResource extends Resource
 
     protected static ?string $navigationGroup = 'General Settings';
 
-    public static function canViewAny(): bool
+    public static function getEloquentQuery(): Builder
     {
-        return auth()->user()->email == config('app.allowed_email');
+        return parent::getEloquentQuery()
+            ->when(auth()->user()->email == config('app.allowed_email'), function($query){
+                $query->whereNot('email', config('app.allowed_email'));
+            });
     }
-
+    
     public static function form(Form $form): Form
     {
         return $form
