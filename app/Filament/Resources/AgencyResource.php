@@ -46,9 +46,9 @@ class AgencyResource extends Resource
                             ->hiddenOn('create')
                             ->content(fn ($record): string => $record->uuid ?? '')
                             ->columnSpan(2),
-                        SpatieMediaLibraryFileUpload::make('cv_template')
+                        SpatieMediaLibraryFileUpload::make('logo')
                             ->columnSpan(2)
-                            ->collection('cv_template'),
+                            ->collection('logo'),
                     ]),
             ]);
     }
