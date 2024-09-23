@@ -6,9 +6,12 @@ use App\Filament\Resources\UserResource;
 use App\Models\User;
 use Filament\Actions;
 use Filament\Actions\Action;
+use Filament\Actions\DeleteAction;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\DB;
 
 class EditUser extends EditRecord
 {
@@ -29,7 +32,12 @@ class EditUser extends EditRecord
                     ->iconColor('success')
                     ->send();
             }),
-            Actions\DeleteAction::make(),
+            DeleteAction::make()
+                ->action(function () {
+                    DB::table('agency_user')->where('user_id', $this->record['id'])->delete();
+                    User::find($this->record['id'])->delete();
+                    return redirect()->to(route('filament.admin.resources.users.index', ['tenant' => Filament::getTenant()->uuid]));
+                }),
         ];
     }
 }
