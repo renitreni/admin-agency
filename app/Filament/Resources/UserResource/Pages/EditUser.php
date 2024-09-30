@@ -23,9 +23,9 @@ class EditUser extends EditRecord
             Action::make('changePassword')->form([
                 TextInput::make('password')->password()->confirmed()->required(),
                 TextInput::make('password_confirmation')->required()->password(),
-            ])->action(function (User $user) {
-                $user->update(['password' => $this->record['password']]);
-
+            ])->action(function (User $user, $data) {
+                $user->update(['password' => $data['password']]);
+                
                 Notification::make()
                     ->title('Password changed successfully!')
                     ->icon('heroicon-o-check')
