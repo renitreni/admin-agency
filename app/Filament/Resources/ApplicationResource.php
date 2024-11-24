@@ -8,7 +8,6 @@ use Filament\Facades\Filament;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
-use Filament\Notifications\Collection;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\BulkAction;
@@ -67,7 +66,7 @@ class ApplicationResource extends Resource
                                         ['records' => $records, 'agency' => Filament::getTenant()]
                                     )
                                 )->setPaper('a4', 'landscape')->stream();
-                            }, "Applications ".now()->format('F j, Y')." .pdf");
+                            }, 'Applications '.now()->format('F j, Y').' .pdf');
                         }),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),

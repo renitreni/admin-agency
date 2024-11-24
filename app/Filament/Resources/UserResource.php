@@ -25,11 +25,11 @@ class UserResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->when(auth()->user()->email == config('app.allowed_email'), function($query){
+            ->when(auth()->user()->email == config('app.allowed_email'), function ($query) {
                 $query->whereNot('email', config('app.allowed_email'));
             });
     }
-    
+
     public static function form(Form $form): Form
     {
         return $form

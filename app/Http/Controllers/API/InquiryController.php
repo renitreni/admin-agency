@@ -23,7 +23,7 @@ class InquiryController extends Controller
             'agency_id' => $agency->id,
         ]);
 
-        if($inquiryStoreRequest->has('inquiry_document')){
+        if ($inquiryStoreRequest->has('inquiry_document')) {
             $inquiry->addMediaFromRequest('inquiry_document')->toMediaCollection('inquiry_document');
         }
 

@@ -13,9 +13,7 @@ class WorkerRegisteredNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(protected $worker)
-    {
-    }
+    public function __construct(protected $worker) {}
 
     /**
      * Get the notification's delivery channels.

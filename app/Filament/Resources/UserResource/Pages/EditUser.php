@@ -4,7 +4,6 @@ namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
 use App\Models\User;
-use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Facades\Filament;
@@ -25,7 +24,7 @@ class EditUser extends EditRecord
                 TextInput::make('password_confirmation')->required()->password(),
             ])->action(function (User $user, $data) {
                 $user->update(['password' => $data['password']]);
-                
+
                 Notification::make()
                     ->title('Password changed successfully!')
                     ->icon('heroicon-o-check')
@@ -36,6 +35,7 @@ class EditUser extends EditRecord
                 ->action(function () {
                     DB::table('agency_user')->where('user_id', $this->record['id'])->delete();
                     User::find($this->record['id'])->delete();
+
                     return redirect()->to(route('filament.admin.resources.users.index', ['tenant' => Filament::getTenant()->uuid]));
                 }),
         ];

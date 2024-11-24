@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('api')->group(function () {
+Route::middleware('api')->prefix('v1')->group(function () {
     Route::apiResource('application', ApplicationController::class)->only('index');
     Route::post('/application/{agency}', [ApplicationController::class, 'store']);
     Route::post('/application/{agency}/job/{jobPost}', [ApplicationController::class, 'storeWithJob'])->name('application.store.job');

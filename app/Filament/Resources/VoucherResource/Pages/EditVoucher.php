@@ -19,8 +19,5 @@ class EditVoucher extends EditRecord
     }
 
     #[On('refreshVoucher')]
-    public function refresh(): void
-    {
-
-    }
+    public function refresh(): void {}
 }
