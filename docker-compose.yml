@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    volumes:
+      - .:/var/www/html
+    networks:
+      - laravel-net
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    networks:
+      - laravel-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:alpine
+    restart: always
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6380:6379"
+    command: redis-server --save 20 1 --loglevel warning
+    networks:
+      - laravel-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+    networks:
+      - laravel-net
+    depends_on:
+      app:
+        condition: service_started
+
+networks:
+  laravel-net:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  redis-data:
