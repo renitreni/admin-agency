@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ComplaintController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect(route('filament.admin.auth.login'));
 })->name('home');
+
+Route::get('/complaints', [ComplaintController::class, 'show'])->name('complaints.form');
+Route::post('/complaints', [ComplaintController::class, 'store'])->middleware('throttle:complaints')->name('complaints.store');
