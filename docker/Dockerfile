@@ -1,5 +1,5 @@
-# Base image
-FROM php:8.3-fpm
+# Base image (Bookworm: has libc-client2007e-dev; Trixie dropped it)
+FROM php:8.3-fpm-bookworm
 
 # Install PHP extensions installer
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     libmagickwand-dev \
     libldap2-dev \
-    libc-client-dev \
+    libc-client2007e-dev \
     libkrb5-dev \
     supervisor \
     libjpeg-dev \
@@ -79,6 +79,9 @@ COPY . .
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/storage/logs \
     && chmod -R 777 /var/www/html/storage \
     && chmod -R 775 /var/www/html/bootstrap/cache
+
+# Ensure PHP-FPM listens on all interfaces (so nginx in another container can connect)
+RUN sed -i 's/^listen = .*/listen = 0.0.0.0:9000/' /usr/local/etc/php-fpm.d/www.conf
 
 # Copy supervisor configuration
 COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf

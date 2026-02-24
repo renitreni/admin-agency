@@ -14,6 +14,7 @@ class Deployment extends Model
 
     protected $fillable = [
         'position',
+        'address',
         'country',
         'date_deployed',
         'status',
@@ -21,6 +22,7 @@ class Deployment extends Model
         'worker_id',
         'foreign_agency_id',
         'handler_id',
+        'identification_no',
     ];
 
     protected $casts = [

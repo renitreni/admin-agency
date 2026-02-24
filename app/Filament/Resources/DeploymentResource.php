@@ -53,12 +53,16 @@ class DeploymentResource extends Resource
                     ->options(Handler::tenant()->get()->pluck('name', 'id'))
                     ->required()
                     ->searchable(),
+                TextInput::make('identification_no')
+                    ->label('Identification No.'),
                 TextInput::make('position')
                     ->required(),
                 Select::make('country')
                     ->required()
                     ->options(Country::tenant()->get()->pluck('country_name', 'id'))
                     ->searchable(),
+                TextInput::make('address')
+                    ->columnSpanFull(),
                 DatePicker::make('date_deployed')
                     ->required(),
             ]);
@@ -74,6 +78,14 @@ class DeploymentResource extends Resource
                 TextColumn::make('position')
                     ->sortable()
                     ->searchable(),
+                TextColumn::make('identification_no')
+                    ->label('Identification No.')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('address')
+                    ->sortable()
+                    ->searchable()
+                    ->limit(30),
                 TextColumn::make('country')
                     ->sortable()
                     ->searchable(),

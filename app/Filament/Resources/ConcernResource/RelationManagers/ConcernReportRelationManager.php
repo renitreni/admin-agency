@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ConcernResource\RelationManagers;
 
+use App\Models\Worker;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -16,9 +17,11 @@ class ConcernReportRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('worker_id')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\Select::make('worker_id')
+                    ->label('Worker')
+                    ->options(Worker::tenant()->get()->pluck('fullname', 'id'))
+                    ->searchable()
+                    ->required(),
             ]);
     }
 
