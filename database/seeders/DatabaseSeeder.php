@@ -40,6 +40,8 @@ class DatabaseSeeder extends Seeder
             ]);
 
         if (app()->environment(['local'])) {
+            $this->call(ComplaintSeeder::class);
+
             Agency::factory(10)->create();
             $agencies = Agency::all();
 

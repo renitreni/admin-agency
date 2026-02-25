@@ -17,7 +17,13 @@ class VoucherTypesFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word(),
+            'name' => $this->faker->randomElement([
+                'Placement Fee',
+                'Visa Processing',
+                'Airline Ticket',
+                'Medical Examination',
+                'OEC / Documentation',
+            ]),
         ];
     }
 }

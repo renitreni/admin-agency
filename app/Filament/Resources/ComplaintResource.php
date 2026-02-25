@@ -61,6 +61,12 @@ class ComplaintResource extends Resource
             ->defaultSort('created_at', 'desc')
             ->filters([])
             ->actions([
+                Tables\Actions\Action::make('viewOnMap')
+                    ->label('View on Map')
+                    ->icon('heroicon-o-map-pin')
+                    ->url(fn (Complaint $record): ?string => $record->getGoogleMapsUrl())
+                    ->openUrlInNewTab()
+                    ->visible(fn (Complaint $record): bool => $record->hasLocation()),
                 Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
@@ -101,6 +107,8 @@ class ComplaintResource extends Resource
                 TextEntry::make('primary_contact')->label('Primary Contact'),
                 TextEntry::make('secondary_contact')->label('Secondary Contact'),
                 TextEntry::make('address_abroad')->label('Address Abroad')->columnSpanFull(),
+                TextEntry::make('latitude')->label('Latitude')->placeholder('—'),
+                TextEntry::make('longitude')->label('Longitude')->placeholder('—'),
                 TextEntry::make('complaint')
                     ->label('Complaint')
                     ->columnSpanFull()

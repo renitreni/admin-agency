@@ -11,12 +11,16 @@ use App\Models\Worker;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
@@ -63,8 +67,31 @@ class DeploymentResource extends Resource
                     ->searchable(),
                 TextInput::make('address')
                     ->columnSpanFull(),
-                DatePicker::make('date_deployed')
-                    ->required(),
+                Grid::make(2)
+                    ->schema([
+                        DatePicker::make('date_deployed')
+                            ->required(),
+                        DatePicker::make('end_of_contract_date')
+                            ->label('End of Contract Date'),
+                    ]),
+                Section::make('Flight details')
+                    ->description('Did this person already leave the country?')
+                    ->schema([
+                        Toggle::make('has_left_country')
+                            ->label('Has left the country?')
+                            ->inline(false),
+                        TextInput::make('flight_number')
+                            ->label('Flight Number'),
+                        Grid::make(2)
+                            ->schema([
+                                DatePicker::make('flight_date')
+                                    ->label('Flight / Departure Date'),
+                                TextInput::make('airline')
+                                    ->label('Airline'),
+                            ]),
+                    ])
+                    ->columns(2)
+                    ->collapsible(),
             ]);
     }
 
@@ -92,6 +119,15 @@ class DeploymentResource extends Resource
                 TextColumn::make('date_deployed')
                     ->sortable()
                     ->date(),
+                TextColumn::make('end_of_contract_date')
+                    ->label('End of Contract')
+                    ->sortable()
+                    ->date()
+                    ->placeholder('—'),
+                IconColumn::make('has_left_country')
+                    ->label('Left Country')
+                    ->sortable()
+                    ->boolean(),
                 TextColumn::make('status')
                     ->sortable()
                     ->searchable(),

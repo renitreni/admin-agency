@@ -17,6 +17,11 @@ class Deployment extends Model
         'address',
         'country',
         'date_deployed',
+        'end_of_contract_date',
+        'has_left_country',
+        'flight_number',
+        'flight_date',
+        'airline',
         'status',
         'agency_id',
         'worker_id',
@@ -27,6 +32,9 @@ class Deployment extends Model
 
     protected $casts = [
         'date_deployed' => 'date',
+        'end_of_contract_date' => 'date',
+        'flight_date' => 'date',
+        'has_left_country' => 'boolean',
     ];
 
     public function agency(): BelongsTo

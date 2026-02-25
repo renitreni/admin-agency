@@ -111,6 +111,14 @@
                         <textarea name="address_abroad" id="address_abroad" rows="3" required
                             class="mt-1 block w-full rounded-lg border border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">{{ old('address_abroad') }}</textarea>
                     </div>
+                    <div class="sm:col-span-2 flex flex-wrap items-center gap-3">
+                        <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude', $latitude ?? '') }}">
+                        <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude', $longitude ?? '') }}">
+                        <button type="button" id="use-location" class="inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            Use my location
+                        </button>
+                        <span id="location-status" class="text-sm text-slate-500"></span>
+                    </div>
                     <div class="sm:col-span-2">
                         <label for="complaint" class="block text-sm font-medium text-slate-700">Complaint * <span class="text-slate-400 font-normal">(max 10,000 characters)</span></label>
                         <textarea name="complaint" id="complaint" rows="10" maxlength="10000" required
@@ -140,6 +148,25 @@
             document.getElementById('complaint-count').textContent = this.value.length;
         });
         document.getElementById('complaint-count').textContent = document.getElementById('complaint').value.length;
+
+        document.getElementById('use-location').addEventListener('click', function () {
+            var status = document.getElementById('location-status');
+            status.textContent = 'Getting location…';
+            if (!navigator.geolocation) {
+                status.textContent = 'Geolocation is not supported by your browser.';
+                return;
+            }
+            navigator.geolocation.getCurrentPosition(
+                function (pos) {
+                    document.getElementById('latitude').value = pos.coords.latitude;
+                    document.getElementById('longitude').value = pos.coords.longitude;
+                    status.textContent = 'Location captured.';
+                },
+                function () {
+                    status.textContent = 'Could not get location. You can still submit without it.';
+                }
+            );
+        });
     </script>
 </body>
 </html>

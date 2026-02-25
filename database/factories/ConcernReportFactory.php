@@ -20,7 +20,13 @@ class ConcernReportFactory extends Factory
     {
         return [
             'worker_id' => Worker::inRandomOrder()->first()->id,
-            'feedback' => $this->faker->paragraph(),
+            'feedback' => $this->faker->randomElement([
+                'Agency made follow-up. Employer agreed to release salary by end of month.',
+                'Worker advised to submit written complaint. Case logged for POEA.',
+                'Contract copy sent to worker. Awaiting signed acknowledgment.',
+                'Transfer request under review. Foreign agency to confirm vacancy.',
+                'No response from employer after 3 attempts. Escalated to embassy.',
+            ]),
             'status' => $this->faker->randomElement(collect(ConcernStatusEnum::cases())->pluck('value')),
         ];
     }

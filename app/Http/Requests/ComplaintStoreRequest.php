@@ -29,6 +29,8 @@ class ComplaintStoreRequest extends FormRequest
             'primary_contact' => 'required|string|max:255',
             'secondary_contact' => 'nullable|string|max:255',
             'address_abroad' => 'required|string|max:1000',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
             'complaint' => 'required|string|max:10000',
             'image_evidences' => 'nullable|array|max:3',
             'image_evidences.*' => 'image|mimes:jpeg,png,gif,webp|max:5120', // 5MB per file
@@ -47,6 +49,8 @@ class ComplaintStoreRequest extends FormRequest
             'primary_contact' => 'Primary Contact',
             'secondary_contact' => 'Secondary Contact',
             'address_abroad' => 'Address Abroad',
+            'latitude' => 'Latitude',
+            'longitude' => 'Longitude',
             'image_evidences' => 'Image Evidences',
         ];
     }

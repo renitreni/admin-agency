@@ -25,6 +25,8 @@ class Complaint extends Model implements HasMedia
         'primary_contact',
         'secondary_contact',
         'address_abroad',
+        'latitude',
+        'longitude',
         'complaint',
     ];
 
@@ -32,7 +34,23 @@ class Complaint extends Model implements HasMedia
     {
         return [
             'birthdate' => 'date',
+            'latitude' => 'float',
+            'longitude' => 'float',
         ];
+    }
+
+    public function hasLocation(): bool
+    {
+        return $this->latitude !== null && $this->longitude !== null;
+    }
+
+    public function getGoogleMapsUrl(): ?string
+    {
+        if (! $this->hasLocation()) {
+            return null;
+        }
+
+        return 'https://www.google.com/maps?q=' . urlencode((string) $this->latitude) . ',' . urlencode((string) $this->longitude);
     }
 
     public function registerMediaCollections(): void

@@ -18,8 +18,20 @@ class ConcernFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->sentence(),
-            'description' => $this->faker->paragraph(),
+            'title' => $this->faker->randomElement([
+                'Delay in contract processing',
+                'Employer not responding to worker concerns',
+                'Salary remittance issue',
+                'Request for transfer of employer',
+                'Documentation follow-up',
+            ]),
+            'description' => $this->faker->randomElement([
+                'Worker reported delayed release of contract. Following up with foreign agency.',
+                'Employer has not replied to repeated contact. Escalating to POEA.',
+                'Worker claims salary not remitted on schedule. Verifying with employer.',
+                'Worker requesting transfer due to change in household setup.',
+                'Pending OEC renewal. Waiting for employer confirmation letter.',
+            ]),
             'status' => $this->faker->randomElement(collect(ConcernStatusEnum::cases())->pluck('value')),
         ];
     }

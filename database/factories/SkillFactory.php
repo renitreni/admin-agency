@@ -17,7 +17,13 @@ class SkillFactory extends Factory
     public function definition(): array
     {
         return [
-            'description' => $this->faker->paragraph(),
+            'description' => $this->faker->randomElement([
+                'Housekeeping and laundry',
+                'Cooking and meal preparation',
+                'Elderly care and basic nursing',
+                'Child care and tutoring',
+                'Driving and vehicle maintenance',
+            ]),
         ];
     }
 }

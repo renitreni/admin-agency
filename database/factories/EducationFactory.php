@@ -20,7 +20,13 @@ class EducationFactory extends Factory
         return [
             'level' => EducationLevelEnum::COLLEGE,
             'title' => $this->faker->company(),
-            'description' => $this->faker->paragraph(),
+            'description' => $this->faker->randomElement([
+                'Bachelor of Science in Nursing',
+                'Caregiving NC II',
+                'Housekeeping NC II',
+                'High school graduate',
+                'TESDA Household Services passer',
+            ]),
             'from_date' => $this->faker->date(),
             'to_date' => $this->faker->date(),
         ];

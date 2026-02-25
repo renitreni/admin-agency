@@ -5,13 +5,20 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ComplaintStoreRequest;
 use App\Models\Complaint;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ComplaintController extends Controller
 {
-    public function show(): View
+    public function show(Request $request): View
     {
-        return view('complaints.form');
+        $latitude = $request->query('latitude');
+        $longitude = $request->query('longitude');
+
+        return view('complaints.form', [
+            'latitude' => $latitude !== null && $latitude !== '' ? (float) $latitude : null,
+            'longitude' => $longitude !== null && $longitude !== '' ? (float) $longitude : null,
+        ]);
     }
 
     public function store(ComplaintStoreRequest $request): RedirectResponse
@@ -36,6 +43,8 @@ class ComplaintController extends Controller
             'primary_contact' => $validated['primary_contact'],
             'secondary_contact' => $validated['secondary_contact'] ?? null,
             'address_abroad' => $validated['address_abroad'],
+            'latitude' => $validated['latitude'] ?? null,
+            'longitude' => $validated['longitude'] ?? null,
             'complaint' => $validated['complaint'],
         ]);
 
