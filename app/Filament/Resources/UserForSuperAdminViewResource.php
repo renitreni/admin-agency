@@ -2,10 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
+use App\Filament\Resources\UserForSuperAdminViewResource\Pages;
 use App\Models\Agency;
 use App\Models\User;
-use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -14,22 +13,69 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class UserResource extends Resource
+class UserForSuperAdminViewResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationIcon = 'heroicon-o-user-circle';
 
     protected static ?string $navigationGroup = 'General Settings';
 
+    protected static ?string $navigationLabel = 'Users (Super Admin)';
+
+    protected static ?string $modelLabel = 'User';
+
+    protected static ?string $slug = 'users-super-admin';
+
+    /** Show all users across all tenants; only for the allowed_email super admin. */
+    protected static bool $isScopedToTenant = false;
+
+    /**
+     * Only the user whose email matches config('app.allowed_email') can see and use this resource.
+     */
+    protected static function isAllowedUser(): bool
+    {
+        $allowedEmail = config('app.allowed_email');
+
+        return $allowedEmail && Auth::check() && Auth::user()->email === $allowedEmail;
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return static::isAllowedUser();
+    }
+
+    public static function canViewAny(): bool
+    {
+        return static::isAllowedUser();
+    }
+
+    public static function canCreate(): bool
+    {
+        return static::isAllowedUser();
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return static::isAllowedUser();
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return static::isAllowedUser();
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return static::isAllowedUser();
+    }
+
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
-            ->when(Auth::user() && Auth::user()->email === config('app.allowed_email'), function ($query) {
-                $query->whereNot('email', config('app.allowed_email'));
-            });
+        return parent::getEloquentQuery();
     }
 
     public static function form(Form $form): Form
@@ -41,13 +87,8 @@ class UserResource extends Resource
                 TextInput::make('password')->password()->confirmed()->hiddenOn('edit'),
                 TextInput::make('password_confirmation')->password()->hiddenOn('edit'),
                 Select::make('agency_id')
-                    ->options(fn () => Filament::getTenant()
-                        ? [Filament::getTenant()->id => Filament::getTenant()->name]
-                        : Agency::all()->pluck('name', 'id')->all())
-                    ->relationship('agency', 'name', fn ($query) => $query->when(
-                        Filament::getTenant(),
-                        fn ($q) => $q->where((new Agency)->getTable() . '.id', Filament::getTenant()->id)
-                    ))
+                    ->options(Agency::all()->pluck('name', 'id'))
+                    ->relationship('agency', 'name')
                     ->required()
                     ->multiple(),
             ]);
@@ -87,9 +128,9 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => Pages\ListUsersForSuperAdminView::route('/'),
+            'create' => Pages\CreateUserForSuperAdminView::route('/create'),
+            'edit' => Pages\EditUserForSuperAdminView::route('/{record}/edit'),
         ];
     }
 }
