@@ -45,7 +45,7 @@ class ConcernResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('title')->sortable()->searchable(),
-                TextColumn::make('agency.name')->sortable()->searchable(),
+                TextColumn::make('foreignAgency.name')->label('F.R.A')->sortable()->searchable(),
                 TextColumn::make('status')->sortable(),
                 TextColumn::make('created_at')->sortable(),
             ])

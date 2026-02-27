@@ -17,6 +17,7 @@ class Concern extends Model
         'description',
         'status',
         'agency_id',
+        'foreign_agency_id',
     ];
 
     protected $casts = [
@@ -30,6 +31,11 @@ class Concern extends Model
 
     public function agency(): BelongsTo
     {
-        return $this->BelongsTo(Agency::class);
+        return $this->belongsTo(Agency::class);
+    }
+
+    public function foreignAgency(): BelongsTo
+    {
+        return $this->belongsTo(ForeignAgency::class);
     }
 }

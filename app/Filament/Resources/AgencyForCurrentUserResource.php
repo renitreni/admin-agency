@@ -2,11 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AgencyResource\Pages;
+use App\Filament\Resources\AgencyForCurrentUserResource\Pages;
 use App\Models\Agency;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -17,7 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class AgencyResource extends Resource
+class AgencyForCurrentUserResource extends Resource
 {
     protected static ?string $model = Agency::class;
 
@@ -25,54 +24,52 @@ class AgencyResource extends Resource
 
     protected static ?string $navigationGroup = 'General Settings';
 
-    protected static ?string $navigationLabel = 'Agencies (Super Admin)';
+    protected static ?string $navigationLabel = 'My Agency';
 
-    /** Only for the allowed_email super admin. */
+    protected static ?string $modelLabel = 'Agency';
+
+    protected static ?string $slug = 'my-agency';
+
+    /** Show only agencies the current user belongs to. */
     protected static bool $isScopedToTenant = false;
 
-    /**
-     * Only the user whose email matches config('app.allowed_email') can see and use this resource.
-     */
-    protected static function isAllowedUser(): bool
+    public static function getEloquentQuery(): Builder
     {
-        $allowedEmail = config('app.allowed_email');
+        $agencyIds = Auth::check()
+            ? Auth::user()->agency->pluck('id')->toArray()
+            : [];
 
-        return $allowedEmail && Auth::check() && Auth::user()->email === $allowedEmail;
+        return parent::getEloquentQuery()->whereIn('id', $agencyIds);
     }
 
     public static function shouldRegisterNavigation(): bool
     {
-        return static::isAllowedUser();
+        return Auth::check() && Auth::user()->agency->isNotEmpty();
     }
 
     public static function canViewAny(): bool
     {
-        return static::isAllowedUser();
+        return Auth::check() && Auth::user()->agency->isNotEmpty();
     }
 
     public static function canCreate(): bool
     {
-        return static::isAllowedUser();
+        return false;
     }
 
     public static function canEdit(Model $record): bool
     {
-        return static::isAllowedUser();
+        return Auth::check() && Auth::user()->agency->contains('id', $record->id);
     }
 
     public static function canDelete(Model $record): bool
     {
-        return static::isAllowedUser();
+        return false;
     }
 
     public static function canDeleteAny(): bool
     {
-        return static::isAllowedUser();
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return static::getModel()::query()->whereNot('name', ['Yaramay']);
+        return false;
     }
 
     public static function form(Form $form): Form
@@ -88,9 +85,6 @@ class AgencyResource extends Resource
                             ->hiddenOn('create')
                             ->content(fn ($record): string => $record->uuid ?? '')
                             ->columnSpan(2),
-                        // SpatieMediaLibraryFileUpload::make('logo')
-                        //     ->columnSpan(2)
-                        //     ->collection('logo'),
                     ]),
             ]);
     }
@@ -111,12 +105,7 @@ class AgencyResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ])
-            ->emptyStateActions([
-                Tables\Actions\CreateAction::make(),
+                //
             ]);
     }
 
@@ -130,9 +119,8 @@ class AgencyResource extends Resource
     public static function getPages(): array
     {
         return [
-            'create' => Pages\CreateAgency::route('/create'),
-            'index' => Pages\ListAgencies::route('/'),
-            'edit' => Pages\EditAgency::route('/{record}/edit'),
+            'index' => Pages\ListAgenciesForCurrentUser::route('/'),
+            'edit' => Pages\EditAgencyForCurrentUser::route('/{record}/edit'),
         ];
     }
 }
