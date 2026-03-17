@@ -76,4 +76,11 @@ class Worker extends Model implements HasMedia
     {
         return $this->hasMany(Skill::class);
     }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('passport')
+            ->singleFile()
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp']);
+    }
 }

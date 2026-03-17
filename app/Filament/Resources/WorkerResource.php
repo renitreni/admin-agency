@@ -87,6 +87,14 @@ class WorkerResource extends Resource
                                                 DatePicker::make('passport_date_issue'),
                                                 DatePicker::make('passport_date_expired'),
                                             ]),
+                                        SpatieMediaLibraryFileUpload::make('passport')
+                                            ->label('Passport image')
+                                            ->collection('passport')
+                                            ->image()
+                                            ->imagePreviewHeight('200')
+                                            ->maxSize(10240)
+                                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                                            ->helperText('Original file is saved as-is. Re-uploading with the same filename overwrites the previous image (max 10MB).'),
                                     ]),
                                 Tab::make('Relative Info')
                                     ->schema([
