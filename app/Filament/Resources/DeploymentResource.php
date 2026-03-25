@@ -102,6 +102,10 @@ class DeploymentResource extends Resource
                 TextColumn::make('worker.fullname')
                     ->sortable(['first_name'])
                     ->searchable(['workers.first_name', 'workers.last_name']),
+                TextColumn::make('foreignAgency.name')
+                    ->label('F.R.A')
+                    ->sortable(['foreign_agencies.name'])
+                    ->searchable(['foreign_agencies.name']),
                 TextColumn::make('position')
                     ->sortable()
                     ->searchable(),
