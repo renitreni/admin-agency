@@ -31,9 +31,10 @@ class Worker extends Model implements HasMedia
 
     protected static function booted(): void
     {
-        static::created(function (Model $model) {
-            $model->code = WorkerService::generateCode();
-            $model->save();
+        static::creating(function (Model $model) {
+            if (! $model->code) {
+                $model->code = WorkerService::generateCode();
+            }
         });
     }
 
@@ -75,6 +76,11 @@ class Worker extends Model implements HasMedia
     public function skills(): HasMany
     {
         return $this->hasMany(Skill::class);
+    }
+
+    public function monitorings(): HasMany
+    {
+        return $this->hasMany(Monitoring::class);
     }
 
     public function registerMediaCollections(): void

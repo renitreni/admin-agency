@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\MonitoringController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -31,3 +32,10 @@ Route::get('/storage/{path}', function (string $path) {
 
 Route::get('/complaints', [ComplaintController::class, 'show'])->name('complaints.form');
 Route::post('/complaints', [ComplaintController::class, 'store'])->middleware('throttle:complaints')->name('complaints.store');
+
+Route::get('/monitoring/login', [MonitoringController::class, 'showLogin'])->name('monitoring.login.show');
+Route::post('/monitoring/login', [MonitoringController::class, 'authenticate'])->middleware('throttle:20,1')->name('monitoring.login.authenticate');
+Route::post('/monitoring/logout', [MonitoringController::class, 'logout'])->name('monitoring.logout');
+
+Route::get('/monitoring/reporting', [MonitoringController::class, 'showForm'])->name('monitoring.form.show');
+Route::post('/monitoring/reporting', [MonitoringController::class, 'store'])->middleware('throttle:20,1')->name('monitoring.form.store');

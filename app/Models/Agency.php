@@ -80,4 +80,9 @@ class Agency extends Model implements HasMedia
     {
         return $this->hasMany(Handler::class);
     }
+
+    public function monitorings(): HasMany
+    {
+        return $this->hasMany(Monitoring::class);
+    }
 }

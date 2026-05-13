@@ -8,7 +8,9 @@ use App\Filament\Resources\WorkerDocumentResource\RelationManagers\WorkerDocumen
 use App\Filament\Resources\WorkerResource\Pages;
 use App\Filament\Resources\WorkHistoryResource\RelationManagers\WorkHistoryRelationManager;
 use App\Models\Worker;
+use App\Services\WorkerService;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Filament\Forms\Components\Actions\Action as FormAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\RichEditor;
@@ -19,6 +21,8 @@ use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
@@ -50,8 +54,32 @@ class WorkerResource extends Resource
                                                 TextInput::make('last_name')->required()->columns(1),
                                                 TextInput::make('middle_name')->required()->columns(1),
                                                 TextInput::make('position')->required(),
-                                                TextInput::make('code')->readOnly()
-                                                    ->default('Auto generated after creation.'),
+                                                TextInput::make('code')
+                                                    ->label('Secret Code (5 digits)')
+                                                    ->readOnly()
+                                                    ->dehydrated(false)
+                                                    ->formatStateUsing(fn (?string $state): string => $state ?: 'Generated after worker is created.')
+                                                    ->suffixAction(
+                                                        FormAction::make('generate_new_secret_code')
+                                                            ->icon('heroicon-o-arrow-path')
+                                                            ->tooltip('Generate new secret code')
+                                                            ->requiresConfirmation()
+                                                            ->visible(fn (?Worker $record): bool => filled($record))
+                                                            ->action(function (Set $set, ?Worker $record): void {
+                                                                if (! $record) {
+                                                                    return;
+                                                                }
+
+                                                                $newCode = WorkerService::regenerateCode($record);
+                                                                $set('code', $newCode);
+
+                                                                Notification::make()
+                                                                    ->title('Secret code regenerated.')
+                                                                    ->success()
+                                                                    ->send();
+                                                            })
+                                                    )
+                                                    ->helperText('This code is used by the worker in the external reporting login.'),
                                             ]),
                                         Grid::make()
                                             ->relationship('workerInformation')
