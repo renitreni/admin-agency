@@ -8,6 +8,8 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 RUN apt-get update && apt-get install -y \
     libmemcached-dev \
     libmemcached-tools \
+    nodejs \
+    npm \
     zlib1g-dev \
     libzstd-dev \
     libpq-dev \

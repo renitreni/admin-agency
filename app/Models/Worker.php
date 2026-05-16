@@ -83,6 +83,31 @@ class Worker extends Model implements HasMedia
         return $this->hasMany(Monitoring::class);
     }
 
+    public function deployments(): HasMany
+    {
+        return $this->hasMany(Deployment::class);
+    }
+
+    public function hasActiveDeployment(): bool
+    {
+        return $this->deployments()
+            ->where('agency_id', $this->agency_id)
+            ->where('status', 'DEPLOYED')
+            ->exists();
+    }
+
+    public function hasSubmittedMonitoring(): bool
+    {
+        return $this->monitorings()
+            ->where('agency_id', $this->agency_id)
+            ->exists();
+    }
+
+    public function needsMonitoringAlert(): bool
+    {
+        return $this->hasActiveDeployment() && ! $this->hasSubmittedMonitoring();
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('passport')

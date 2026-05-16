@@ -90,6 +90,8 @@ class DatabaseSeeder extends Seeder
                     ]);
                 }
             }
+
+            $this->call(MonitoringSeeder::class);
         }
     }
 }

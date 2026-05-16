@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MonitoringLoginRequest;
 use App\Http\Requests\MonitoringStoreRequest;
+use App\Models\Deployment;
 use App\Models\Monitoring;
 use App\Models\Worker;
 use Illuminate\Http\RedirectResponse;
@@ -33,6 +34,17 @@ class MonitoringController extends Controller
         if (! $worker) {
             return back()
                 ->withErrors(['credentials' => 'Invalid passport number or secret code.'])
+                ->withInput();
+        }
+
+        $hasActiveDeployment = Deployment::query()
+            ->where('worker_id', $worker->id)
+            ->where('status', 'DEPLOYED')
+            ->exists();
+
+        if (! $hasActiveDeployment) {
+            return back()
+                ->withErrors(['credentials' => 'Worker is not currently deployed.'])
                 ->withInput();
         }
 
@@ -107,4 +119,3 @@ class MonitoringController extends Controller
             ->find($workerId);
     }
 }
-
