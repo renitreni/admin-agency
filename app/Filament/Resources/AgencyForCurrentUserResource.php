@@ -47,11 +47,6 @@ class AgencyForCurrentUserResource extends BaseResource
         return Auth::check() && Auth::user()->agency->isNotEmpty();
     }
 
-    public static function canViewAny(): bool
-    {
-        return Auth::check() && Auth::user()->agency->isNotEmpty();
-    }
-
     public static function canCreate(): bool
     {
         return false;
