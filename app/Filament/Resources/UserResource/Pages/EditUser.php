@@ -20,8 +20,8 @@ class EditUser extends EditRecord
     {
         return [
             Action::make('changePassword')->form([
-                TextInput::make('password')->password()->confirmed()->required(),
-                TextInput::make('password_confirmation')->required()->password(),
+                TextInput::make('password')->password()->revealable()->confirmed()->required(),
+                TextInput::make('password_confirmation')->required()->password()->revealable(),
             ])->action(function (User $user, $data) {
                 $user->update(['password' => \Illuminate\Support\Facades\Hash::make($data['password'])]);
 

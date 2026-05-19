@@ -26,8 +26,8 @@ class EditForeignAgencyAccount extends EditRecord
         return [
             Action::make('changePassword')
                 ->form([
-                    \Filament\Forms\Components\TextInput::make('password')->password()->confirmed()->required(),
-                    \Filament\Forms\Components\TextInput::make('password_confirmation')->required()->password(),
+                    \Filament\Forms\Components\TextInput::make('password')->password()->revealable()->confirmed()->required(),
+                    \Filament\Forms\Components\TextInput::make('password_confirmation')->required()->password()->revealable(),
                 ])
                 ->action(function (array $data) {
                     $this->record->update(['password' => Hash::make($data['password'])]);

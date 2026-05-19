@@ -42,8 +42,8 @@ class UserResource extends BaseResource
             ->schema([
                 TextInput::make('name')->required(),
                 TextInput::make('email')->disabledOn('edit')->unique(ignoreRecord: true)->required(),
-                TextInput::make('password')->password()->confirmed()->hiddenOn('edit'),
-                TextInput::make('password_confirmation')->password()->hiddenOn('edit'),
+                TextInput::make('password')->password()->revealable()->confirmed()->hiddenOn('edit'),
+                TextInput::make('password_confirmation')->password()->revealable()->hiddenOn('edit'),
                 Select::make('agency_id')
                     ->options(fn () => Filament::getTenant()
                         ? [Filament::getTenant()->id => Filament::getTenant()->name]
