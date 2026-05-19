@@ -96,6 +96,65 @@ class Worker extends Model implements HasMedia
             ->exists();
     }
 
+    public function getLatestDeploymentDate()
+    {
+        return $this->deployments()
+            ->where('agency_id', $this->agency_id)
+            ->where('status', 'DEPLOYED')
+            ->latest('date_deployed')
+            ->value('date_deployed');
+    }
+
+    public function getLastMonitoringDate()
+    {
+        return $this->monitorings()
+            ->where('agency_id', $this->agency_id)
+            ->latest('created_at')
+            ->value('created_at');
+    }
+
+    public function getDaysSinceLastReport(): int
+    {
+        $lastMonitoringDate = $this->getLastMonitoringDate();
+        
+        if ($lastMonitoringDate) {
+            return now()->startOfDay()->diffInDays($lastMonitoringDate->startOfDay());
+        }
+        
+        // If no previous report, calculate from deployment date
+        $deploymentDate = $this->getLatestDeploymentDate();
+        if ($deploymentDate) {
+            return now()->startOfDay()->diffInDays($deploymentDate->startOfDay());
+        }
+        
+        return PHP_INT_MAX; // Return a large number if no deployment date found
+    }
+
+    public function needsMonitoringAlertBasedOnConfig(): bool
+    {
+        $firstReportThreshold = config('monitoring.first_report_threshold_days', 3);
+        $subsequentReportThreshold = config('monitoring.subsequent_report_threshold_days', 15);
+        
+        $hasPreviousReports = $this->monitorings()
+            ->where('agency_id', $this->agency_id)
+            ->exists();
+            
+        $daysSinceLastReport = $this->getDaysSinceLastReport();
+        
+        // Check if worker has active deployment
+        if (!$this->hasActiveDeployment()) {
+            return false;
+        }
+        
+        if (!$hasPreviousReports) {
+            // First condition: Worker has no report yet for X days after deployment
+            return $daysSinceLastReport >= $firstReportThreshold;
+        } else {
+            // Second condition: Worker has previous report but didn't report in X days
+            return $daysSinceLastReport >= $subsequentReportThreshold;
+        }
+    }
+
     public function hasSubmittedMonitoring(): bool
     {
         return $this->monitorings()

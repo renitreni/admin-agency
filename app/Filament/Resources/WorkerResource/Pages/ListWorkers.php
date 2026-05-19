@@ -4,9 +4,9 @@ namespace App\Filament\Resources\WorkerResource\Pages;
 
 use App\Filament\Resources\WorkerResource;
 use App\Models\Worker;
+use App\Services\MonitoringService;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\View\View;
 
 class ListWorkers extends ListRecords
@@ -18,19 +18,8 @@ class ListWorkers extends ListRecords
      */
     public function getHeader(): ?View
     {
-        $workersNeedingMonitoring = Worker::query()
-            ->tenant()
-            ->with('agency')
-            ->whereHas('deployments', function (Builder $query): void {
-                $query->whereColumn('agency_id', 'workers.agency_id')
-                    ->where('status', 'DEPLOYED');
-            })
-            ->whereDoesntHave('monitorings', function (Builder $query): void {
-                $query->whereColumn('agency_id', 'workers.agency_id');
-            })
-            ->orderBy('last_name')
-            ->orderBy('first_name')
-            ->get();
+        $monitoringService = new MonitoringService();
+        $workersNeedingMonitoring = $monitoringService->getWorkersNeedingMonitoring();
 
         if ($workersNeedingMonitoring->isEmpty()) {
             return null;

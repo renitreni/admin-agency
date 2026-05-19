@@ -1,3 +1,7 @@
+<!-- Configuration for monitoring thresholds:
+     - Workers with no reports: Show alert after config('monitoring.first_report_threshold_days', 3) days of deployment
+     - Workers with previous reports: Show alert after config('monitoring.subsequent_report_threshold_days', 15) days without a report
+-->
 <div class="monitoring-alert-banner rounded-lg bg-danger-50 p-4 text-danger-600">
     <p class="text-base font-bold">⚠ Monitoring Alert</p>
 
@@ -6,7 +10,25 @@
             <div class="carousel-track flex transition-transform duration-500 ease-in-out" style="transform: translateX(0%);">
                 @foreach ($workersNeedingMonitoring as $index => $worker)
                     <div class="carousel-item w-full flex-shrink-0 px-2 py-1">
-                        {{ $worker->fullname }} is currently DEPLOYED under {{ $worker->agency?->name }} and has not submitted any monitoring report yet. Please follow up immediately.
+                        @php
+                            $hasPreviousReports = $worker->monitorings()
+                                ->where('agency_id', $worker->agency_id)
+                                ->exists();
+                            
+                            $threshold = $hasPreviousReports
+                                ? config('monitoring.subsequent_report_threshold_days', 15)
+                                : config('monitoring.first_report_threshold_days', 3);
+                                
+                            $daysSinceLastReport = $worker->getDaysSinceLastReport();
+                        @endphp
+                        
+                        {{ $worker->fullname }} is currently DEPLOYED under {{ $worker->agency?->name }}
+                        @if($hasPreviousReports)
+                            and has not submitted a monitoring report for {{ $daysSinceLastReport }} days (threshold: {{ $threshold }} days).
+                        @else
+                            and has not submitted any monitoring report for {{ $daysSinceLastReport }} days since deployment (threshold: {{ $threshold }} days).
+                        @endif
+                        Please follow up immediately.
                     </div>
                 @endforeach
             </div>
