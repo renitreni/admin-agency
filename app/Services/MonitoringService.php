@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Models\Worker;
 use Illuminate\Support\Collection;
 
@@ -13,10 +14,33 @@ class MonitoringService
             ->tenant()
             ->with('agency')
             ->get()
-            ->filter(fn($worker) => $worker->needsMonitoringAlertBasedOnConfig())
+            ->filter(fn ($worker) => $worker->needsMonitoringAlertBasedOnConfig())
             ->sortBy([
                 ['last_name', 'asc'],
-                ['first_name', 'asc']
+                ['first_name', 'asc'],
+            ])
+            ->values();
+    }
+
+    public function getWorkersNeedingMonitoringForFra(User $user): Collection
+    {
+        $foreignAgencyIds = $user->foreignAgencies->pluck('id');
+
+        if ($foreignAgencyIds->isEmpty()) {
+            return collect();
+        }
+
+        return Worker::query()
+            ->tenant()
+            ->whereHas('deployments', function ($query) use ($foreignAgencyIds) {
+                $query->whereIn('foreign_agency_id', $foreignAgencyIds);
+            })
+            ->with('agency')
+            ->get()
+            ->filter(fn ($worker) => $worker->needsMonitoringAlertBasedOnConfig())
+            ->sortBy([
+                ['last_name', 'asc'],
+                ['first_name', 'asc'],
             ])
             ->values();
     }

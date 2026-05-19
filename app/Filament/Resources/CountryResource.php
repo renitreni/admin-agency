@@ -6,13 +6,13 @@ use App\Filament\Resources\CountryResource\Pages;
 use App\Models\Country;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
-class CountryResource extends Resource
+class CountryResource extends BaseResource
 {
     protected static ?string $model = Country::class;
 

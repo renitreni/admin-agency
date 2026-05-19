@@ -23,7 +23,7 @@ class EditUser extends EditRecord
                 TextInput::make('password')->password()->confirmed()->required(),
                 TextInput::make('password_confirmation')->required()->password(),
             ])->action(function (User $user, $data) {
-                $user->update(['password' => $data['password']]);
+                $user->update(['password' => \Illuminate\Support\Facades\Hash::make($data['password'])]);
 
                 Notification::make()
                     ->title('Password changed successfully!')
@@ -33,6 +33,7 @@ class EditUser extends EditRecord
             }),
             DeleteAction::make()
                 ->action(function () {
+                    DB::table('foreign_agency_user')->where('user_id', $this->record['id'])->delete();
                     DB::table('agency_user')->where('user_id', $this->record['id'])->delete();
                     User::find($this->record['id'])->delete();
 

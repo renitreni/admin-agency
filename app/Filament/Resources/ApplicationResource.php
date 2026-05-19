@@ -8,14 +8,14 @@ use Filament\Facades\Filament;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
-use Filament\Resources\Resource;
+use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection as DBCollection;
 
-class ApplicationResource extends Resource
+class ApplicationResource extends BaseResource
 {
     protected static ?string $model = Application::class;
 

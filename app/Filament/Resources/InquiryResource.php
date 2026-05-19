@@ -7,13 +7,13 @@ use App\Models\Inquiry;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
-use Filament\Resources\Resource;
+use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
-class InquiryResource extends Resource
+class InquiryResource extends BaseResource
 {
     protected static ?string $model = Inquiry::class;
 

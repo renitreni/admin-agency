@@ -8,6 +8,7 @@ use App\Services\MonitoringService;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 
 class ListWorkers extends ListRecords
 {
@@ -19,7 +20,11 @@ class ListWorkers extends ListRecords
     public function getHeader(): ?View
     {
         $monitoringService = new MonitoringService();
-        $workersNeedingMonitoring = $monitoringService->getWorkersNeedingMonitoring();
+        $user = Auth::user();
+
+        $workersNeedingMonitoring = $user instanceof \App\Models\User && $user->user_type === \App\Models\User::TYPE_FRA
+            ? $monitoringService->getWorkersNeedingMonitoringForFra($user)
+            : $monitoringService->getWorkersNeedingMonitoring();
 
         if ($workersNeedingMonitoring->isEmpty()) {
             return null;

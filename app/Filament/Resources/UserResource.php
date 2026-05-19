@@ -9,14 +9,15 @@ use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
-class UserResource extends Resource
+class UserResource extends BaseResource
 {
     protected static ?string $model = User::class;
 
@@ -29,6 +30,9 @@ class UserResource extends Resource
         return parent::getEloquentQuery()
             ->when(Auth::user() && Auth::user()->email === config('app.allowed_email'), function ($query) {
                 $query->whereNot('email', config('app.allowed_email'));
+            })
+            ->when(Auth::check(), function ($query) {
+                $query->where('user_type', User::TYPE_AGENCY);
             });
     }
 
@@ -53,6 +57,14 @@ class UserResource extends Resource
             ]);
     }
 
+    public static function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['user_type'] = User::TYPE_AGENCY;
+        $data['password'] = Hash::make($data['password']);
+
+        return $data;
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -60,6 +72,7 @@ class UserResource extends Resource
                 TextColumn::make('name')->sortable()->searchable(),
                 TextColumn::make('agency.name')->sortable()->badge(),
                 TextColumn::make('email')->sortable(),
+                TextColumn::make('user_type')->badge(),
             ])
             ->filters([
                 //

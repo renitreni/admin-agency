@@ -7,13 +7,13 @@ use App\Models\Complaint;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
-use Filament\Resources\Resource;
+use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
-class ComplaintResource extends Resource
+class ComplaintResource extends BaseResource
 {
     protected static ?string $model = Complaint::class;
 

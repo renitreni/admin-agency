@@ -6,12 +6,12 @@ use App\Filament\Resources\VoucherTypesResource\Pages;
 use App\Models\VoucherTypes;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class VoucherTypesResource extends Resource
+class VoucherTypesResource extends BaseResource
 {
     protected static ?string $model = VoucherTypes::class;
 

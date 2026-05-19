@@ -8,15 +8,16 @@ use App\Models\User;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
-class UserForSuperAdminViewResource extends Resource
+class UserForSuperAdminViewResource extends BaseResource
 {
     protected static ?string $model = User::class;
 
@@ -45,32 +46,32 @@ class UserForSuperAdminViewResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        return static::isAllowedUser();
+        return static::isAllowedUser() && ! static::isFraUser();
     }
 
     public static function canViewAny(): bool
     {
-        return static::isAllowedUser();
+        return static::isAllowedUser() && ! static::isFraUser();
     }
 
     public static function canCreate(): bool
     {
-        return static::isAllowedUser();
+        return static::isAllowedUser() && ! static::isFraUser();
     }
 
     public static function canEdit(Model $record): bool
     {
-        return static::isAllowedUser();
+        return static::isAllowedUser() && ! static::isFraUser();
     }
 
     public static function canDelete(Model $record): bool
     {
-        return static::isAllowedUser();
+        return static::isAllowedUser() && ! static::isFraUser();
     }
 
     public static function canDeleteAny(): bool
     {
-        return static::isAllowedUser();
+        return static::isAllowedUser() && ! static::isFraUser();
     }
 
     public static function getEloquentQuery(): Builder
@@ -86,12 +87,35 @@ class UserForSuperAdminViewResource extends Resource
                 TextInput::make('email')->disabledOn('edit')->unique(ignoreRecord: true)->required(),
                 TextInput::make('password')->password()->confirmed()->hiddenOn('edit'),
                 TextInput::make('password_confirmation')->password()->hiddenOn('edit'),
+                Select::make('user_type')
+                    ->options([
+                        User::TYPE_AGENCY => 'Agency',
+                        User::TYPE_FRA => 'FRA',
+                    ])
+                    ->required(),
+                Select::make('foreign_agency_id')
+                    ->label('Foreign Recruitment Agency')
+                    ->relationship('foreignAgencies', 'name')
+                    ->multiple()
+                    ->visible(fn ($get) => $get('user_type') === User::TYPE_FRA),
                 Select::make('agency_id')
-                    ->options(Agency::all()->pluck('name', 'id'))
+                    ->options(
+                        Agency::query()
+                            ->whereKey(Auth::id() ? Auth::user()->agency_id : null)
+                            ->pluck('name', 'id')
+                    )
                     ->relationship('agency', 'name')
+                    ->default(fn () => Auth::id() ? Auth::user()->agency_id : null)
                     ->required()
-                    ->multiple(),
+                    ->disabled(),
             ]);
+    }
+
+    public static function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['password'] = Hash::make($data['password']);
+
+        return $data;
     }
 
     public static function table(Table $table): Table
@@ -99,6 +123,11 @@ class UserForSuperAdminViewResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')->sortable()->searchable(),
+                TextColumn::make('user_type')
+                    ->label('Role')
+                    ->formatStateUsing(fn (string $state): string => $state === User::TYPE_FRA ? 'FRA' : 'Agency')
+                    ->sortable()
+                    ->badge(),
                 TextColumn::make('agency.name')->sortable()->badge(),
                 TextColumn::make('email')->sortable(),
             ])

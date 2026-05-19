@@ -27,6 +27,14 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         'name',
         'email',
         'password',
+        'user_type',
+    ];
+
+    public const TYPE_AGENCY = 'AGENCY';
+    public const TYPE_FRA = 'FRA';
+
+    protected $attributes = [
+        'user_type' => self::TYPE_AGENCY,
     ];
 
     /**
@@ -67,5 +75,10 @@ class User extends Authenticatable implements FilamentUser, HasTenants
     public function agency(): BelongsToMany
     {
         return $this->belongsToMany(Agency::class);
+    }
+
+    public function foreignAgencies(): BelongsToMany
+    {
+        return $this->belongsToMany(ForeignAgency::class);
     }
 }

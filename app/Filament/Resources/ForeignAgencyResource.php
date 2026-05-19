@@ -6,13 +6,13 @@ use App\Filament\Resources\ForeignAgencyResource\Pages;
 use App\Models\ForeignAgency;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
-class ForeignAgencyResource extends Resource
+class ForeignAgencyResource extends BaseResource
 {
     protected static ?string $model = ForeignAgency::class;
 

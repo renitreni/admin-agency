@@ -9,7 +9,7 @@ use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class AgencyResource extends Resource
+class AgencyResource extends BaseResource
 {
     protected static ?string $model = Agency::class;
 
@@ -42,32 +42,32 @@ class AgencyResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        return static::isAllowedUser();
+        return static::isAllowedUser() && ! static::isFraUser();
     }
 
     public static function canViewAny(): bool
     {
-        return static::isAllowedUser();
+        return static::isAllowedUser() && ! static::isFraUser();
     }
 
     public static function canCreate(): bool
     {
-        return static::isAllowedUser();
+        return static::isAllowedUser() && ! static::isFraUser();
     }
 
     public static function canEdit(Model $record): bool
     {
-        return static::isAllowedUser();
+        return static::isAllowedUser() && ! static::isFraUser();
     }
 
     public static function canDelete(Model $record): bool
     {
-        return static::isAllowedUser();
+        return static::isAllowedUser() && ! static::isFraUser();
     }
 
     public static function canDeleteAny(): bool
     {
-        return static::isAllowedUser();
+        return static::isAllowedUser() && ! static::isFraUser();
     }
 
     public static function getEloquentQuery(): Builder

@@ -25,7 +25,9 @@ class EditUserForSuperAdminView extends EditRecord
                     TextInput::make('password_confirmation')->required()->password(),
                 ])
                 ->action(function (array $data) {
-                    $this->record->update(['password' => $data['password']]);
+                    $this->record->update([
+                        'password' => \Illuminate\Support\Facades\Hash::make($data['password']),
+                    ]);
 
                     Notification::make()
                         ->title('Password changed successfully!')
@@ -35,6 +37,7 @@ class EditUserForSuperAdminView extends EditRecord
                 }),
             DeleteAction::make()
                 ->action(function () {
+                    DB::table('foreign_agency_user')->where('user_id', $this->record->id)->delete();
                     DB::table('agency_user')->where('user_id', $this->record->id)->delete();
                     User::find($this->record->id)?->delete();
 

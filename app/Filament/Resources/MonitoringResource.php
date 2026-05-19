@@ -7,13 +7,13 @@ use App\Models\Monitoring;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
-use Filament\Resources\Resource;
+use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
-class MonitoringResource extends Resource
+class MonitoringResource extends BaseResource
 {
     protected static ?string $model = Monitoring::class;
 
@@ -108,4 +108,3 @@ class MonitoringResource extends Resource
             ]);
     }
 }
-

@@ -23,19 +23,75 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Notifications\Notification;
-use Filament\Resources\Resource;
+use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
-class WorkerResource extends Resource
+class WorkerResource extends BaseResource
 {
     protected static ?string $model = Worker::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-briefcase';
+
+    protected static ?string $navigationGroup = 'FRA';
+
+    protected static ?string $navigationLabel = 'Assigned Workers';
+
+    protected static ?int $navigationSort = 10;
+
+
+    public static function getNavigationGroup(): ?string
+    {
+        return Auth::check()
+            && Auth::user() instanceof \App\Models\User
+            && Auth::user()->user_type === \App\Models\User::TYPE_FRA
+            ? 'FRA'
+            : 'Master Data';
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return Auth::check()
+            && Auth::user() instanceof \App\Models\User
+            && Auth::user()->user_type === \App\Models\User::TYPE_FRA
+            ? 'Assigned Workers'
+            : 'Workers';
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        if (! Auth::check()
+            || ! Auth::user() instanceof \App\Models\User
+            || Auth::user()->user_type !== \App\Models\User::TYPE_FRA
+        ) {
+            return $query;
+        }
+
+        $foreignAgencyIds = Auth::user()->foreignAgencies->pluck('id');
+
+        if ($foreignAgencyIds->isEmpty()) {
+            return $query->whereRaw('1 = 0');
+        }
+
+        return $query->whereHas('deployments', function (Builder $deploymentQuery) use ($foreignAgencyIds) {
+            $deploymentQuery->whereIn('foreign_agency_id', $foreignAgencyIds);
+        });
+    }
+
+    public static function canCreate(): bool
+    {
+        return Auth::check()
+            && Auth::user() instanceof \App\Models\User
+            && Auth::user()->user_type !== \App\Models\User::TYPE_FRA;
+    }
 
     public static function form(Form $form): Form
     {
@@ -174,6 +230,10 @@ class WorkerResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $isFra = Auth::check()
+            && Auth::user() instanceof \App\Models\User
+            && Auth::user()->user_type === \App\Models\User::TYPE_FRA;
+
         return $table
             ->defaultSort('id', 'desc')
             ->columns([
@@ -188,7 +248,7 @@ class WorkerResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->visible(! $isFra),
                 Action::make('generate_cv')
                     ->icon('heroicon-o-cloud-arrow-down')
                     ->requiresConfirmation()
@@ -205,11 +265,11 @@ class WorkerResource extends Resource
             ->bulkActions([
                 ExportBulkAction::make(),
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()->visible(! $isFra),
                 ]),
             ])
             ->emptyStateActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()->visible(! $isFra),
             ]);
     }
 

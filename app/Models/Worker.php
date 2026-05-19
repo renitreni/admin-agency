@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -76,6 +77,12 @@ class Worker extends Model implements HasMedia
     public function skills(): HasMany
     {
         return $this->hasMany(Skill::class);
+    }
+
+    public function foreignAgencies(): BelongsToMany
+    {
+        return $this->belongsToMany(ForeignAgency::class, 'deployments', 'worker_id', 'foreign_agency_id')
+            ->withPivot('agency_id');
     }
 
     public function monitorings(): HasMany
