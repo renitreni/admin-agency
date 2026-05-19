@@ -14,14 +14,14 @@
                             $hasPreviousReports = $worker->monitorings()
                                 ->where('agency_id', $worker->agency_id)
                                 ->exists();
-                            
+
                             $threshold = $hasPreviousReports
                                 ? config('monitoring.subsequent_report_threshold_days', 15)
                                 : config('monitoring.first_report_threshold_days', 3);
-                                
+
                             $daysSinceLastReport = $worker->getDaysSinceLastReport();
                         @endphp
-                        
+
                         {{ $worker->fullname }} is currently DEPLOYED under {{ $worker->agency?->name }}
                         @if($hasPreviousReports)
                             and has not submitted a monitoring report for {{ $daysSinceLastReport }} days (threshold: {{ $threshold }} days).
@@ -33,7 +33,7 @@
                 @endforeach
             </div>
         </div>
-        
+
         <!-- Optional indicators -->
         @if(count($workersNeedingMonitoring) > 1)
         <div class="carousel-indicators flex justify-center mt-2 space-x-2">
@@ -57,18 +57,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const indicators = document.querySelectorAll('.indicator');
     let currentIndex = 0;
     const totalItems = items.length;
-    
+
     if (totalItems <= 1) {
         // No carousel needed if there's only one or no item
         console.log("Only one or no item, carousel not needed");
         return;
     }
-    
+
     function updateCarousel() {
         // Calculate the translation amount
         const translateXValue = -(currentIndex * 100);
         track.style.transform = `translateX(${translateXValue}%)`;
-        
+
         // Update indicators if they exist
         if (indicators.length > 0) {
             indicators.forEach((indicator, index) => {
@@ -81,43 +81,43 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         }
-        
+
         console.log(`Showing slide ${currentIndex + 1} of ${totalItems}`);
     }
-    
+
     function goToSlide(index) {
         if (index >= 0 && index < totalItems) {
             currentIndex = index;
             updateCarousel();
         }
     }
-    
+
     function nextSlide() {
         currentIndex = (currentIndex + 1) % totalItems;
         updateCarousel();
     }
-    
+
     // Auto-slide every 2 seconds
     let slideInterval = setInterval(nextSlide, 2000);
-    
+
     // Pause sliding when hovering over the carousel
     const container = document.querySelector('.carousel-container');
     if (container) {
         container.addEventListener('mouseenter', () => {
             clearInterval(slideInterval);
         });
-        
+
         container.addEventListener('mouseleave', () => {
             slideInterval = setInterval(nextSlide, 2000);
         });
     }
-    
+
     // Expose goToSlide globally so it can be called from HTML
     window.goToSlide = goToSlide;
-    
+
     // Initialize the carousel
     updateCarousel();
-    
+
     console.log("Carousel initialized with " + totalItems + " items");
 });
 </script>
@@ -142,25 +142,25 @@ document.addEventListener('DOMContentLoaded', function() {
             monitoring-alert-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite,
             pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
-    
+
     .carousel-container {
         height: auto;
         overflow: hidden;
         position: relative;
     }
-    
+
     .carousel-track {
         display: flex;
         width: 100%;
         transition: transform 0.5s ease-in-out;
     }
-    
+
     .carousel-item {
         width: 100%;
         flex-shrink: 0;
         padding: 0.5rem 0;
     }
-    
+
     .carousel-indicators button {
         cursor: pointer;
         border: none;
