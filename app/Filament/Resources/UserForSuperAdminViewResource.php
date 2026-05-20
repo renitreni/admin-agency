@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserForSuperAdminViewResource\Pages;
+use App\Filament\Resources\UserResource\RelationManagers\LoginHistoryRelationManager;
 use App\Models\Agency;
 use App\Models\User;
 use Filament\Forms\Components\Select;
@@ -150,7 +151,7 @@ class UserForSuperAdminViewResource extends BaseResource
     public static function getRelations(): array
     {
         return [
-            //
+            LoginHistoryRelationManager::class,
         ];
     }
 

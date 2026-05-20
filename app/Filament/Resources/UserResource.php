@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
+use App\Filament\Resources\UserResource\RelationManagers\LoginHistoryRelationManager;
 use App\Models\Agency;
 use App\Models\User;
 use Filament\Facades\Filament;
@@ -93,7 +94,7 @@ class UserResource extends BaseResource
     public static function getRelations(): array
     {
         return [
-            //
+            LoginHistoryRelationManager::class,
         ];
     }
 
