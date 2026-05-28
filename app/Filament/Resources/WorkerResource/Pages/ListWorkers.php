@@ -3,11 +3,10 @@
 namespace App\Filament\Resources\WorkerResource\Pages;
 
 use App\Filament\Resources\WorkerResource;
-use App\Services\MonitoringService;
+use App\Services\AlertBannerService;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Auth;
 
 class ListWorkers extends ListRecords
 {
@@ -18,12 +17,8 @@ class ListWorkers extends ListRecords
      */
     public function getHeader(): ?View
     {
-        $monitoringService = new MonitoringService();
-        $user = Auth::user();
-
-        $workersNeedingMonitoring = $user instanceof \App\Models\User && $user->user_type === \App\Models\User::TYPE_FRA
-            ? $monitoringService->getWorkersNeedingMonitoringForFra($user)
-            : $monitoringService->getWorkersNeedingMonitoring();
+        $alertService = new AlertBannerService();
+        $workersNeedingMonitoring = $alertService->getWorkersNeedingMonitoring();
 
         if ($workersNeedingMonitoring->isEmpty()) {
             return null;

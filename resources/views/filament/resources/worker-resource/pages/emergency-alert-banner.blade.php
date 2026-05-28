@@ -27,7 +27,7 @@
                         @else
                             Not available
                         @endif
-                        <a href="{{ route('filament.admin.resources.worker-emergencies.view', $emergency) }}" class="ml-2 inline-flex items-center rounded bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700 hover:bg-red-200">
+                        <a href="{{ \App\Filament\Resources\WorkerEmergencyResource::getUrl('view', ['record' => $emergency]) }}" class="ml-2 inline-flex items-center rounded bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700 hover:bg-red-200">
                             View Details →
                         </a>
                     </div>
