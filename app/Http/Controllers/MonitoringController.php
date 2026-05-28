@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MonitoringEmergencyRequest;
 use App\Http\Requests\MonitoringLoginRequest;
 use App\Http\Requests\MonitoringStoreRequest;
 use App\Models\Deployment;
 use App\Models\Monitoring;
 use App\Models\Worker;
+use App\Models\WorkerEmergency;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -97,6 +99,33 @@ class MonitoringController extends Controller
         ]);
 
         return redirect()->route('monitoring.form.show')->with('success', __('Report submitted successfully.'));
+    }
+
+    public function storeEmergency(MonitoringEmergencyRequest $request): RedirectResponse
+    {
+        $worker = $this->getAuthenticatedWorker();
+
+        if (! $worker) {
+            return redirect()->route('monitoring.login.show');
+        }
+
+        // Check if worker already has an unresolved emergency
+        if (WorkerEmergency::hasUnresolvedEmergency($worker->id)) {
+            return redirect()->route('monitoring.form.show')->with('success', __('🚨 An emergency alert is already active for your account. Please wait for assistance.'));
+        }
+
+        $validated = $request->validated();
+
+        WorkerEmergency::create([
+            'agency_id' => $worker->agency_id,
+            'worker_id' => $worker->id,
+            'passport_number' => (string) optional($worker->workerInformation)->passport_number,
+            'secret_code' => $worker->code,
+            'latitude' => $validated['latitude'],
+            'longitude' => $validated['longitude'],
+        ]);
+
+        return redirect()->route('monitoring.form.show')->with('success', __('🚨 Emergency alert sent successfully. Help is on the way.'));
     }
 
     public function logout(): RedirectResponse

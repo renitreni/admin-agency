@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\WorkerResource\Pages;
 
 use App\Filament\Resources\WorkerResource;
-use App\Models\Worker;
 use App\Services\MonitoringService;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;

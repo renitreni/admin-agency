@@ -125,13 +125,13 @@ class Worker extends Model implements HasMedia
         $lastMonitoringDate = $this->getLastMonitoringDate();
         
         if ($lastMonitoringDate) {
-            return now()->startOfDay()->diffInDays($lastMonitoringDate->startOfDay());
+            return $lastMonitoringDate->startOfDay()->diffInDays(now()->startOfDay());
         }
         
         // If no previous report, calculate from deployment date
         $deploymentDate = $this->getLatestDeploymentDate();
         if ($deploymentDate) {
-            return now()->startOfDay()->diffInDays($deploymentDate->startOfDay());
+            return $deploymentDate->startOfDay()->diffInDays(now()->startOfDay());
         }
         
         return PHP_INT_MAX; // Return a large number if no deployment date found

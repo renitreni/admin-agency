@@ -39,3 +39,4 @@ Route::post('/monitoring/logout', [MonitoringController::class, 'logout'])->name
 
 Route::get('/monitoring/reporting', [MonitoringController::class, 'showForm'])->name('monitoring.form.show');
 Route::post('/monitoring/reporting', [MonitoringController::class, 'store'])->middleware('throttle:20,1')->name('monitoring.form.store');
+Route::post('/monitoring/emergency', [MonitoringController::class, 'storeEmergency'])->middleware('throttle:5,1')->name('monitoring.emergency.store');

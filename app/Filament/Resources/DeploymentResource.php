@@ -139,22 +139,7 @@ class DeploymentResource extends BaseResource
                     ->sortable(),
             ])
             ->filters([
-                Filter::make('date_deployed')
-                    ->form([
-                        DatePicker::make('date_deployed_from')->default(now()->startOfMonth()),
-                        DatePicker::make('date_deployed_to')->default(now()),
-                    ])
-                    ->query(function (Builder $query, array $data): Builder {
-                        return $query
-                            ->when(
-                                $data['date_deployed_from'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('date_deployed', '>=', $date),
-                            )
-                            ->when(
-                                $data['date_deployed_to'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('date_deployed', '<=', $date),
-                            );
-                    }),
+                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

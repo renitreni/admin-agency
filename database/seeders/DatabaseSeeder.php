@@ -91,7 +91,7 @@ class DatabaseSeeder extends Seeder
                 }
             }
 
-            $this->call(MonitoringSeeder::class);
+            $this->call([MonitoringSeeder::class, DeploymentSeeder::class]);
         }
     }
 }
