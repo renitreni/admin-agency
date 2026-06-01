@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="theme-color" content="#2563eb">
+    <link rel="manifest" href="/manifest.json">
     <title>Worker Monitoring Login – {{ config('app.name') }}</title>
     @vite('resources/css/app.css')
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -54,11 +56,95 @@
                     </button>
                     <a href="{{ url('/') }}" class="text-sm text-slate-600 hover:text-slate-900">Cancel</a>
                 </div>
+
+                <!-- PWA Install Button Section -->
+                <div class="mt-6 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-4 text-center">
+                    <p class="mb-3 text-sm text-slate-600">Install this app on your device for quick access</p>
+                    <button type="button" id="installBtn" class="inline-flex items-center rounded-lg bg-green-600 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all hover:bg-green-700 hover:shadow-lg active:translate-y-0.5 active:shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-green-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        <span id="installBtnText">Download & Install App</span>
+                    </button>
+                    <p id="installStatus" class="mt-2 hidden text-xs text-slate-500"></p>
+                </div>
             </form>
         </div>
     </div>
 
     @vite('resources/js/app.js')
+    <script>
+        // PWA Installation Logic
+        let deferredPrompt;
+        const installBtn = document.getElementById('installBtn');
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then((registration) => {
+                    console.log('Service Worker registered:', registration);
+                })
+                .catch((error) => {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
+
+        // Listen for the beforeinstallprompt event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent the mini-infobar from appearing on mobile
+            e.preventDefault();
+            // Store the event for later use
+            deferredPrompt = e;
+            // Enable the install button
+            installBtn.disabled = false;
+            document.getElementById('installStatus').classList.add('hidden');
+        });
+
+        // Check if app is already installed
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            installBtn.disabled = true;
+            installBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            document.getElementById('installBtnText').textContent = 'App Installed';
+            document.getElementById('installStatus').textContent = 'This app is already installed on your device';
+            document.getElementById('installStatus').classList.remove('hidden');
+        }
+
+        // Handle install button click
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) {
+                // Show message if install is not available
+                document.getElementById('installStatus').textContent = 'Installation not available. Please use your browser menu to install.';
+                document.getElementById('installStatus').classList.remove('hidden');
+                return;
+            }
+            
+            // Show the install prompt
+            deferredPrompt.prompt();
+            
+            // Wait for the user to respond to the prompt
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            if (outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+                installBtn.disabled = true;
+                document.getElementById('installBtnText').textContent = 'Installing...';
+            } else {
+                console.log('User dismissed the install prompt');
+                document.getElementById('installStatus').textContent = 'Installation cancelled. Click the button to try again.';
+                document.getElementById('installStatus').classList.remove('hidden');
+            }
+            
+            // Clear the deferred prompt
+            deferredPrompt = null;
+        });
+
+        // Listen for the appinstalled event
+        window.addEventListener('appinstalled', () => {
+            console.log('PWA was installed');
+            installBtn.classList.add('hidden');
+            deferredPrompt = null;
+        });
+    </script>
 </body>
 </html>
 
