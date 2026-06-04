@@ -4,12 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserForSuperAdminViewResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers\LoginHistoryRelationManager;
+use App\Filament\Tables\Columns\EmailColumn;
 use App\Models\Agency;
 use App\Models\User;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -130,7 +130,7 @@ class UserForSuperAdminViewResource extends BaseResource
                     ->sortable()
                     ->badge(),
                 TextColumn::make('agency.name')->sortable()->badge(),
-                TextColumn::make('email')->sortable(),
+                EmailColumn::make('email', searchable: false),
             ])
             ->filters([
                 //

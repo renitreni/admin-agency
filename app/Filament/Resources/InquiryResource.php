@@ -3,11 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\InquiryResource\Pages;
+use App\Filament\Tables\Columns\ContactNumberColumn;
+use App\Filament\Tables\Columns\EmailColumn;
 use App\Models\Inquiry;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
-use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -45,8 +46,8 @@ class InquiryResource extends BaseResource
             ->columns([
                 TextColumn::make('id'),
                 TextColumn::make('name'),
-                TextColumn::make('phone'),
-                TextColumn::make('email'),
+                ContactNumberColumn::make('phone', sortable: false, searchable: false),
+                EmailColumn::make('email', sortable: false, searchable: false),
                 TextColumn::make('company_no'),
             ])
             ->filters([
@@ -77,8 +78,8 @@ class InquiryResource extends BaseResource
         return [
             'index' => Pages\ListInquiries::route('/'),
             'view' => Pages\ViewInquiry::route('/{record}'),
-            //'create' => Pages\CreateInquiry::route('/create'),
-            //'edit' => Pages\EditInquiry::route('/{record}/edit'),
+            // 'create' => Pages\CreateInquiry::route('/create'),
+            // 'edit' => Pages\EditInquiry::route('/{record}/edit'),
         ];
     }
 

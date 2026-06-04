@@ -3,10 +3,11 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ForeignAgencyResource\Pages;
+use App\Filament\Tables\Columns\ContactNumberColumn;
+use App\Filament\Tables\Columns\EmailColumn;
 use App\Models\ForeignAgency;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -27,6 +28,15 @@ class ForeignAgencyResource extends BaseResource
                 TextInput::make('name')
                     ->columnSpanFull()
                     ->required(),
+                TextInput::make('primary_contact_number')
+                    ->label('Primary Contact Number')
+                    ->columnSpanFull(),
+                TextInput::make('email')
+                    ->label('E-mail Address')
+                    ->email()
+                    ->columnSpanFull(),
+                TextInput::make('address')
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -35,6 +45,14 @@ class ForeignAgencyResource extends BaseResource
         return $table
             ->columns([
                 TextColumn::make('name')->sortable()->searchable(),
+                ContactNumberColumn::make('primary_contact_number')
+                    ->label('Primary Contact Number'),
+                EmailColumn::make('email')
+                    ->label('E-mail Address'),
+                TextColumn::make('address')
+                    ->sortable()
+                    ->searchable()
+                    ->limit(50),
             ])
             ->filters([
                 //

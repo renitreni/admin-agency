@@ -3,13 +3,13 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\AgencyResource\Pages;
+use App\Filament\Tables\Columns\EmailColumn;
 use App\Models\Agency;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -101,7 +101,7 @@ class AgencyResource extends BaseResource
             ->columns([
                 TextColumn::make('id')->sortable()->searchable(),
                 TextColumn::make('name')->sortable()->searchable(),
-                TextColumn::make('email')->sortable()->searchable(),
+                EmailColumn::make('email'),
                 TextColumn::make('uuid')->searchable()->copyable(),
             ])
             ->filters([

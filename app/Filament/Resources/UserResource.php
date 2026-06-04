@@ -4,13 +4,13 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers\LoginHistoryRelationManager;
+use App\Filament\Tables\Columns\EmailColumn;
 use App\Models\Agency;
 use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -51,7 +51,7 @@ class UserResource extends BaseResource
                         : Agency::all()->pluck('name', 'id')->all())
                     ->relationship('agency', 'name', fn ($query) => $query->when(
                         Filament::getTenant(),
-                        fn ($q) => $q->where((new Agency)->getTable() . '.id', Filament::getTenant()->id)
+                        fn ($q) => $q->where((new Agency)->getTable().'.id', Filament::getTenant()->id)
                     ))
                     ->required()
                     ->multiple(),
@@ -72,7 +72,7 @@ class UserResource extends BaseResource
             ->columns([
                 TextColumn::make('name')->sortable()->searchable(),
                 TextColumn::make('agency.name')->sortable()->badge(),
-                TextColumn::make('email')->sortable(),
+                EmailColumn::make('email', searchable: false),
                 TextColumn::make('user_type')->badge(),
             ])
             ->filters([

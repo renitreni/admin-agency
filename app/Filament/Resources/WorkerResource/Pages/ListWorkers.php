@@ -17,15 +17,19 @@ class ListWorkers extends ListRecords
      */
     public function getHeader(): ?View
     {
-        $alertService = new AlertBannerService();
+        $alertService = new AlertBannerService;
         $workersNeedingMonitoring = $alertService->getWorkersNeedingMonitoring();
 
         if ($workersNeedingMonitoring->isEmpty()) {
             return null;
         }
 
-        return view('filament.resources.worker-resource.pages.monitoring-alert-banner', [
+        return view('filament.resources.worker-resource.pages.list-workers-header', [
             'workersNeedingMonitoring' => $workersNeedingMonitoring,
+            'heading' => $this->getHeading(),
+            'subheading' => $this->getSubheading(),
+            'headerActions' => $this->getCachedHeaderActions(),
+            'breadcrumbs' => filament()->hasBreadcrumbs() ? $this->getBreadcrumbs() : [],
         ]);
     }
 

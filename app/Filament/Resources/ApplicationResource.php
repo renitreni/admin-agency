@@ -3,12 +3,13 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ApplicationResource\Pages;
+use App\Filament\Tables\Columns\ContactNumberColumn;
+use App\Filament\Tables\Columns\EmailColumn;
 use App\Models\Application;
 use Filament\Facades\Filament;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
-use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
@@ -44,8 +45,8 @@ class ApplicationResource extends BaseResource
                 TextColumn::make('first_name')->sortable()->searchable(),
                 TextColumn::make('last_name')->sortable()->searchable(),
                 TextColumn::make('middle_name')->sortable()->searchable(),
-                TextColumn::make('contact_number')->sortable()->searchable(),
-                TextColumn::make('email')->sortable()->searchable(),
+                ContactNumberColumn::make('contact_number'),
+                EmailColumn::make('email'),
             ])
             ->filters([
                 //

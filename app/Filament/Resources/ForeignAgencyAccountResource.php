@@ -3,13 +3,13 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ForeignAgencyAccountResource\Pages;
+use App\Filament\Tables\Columns\EmailColumn;
 use App\Models\ForeignAgency;
 use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -82,7 +82,7 @@ class ForeignAgencyAccountResource extends BaseResource
                         : [])
                     ->relationship('agency', 'name', fn ($query) => $query->when(
                         Filament::getTenant(),
-                        fn ($q) => $q->where((new \App\Models\Agency)->getTable() . '.id', Filament::getTenant()->id)
+                        fn ($q) => $q->where((new \App\Models\Agency)->getTable().'.id', Filament::getTenant()->id)
                     ))
                     ->required()
                     ->multiple(),
@@ -102,7 +102,7 @@ class ForeignAgencyAccountResource extends BaseResource
         return $table
             ->columns([
                 TextColumn::make('name')->sortable()->searchable(),
-                TextColumn::make('email')->sortable()->searchable(),
+                EmailColumn::make('email'),
                 TextColumn::make('foreignAgencies.name')->label('F.R.A')->badge(),
             ])
             ->actions([

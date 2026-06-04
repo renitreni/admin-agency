@@ -3,11 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ComplaintResource\Pages;
+use App\Filament\Tables\Columns\ContactNumberColumn;
+use App\Filament\Tables\Columns\EmailColumn;
 use App\Models\Complaint;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
-use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -54,8 +55,9 @@ class ComplaintResource extends BaseResource
                     ->label('Foreign Recruitment Agency')
                     ->searchable()
                     ->limit(30),
-                TextColumn::make('email')->searchable(),
-                TextColumn::make('primary_contact')->label('Primary Contact'),
+                EmailColumn::make('email', sortable: false),
+                ContactNumberColumn::make('primary_contact', sortable: false, searchable: false)
+                    ->label('Primary Contact'),
                 TextColumn::make('created_at')->dateTime()->sortable(),
             ])
             ->defaultSort('created_at', 'desc')
@@ -120,6 +122,7 @@ class ComplaintResource extends BaseResource
                         if ($media->isEmpty()) {
                             return '—';
                         }
+
                         return $media->map(fn ($m, $i) => '<a href="'.$m->getUrl().'" target="_blank" class="text-primary-600 hover:underline">Evidence '.($i + 1).'</a>')->join(', ');
                     })
                     ->html()

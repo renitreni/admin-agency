@@ -18,6 +18,9 @@ class ForeignAgencyFactory extends Factory
     {
         return [
             'name' => $this->faker->company(),
+            'primary_contact_number' => $this->faker->phoneNumber(),
+            'email' => $this->faker->companyEmail(),
+            'address' => $this->faker->address(),
         ];
     }
 }

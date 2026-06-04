@@ -16,6 +16,9 @@ class ForeignAgency extends Model
     protected $fillable = [
         'agency_id',
         'name',
+        'primary_contact_number',
+        'email',
+        'address',
     ];
 
     public function agency(): BelongsTo
