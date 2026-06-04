@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Auth\Login;
 use App\Filament\Pages\Dashboard;
 use App\Filament\Resources\Resource\Widgets\WorkerOverview;
 use App\Models\Agency;
@@ -31,7 +32,10 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            ->login(Login::class)
+            ->brandName(config('app.name') ?? 'Agency Portal')
+            // ->brandLogo(asset('images/1010-logo.jpg'))
+            ->viteTheme('resources/css/filament-auth.css')
             ->colors([
                 'primary' => Color::Blue,
                 'danger' => Color::Red,

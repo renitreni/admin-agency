@@ -1,0 +1,138 @@
+@import '../../vendor/filament/filament/resources/css/theme.css';
+
+@config '../../tailwind.config.js';
+
+/* Auth login layout */
+.auth-login-layout {
+    font-family: 'Figtree', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Brand panel */
+.auth-login-brand {
+    background: linear-gradient(135deg, rgb(37 99 235) 0%, rgb(29 78 216) 50%, rgb(30 58 138) 100%);
+}
+
+.dark .auth-login-brand {
+    background: linear-gradient(135deg, rgb(30 58 138) 0%, rgb(23 37 84) 50%, rgb(15 23 42) 100%);
+}
+
+.auth-login-brand-glow {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 80% 50% at 20% 40%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.auth-login-brand-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+}
+
+/* Form panel */
+.auth-login-form {
+    background-color: rgb(248 250 252);
+}
+
+.dark .auth-login-form {
+    background-color: rgb(17 24 39);
+}
+
+/* Mobile: compact brand header */
+@media (max-width: 1023px) {
+    .auth-login-brand {
+        min-height: auto;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 1.25rem 1.5rem;
+    }
+
+    .auth-login-brand .relative.z-10 {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        text-align: left;
+        gap: 0.75rem;
+    }
+
+    .auth-login-logo {
+        height: 3rem;
+        width: 3rem;
+        flex-shrink: 0;
+    }
+
+    .auth-login-brand h1 {
+        margin-top: 0;
+        font-size: 1.125rem;
+    }
+
+    .auth-login-brand p {
+        display: none;
+    }
+
+    .auth-login-form {
+        min-height: auto;
+        flex: 1;
+    }
+}
+
+/* Remove default simple page card styling inside custom layout */
+.auth-login-form .fi-simple-page {
+    padding: 0;
+}
+
+.auth-login-form .fi-simple-header-heading {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.dark .auth-login-form .fi-simple-header-heading {
+    color: rgb(255 255 255);
+}
+
+.auth-login-form .fi-simple-header-subheading {
+    color: rgb(100 116 139);
+}
+
+.dark .auth-login-form .fi-simple-header-subheading {
+    color: rgb(148 163 184);
+}
+
+/* Fade-in animation */
+@keyframes auth-login-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-login-form-inner.animate-fade-in {
+    animation: auth-login-fade-in 0.4s ease-out forwards;
+}
+
+/* Mobile form card elevation */
+@media (max-width: 1023px) {
+    .auth-login-form-inner {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        border: 1px solid rgb(226 232 240);
+    }
+
+    .dark .auth-login-form-inner {
+        background: rgb(31 41 55);
+        border-color: rgb(55 65 81);
+    }
+}
