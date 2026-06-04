@@ -10,6 +10,7 @@ use App\Models\ForeignAgency;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use App\Filament\Resources\BaseResource;
@@ -37,6 +38,12 @@ class ConcernResource extends BaseResource
                     ->searchable(),
                 Select::make('status')->options(ConcernStatusEnum::class)->required(),
                 RichEditor::make('description')->required()->columnSpanFull(),
+                SpatieMediaLibraryFileUpload::make('evidences')
+                    ->label('Evidences')
+                    ->collection('evidences')
+                    ->multiple()
+                    ->maxFiles(3)
+                    ->columnSpanFull(),
             ]);
     }
 
