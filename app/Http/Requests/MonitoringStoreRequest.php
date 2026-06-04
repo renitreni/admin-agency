@@ -27,9 +27,9 @@ class MonitoringStoreRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'report' => 'Report',
-            'latitude' => 'Latitude',
-            'longitude' => 'Longitude',
+            'report' => __('monitoring.attributes.report'),
+            'latitude' => __('monitoring.attributes.latitude'),
+            'longitude' => __('monitoring.attributes.longitude'),
         ];
     }
 }

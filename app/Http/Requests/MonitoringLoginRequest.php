@@ -25,8 +25,8 @@ class MonitoringLoginRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'passport_number' => 'Passport Number',
-            'secret_code' => 'Secret Code',
+            'passport_number' => __('monitoring.attributes.passport_number'),
+            'secret_code' => __('monitoring.attributes.secret_code'),
         ];
     }
 }

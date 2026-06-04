@@ -123,17 +123,17 @@ class Worker extends Model implements HasMedia
     public function getDaysSinceLastReport(): int
     {
         $lastMonitoringDate = $this->getLastMonitoringDate();
-        
+
         if ($lastMonitoringDate) {
             return $lastMonitoringDate->startOfDay()->diffInDays(now()->startOfDay());
         }
-        
+
         // If no previous report, calculate from deployment date
         $deploymentDate = $this->getLatestDeploymentDate();
         if ($deploymentDate) {
             return $deploymentDate->startOfDay()->diffInDays(now()->startOfDay());
         }
-        
+
         return PHP_INT_MAX; // Return a large number if no deployment date found
     }
 
@@ -141,18 +141,18 @@ class Worker extends Model implements HasMedia
     {
         $firstReportThreshold = config('monitoring.first_report_threshold_days', 3);
         $subsequentReportThreshold = config('monitoring.subsequent_report_threshold_days', 15);
-        
+
         $hasPreviousReports = $this->monitorings()
             ->where('agency_id', $this->agency_id)
             ->exists();
-            
+
         $daysSinceLastReport = $this->getDaysSinceLastReport();
-        
+
         // Check if worker has active deployment
         if (!$this->hasActiveDeployment()) {
             return false;
         }
-        
+
         if (!$hasPreviousReports) {
             // First condition: Worker has no report yet for X days after deployment
             return $daysSinceLastReport >= $firstReportThreshold;

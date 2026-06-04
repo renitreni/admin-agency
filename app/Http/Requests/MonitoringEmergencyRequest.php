@@ -25,16 +25,18 @@ class MonitoringEmergencyRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'latitude' => 'Latitude',
-            'longitude' => 'Longitude',
+            'latitude' => __('monitoring.attributes.latitude'),
+            'longitude' => __('monitoring.attributes.longitude'),
         ];
     }
 
     public function messages(): array
     {
+        $message = __('monitoring.messages.location_required_emergency');
+
         return [
-            'latitude.required' => 'Location is required for emergency alerts. Please enable location services.',
-            'longitude.required' => 'Location is required for emergency alerts. Please enable location services.',
+            'latitude.required' => $message,
+            'longitude.required' => $message,
         ];
     }
 }

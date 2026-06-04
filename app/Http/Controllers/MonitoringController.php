@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\SetMonitoringLocale;
 use App\Http\Requests\MonitoringEmergencyRequest;
 use App\Http\Requests\MonitoringLoginRequest;
 use App\Http\Requests\MonitoringStoreRequest;
@@ -35,7 +36,7 @@ class MonitoringController extends Controller
 
         if (! $worker) {
             return back()
-                ->withErrors(['credentials' => 'Invalid passport number or secret code.'])
+                ->withErrors(['credentials' => __('monitoring.errors.invalid_credentials')])
                 ->withInput();
         }
 
@@ -46,7 +47,7 @@ class MonitoringController extends Controller
 
         if (! $hasActiveDeployment) {
             return back()
-                ->withErrors(['credentials' => 'Worker is not currently deployed.'])
+                ->withErrors(['credentials' => __('monitoring.errors.not_deployed')])
                 ->withInput();
         }
 
@@ -85,7 +86,7 @@ class MonitoringController extends Controller
         $validated = $request->validated();
 
         if (! empty($request->input('website'))) {
-            return redirect()->route('monitoring.form.show')->with('success', __('Report submitted successfully.'));
+            return redirect()->route('monitoring.form.show')->with('success', __('monitoring.messages.report_submitted'));
         }
 
         Monitoring::create([
@@ -98,7 +99,18 @@ class MonitoringController extends Controller
             'longitude' => $validated['longitude'] ?? null,
         ]);
 
-        return redirect()->route('monitoring.form.show')->with('success', __('Report submitted successfully.'));
+        return redirect()->route('monitoring.form.show')->with('success', __('monitoring.messages.report_submitted'));
+    }
+
+    public function switchLocale(Request $request): RedirectResponse
+    {
+        $locale = $request->input('locale');
+
+        if (in_array($locale, SetMonitoringLocale::ALLOWED_LOCALES, true)) {
+            $request->session()->put('locale', $locale);
+        }
+
+        return redirect()->back();
     }
 
     public function storeEmergency(MonitoringEmergencyRequest $request): RedirectResponse
@@ -111,7 +123,7 @@ class MonitoringController extends Controller
 
         // Check if worker already has an unresolved emergency
         if (WorkerEmergency::hasUnresolvedEmergency($worker->id)) {
-            return redirect()->route('monitoring.form.show')->with('success', __('🚨 An emergency alert is already active for your account. Please wait for assistance.'));
+            return redirect()->route('monitoring.form.show')->with('success', __('monitoring.messages.emergency_already_active'));
         }
 
         $validated = $request->validated();
@@ -125,7 +137,7 @@ class MonitoringController extends Controller
             'longitude' => $validated['longitude'],
         ]);
 
-        return redirect()->route('monitoring.form.show')->with('success', __('🚨 Emergency alert sent successfully. Help is on the way.'));
+        return redirect()->route('monitoring.form.show')->with('success', __('monitoring.messages.emergency_sent'));
     }
 
     public function logout(): RedirectResponse
