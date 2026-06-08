@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
@@ -86,5 +87,10 @@ class User extends Authenticatable implements FilamentUser, HasTenants
     public function loginHistories(): HasMany
     {
         return $this->hasMany(UserLoginHistory::class)->latest('logged_in_at');
+    }
+
+    public function latestLoginHistory(): HasOne
+    {
+        return $this->hasOne(UserLoginHistory::class)->latestOfMany('logged_in_at');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\UserForSuperAdminViewResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers\LoginHistoryRelationManager;
 use App\Filament\Tables\Columns\EmailColumn;
+use App\Filament\Tables\Columns\LatestLoginColumn;
 use App\Models\Agency;
 use App\Models\User;
 use Filament\Forms\Components\Select;
@@ -77,7 +78,7 @@ class UserForSuperAdminViewResource extends BaseResource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery();
+        return parent::getEloquentQuery()->with('latestLoginHistory');
     }
 
     public static function form(Form $form): Form
@@ -131,6 +132,7 @@ class UserForSuperAdminViewResource extends BaseResource
                     ->badge(),
                 TextColumn::make('agency.name')->sortable()->badge(),
                 EmailColumn::make('email', searchable: false),
+                LatestLoginColumn::make(),
             ])
             ->filters([
                 //
