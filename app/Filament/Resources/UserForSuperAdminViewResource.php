@@ -107,8 +107,7 @@ class UserForSuperAdminViewResource extends BaseResource
                     )
                     ->relationship('agency', 'name')
                     ->default(fn () => Auth::id() ? Auth::user()->agency_id : null)
-                    ->required()
-                    ->disabled(),
+                    ->required(),
             ]);
     }
 
