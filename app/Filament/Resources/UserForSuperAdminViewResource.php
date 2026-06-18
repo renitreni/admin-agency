@@ -103,7 +103,6 @@ class UserForSuperAdminViewResource extends BaseResource
                 Select::make('agency_id')
                     ->options(
                         Agency::query()
-                            ->whereKey(Auth::id() ? Auth::user()->agency_id : null)
                             ->pluck('name', 'id')
                     )
                     ->relationship('agency', 'name')
