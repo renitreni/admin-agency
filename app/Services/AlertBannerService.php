@@ -27,6 +27,8 @@ class AlertBannerService
 
         if ($this->isFraUser($user)) {
             $query->whereHas('worker', fn ($q) => $q->where('fra_id', $user->id));
+        } else {
+            $query->tenant();
         }
 
         return $query->get();
