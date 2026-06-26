@@ -26,7 +26,13 @@ class AlertBannerService
         $query = WorkerEmergency::with(['worker', 'agency'])->unresolved()->latest();
 
         if ($this->isFraUser($user)) {
-            $query->whereHas('worker', fn ($q) => $q->where('fra_id', $user->id));
+            $foreignAgencyIds = $user->foreignAgencies->pluck('id');
+
+            if ($foreignAgencyIds->isEmpty()) {
+                return collect();
+            }
+
+            $query->whereHas('worker.deployments', fn ($q) => $q->whereIn('foreign_agency_id', $foreignAgencyIds));
         } else {
             $query->tenant();
         }
