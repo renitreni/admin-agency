@@ -1,11 +1,11 @@
 const CACHE_NAME = 'monitoring-v1';
 const urlsToCache = [
-  '/monitoring/login',
-  '/resources/css/app.css',
-  '/resources/js/app.js'
+  '/manifest.json',
+  '/pwa-icon-192.svg',
+  '/pwa-icon-512.svg'
 ];
 
-// Install event - cache assets
+// Install event - cache static assets only
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -17,10 +17,17 @@ self.addEventListener('install', (event) => {
 
 // Fetch event - serve from cache when offline
 self.addEventListener('fetch', (event) => {
+  // Navigation requests (HTML pages) must always go to the network
+  // so we never serve stale CSRF tokens or session-dependent markup.
+  if (event.request.mode === 'navigate') {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
+  // For static assets, return cached version or fetch from network
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
-        // Return cached version or fetch from network
         return response || fetch(event.request);
       })
   );
