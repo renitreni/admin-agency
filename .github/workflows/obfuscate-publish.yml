@@ -1,0 +1,101 @@
+name: Obfuscate and publish to main
+
+on:
+  push:
+    branches:
+      - clean-main
+
+permissions:
+  contents: write
+
+concurrency:
+  group: obfuscate-publish-main
+  cancel-in-progress: true
+
+jobs:
+  obfuscate-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout clean-main
+        uses: actions/checkout@v4
+        with:
+          ref: clean-main
+          fetch-depth: 0
+          path: source
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: none
+
+      - name: Install YakPro-po and PHP-Parser
+        working-directory: ${{ github.workspace }}
+        run: |
+          set -euo pipefail
+          git clone --depth 1 https://github.com/pk-fr/yakpro-po.git yakpro-po
+          # PHP-Parser 5.x ships on master (required by yakpro-po 3.x)
+          git clone --depth 1 https://github.com/nikic/PHP-Parser.git yakpro-po/PHP-Parser
+          chmod +x yakpro-po/yakpro-po.php
+
+      - name: Obfuscate app/
+        working-directory: ${{ github.workspace }}
+        run: |
+          set -euo pipefail
+          SOURCE_SHA="$(git -C source rev-parse --short HEAD)"
+          echo "SOURCE_SHA=${SOURCE_SHA}" >> "$GITHUB_ENV"
+
+          mkdir -p obfuscate-out
+          php yakpro-po/yakpro-po.php \
+            --config-file source/yakpro-po.cnf \
+            --silent \
+            -y \
+            source/app \
+            -o obfuscate-out
+
+          OBFUSCATED_DIR="obfuscate-out/yakpro-po/obfuscated"
+          if [ ! -d "$OBFUSCATED_DIR" ]; then
+            echo "Expected obfuscated output at ${OBFUSCATED_DIR}" >&2
+            ls -la obfuscate-out || true
+            ls -la obfuscate-out/yakpro-po || true
+            exit 1
+          fi
+
+          find "$OBFUSCATED_DIR" -type f -name '*.php' | head -n 5
+          echo "Obfuscated PHP files: $(find "$OBFUSCATED_DIR" -type f -name '*.php' | wc -l)"
+
+      - name: Publish obfuscated tree to main
+        working-directory: ${{ github.workspace }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git clone --depth 1 --branch main \
+            "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+            publish
+
+          # Sync publish tree to clean-main contents (keeps non-app files identical)
+          rsync -a --delete \
+            --exclude '.git' \
+            --exclude 'app' \
+            source/ publish/
+
+          rm -rf publish/app
+          mkdir -p publish/app
+          rsync -a obfuscate-out/yakpro-po/obfuscated/ publish/app/
+
+          cd publish
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No changes to publish on main."
+            exit 0
+          fi
+
+          git commit -m "chore: publish obfuscated app from clean-main (${SOURCE_SHA})"
+          git push --force-with-lease origin HEAD:main

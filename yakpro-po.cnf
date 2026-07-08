@@ -1,0 +1,84 @@
+<?php
+// YAK Pro - Php Obfuscator: Config File
+// Do not delete the previous line! it's a magic string for config file!
+//========================================================================
+// Laravel / Filament safe profile for admin-agency.
+// Scramble variables and control-flow only. Keep class/method/property/
+// namespace names so reflection, routes, and Filament discovery keep working.
+//========================================================================
+
+$conf->t_ignore_pre_defined_classes     = 'all';
+
+$conf->t_ignore_constants               = null;
+$conf->t_ignore_variables               = null;
+$conf->t_ignore_functions               = null;
+$conf->t_ignore_class_constants         = null;
+$conf->t_ignore_methods                 = null;
+$conf->t_ignore_properties              = null;
+$conf->t_ignore_classes                 = null;
+$conf->t_ignore_interfaces              = null;
+$conf->t_ignore_traits                  = null;
+$conf->t_ignore_namespaces              = null;
+$conf->t_ignore_labels                  = null;
+
+$conf->t_ignore_constants_prefix        = null;
+$conf->t_ignore_variables_prefix        = null;
+$conf->t_ignore_functions_prefix        = null;
+$conf->t_ignore_class_constants_prefix  = null;
+$conf->t_ignore_properties_prefix       = null;
+$conf->t_ignore_methods_prefix          = null;
+$conf->t_ignore_classes_prefix          = null;
+$conf->t_ignore_interfaces_prefix       = null;
+$conf->t_ignore_traits_prefix           = null;
+$conf->t_ignore_namespaces_prefix       = null;
+$conf->t_ignore_labels_prefix           = null;
+
+$conf->parser_mode                      = 'HOST_VERSION';
+
+$conf->scramble_mode                    = 'identifier';
+$conf->scramble_length                  = 5;
+
+$conf->t_obfuscate_php_extension        = array('php');
+
+// Keep structural names for Laravel/Filament/Composer compatibility
+$conf->obfuscate_constant_name          = false;
+$conf->obfuscate_variable_name          = true;
+$conf->obfuscate_function_name          = false;
+$conf->obfuscate_class_name             = false;
+$conf->obfuscate_interface_name         = false;
+$conf->obfuscate_trait_name             = false;
+$conf->obfuscate_class_constant_name    = false;
+$conf->obfuscate_property_name          = false;
+$conf->obfuscate_method_name            = false;
+$conf->obfuscate_namespace_name         = false;
+$conf->obfuscate_label_name             = false;
+
+$conf->obfuscate_if_statement           = true;
+$conf->obfuscate_loop_statement         = true;
+$conf->obfuscate_string_literal         = true;
+
+$conf->shuffle_stmts                    = true;
+$conf->shuffle_stmts_min_chunk_size     = 2;
+$conf->shuffle_stmts_chunk_mode         = 'fixed';
+$conf->shuffle_stmts_chunk_ratio        = 20;
+
+$conf->strip_indentation                = true;
+$conf->abort_on_error                   = true;
+$conf->confirm                          = true;
+$conf->silent                           = true;
+
+$conf->source_directory                 = null;
+$conf->target_directory                 = null;
+
+$conf->t_keep                           = null;
+$conf->t_skip                           = null;
+$conf->allow_and_overwrite_empty_files  = true;
+
+$conf->max_nested_directory             = 99;
+$conf->follow_symlinks                  = false;
+
+$conf->user_comment                     = 'Obfuscated for deploy; develop on clean-main';
+$conf->extract_comment_from_line        = null;
+$conf->extract_comment_to_line          = null;
+
+?>
