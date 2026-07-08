@@ -2,7 +2,7 @@
 
 This document records the Foreign Recruitment Agency (FRA) user type implementation and related Filament changes.
 
-**Branching / deploy:** develop on `clean-main`. Pushing to `clean-main` publishes obfuscated `app/` PHP to `main` via GitHub Actions (server webhooks still pull `main`). See [docs/obfuscation.md](docs/obfuscation.md).
+**Branching / deploy:** develop on `clean-main`. Pushing to `clean-main` publishes obfuscated Models, Filament Resources, and Blade views to `main` via GitHub Actions (server webhooks still pull `main`). See [docs/obfuscation.md](docs/obfuscation.md).
 
 ## 1) Data Model and Migrations
 
