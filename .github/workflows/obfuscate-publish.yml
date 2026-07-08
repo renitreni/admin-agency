@@ -33,63 +33,112 @@ jobs:
       - name: Install YakPro-po and PHP-Parser
         working-directory: ${{ github.workspace }}
         run: |
-          set -euo pipefail
+          set -eu
           git clone --depth 1 https://github.com/pk-fr/yakpro-po.git yakpro-po
           # PHP-Parser 5.x ships on master (required by yakpro-po 3.x)
           git clone --depth 1 https://github.com/nikic/PHP-Parser.git yakpro-po/PHP-Parser
           chmod +x yakpro-po/yakpro-po.php
+          php -v
+          test -f yakpro-po/yakpro-po.php
+          test -d yakpro-po/PHP-Parser/lib
 
       - name: Obfuscate app/
         working-directory: ${{ github.workspace }}
         run: |
-          set -euo pipefail
-          SOURCE_SHA="$(git -C source rev-parse --short HEAD)"
+          # Intentionally avoid `pipefail`: `find | head` raises SIGPIPE (exit 141) on Ubuntu.
+          set -eu
+
+          WS="${GITHUB_WORKSPACE}"
+          SOURCE_DIR="${WS}/source"
+          YAKPRO="${WS}/yakpro-po/yakpro-po.php"
+          CONFIG="${SOURCE_DIR}/yakpro-po.cnf"
+          APP_DIR="${SOURCE_DIR}/app"
+          OUT_DIR="${WS}/obfuscate-out"
+          OBFUSCATED_DIR="${OUT_DIR}/yakpro-po/obfuscated"
+
+          SOURCE_SHA="$(git -C "${SOURCE_DIR}" rev-parse --short HEAD)"
           echo "SOURCE_SHA=${SOURCE_SHA}" >> "$GITHUB_ENV"
+          echo "Workspace=${WS}"
+          echo "Config=${CONFIG}"
+          echo "App=${APP_DIR}"
+          echo "Out=${OUT_DIR}"
 
-          mkdir -p obfuscate-out
-          php yakpro-po/yakpro-po.php \
-            --config-file source/yakpro-po.cnf \
-            --silent \
+          test -f "${YAKPRO}"
+          test -f "${CONFIG}"
+          test -d "${APP_DIR}"
+
+          mkdir -p "${OUT_DIR}"
+
+          # First run without --silent so CI logs show yakpro/PHP errors.
+          set +e
+          php "${YAKPRO}" \
+            --config-file "${CONFIG}" \
             -y \
-            source/app \
-            -o obfuscate-out
+            "${APP_DIR}" \
+            -o "${OUT_DIR}"
+          YAKPRO_EXIT=$?
+          set -e
 
-          OBFUSCATED_DIR="obfuscate-out/yakpro-po/obfuscated"
-          if [ ! -d "$OBFUSCATED_DIR" ]; then
+          if [ "${YAKPRO_EXIT}" -ne 0 ]; then
+            echo "YakPro-po failed with exit code ${YAKPRO_EXIT}" >&2
+            ls -la "${OUT_DIR}" || true
+            ls -la "${OUT_DIR}/yakpro-po" || true
+            exit "${YAKPRO_EXIT}"
+          fi
+
+          if [ ! -d "${OBFUSCATED_DIR}" ]; then
             echo "Expected obfuscated output at ${OBFUSCATED_DIR}" >&2
-            ls -la obfuscate-out || true
-            ls -la obfuscate-out/yakpro-po || true
+            ls -la "${OUT_DIR}" || true
+            ls -la "${OUT_DIR}/yakpro-po" || true
             exit 1
           fi
 
-          find "$OBFUSCATED_DIR" -type f -name '*.php' | head -n 5
-          echo "Obfuscated PHP files: $(find "$OBFUSCATED_DIR" -type f -name '*.php' | wc -l)"
+          # Avoid `find | head` under pipefail (SIGPIPE). Sample with find -print -quit loops.
+          echo "Sample obfuscated PHP files:"
+          i=0
+          while IFS= read -r -d '' f; do
+            echo "  ${f}"
+            i=$((i + 1))
+            [ "${i}" -ge 5 ] && break
+          done < <(find "${OBFUSCATED_DIR}" -type f -name '*.php' -print0)
+
+          PHP_COUNT="$(find "${OBFUSCATED_DIR}" -type f -name '*.php' | wc -l | tr -d ' ')"
+          echo "Obfuscated PHP files: ${PHP_COUNT}"
+          if [ "${PHP_COUNT}" -lt 1 ]; then
+            echo "No obfuscated PHP files produced" >&2
+            exit 1
+          fi
 
       - name: Publish obfuscated tree to main
         working-directory: ${{ github.workspace }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -euo pipefail
+          set -eu
+
+          WS="${GITHUB_WORKSPACE}"
+          SOURCE_DIR="${WS}/source"
+          OBFUSCATED_DIR="${WS}/obfuscate-out/yakpro-po/obfuscated"
+          PUBLISH_DIR="${WS}/publish"
 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git clone --depth 1 --branch main \
             "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
-            publish
+            "${PUBLISH_DIR}"
 
           # Sync publish tree to clean-main contents (keeps non-app files identical)
           rsync -a --delete \
             --exclude '.git' \
             --exclude 'app' \
-            source/ publish/
+            "${SOURCE_DIR}/" "${PUBLISH_DIR}/"
 
-          rm -rf publish/app
-          mkdir -p publish/app
-          rsync -a obfuscate-out/yakpro-po/obfuscated/ publish/app/
+          rm -rf "${PUBLISH_DIR}/app"
+          mkdir -p "${PUBLISH_DIR}/app"
+          rsync -a "${OBFUSCATED_DIR}/" "${PUBLISH_DIR}/app/"
 
-          cd publish
+          cd "${PUBLISH_DIR}"
           git add -A
 
           if git diff --cached --quiet; then
