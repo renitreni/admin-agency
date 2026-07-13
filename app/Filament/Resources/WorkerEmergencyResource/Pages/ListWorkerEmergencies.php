@@ -6,6 +6,7 @@ use App\Filament\Resources\WorkerEmergencyResource;
 use App\Services\AlertBannerService;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListWorkerEmergencies extends ListRecords
 {
@@ -31,5 +32,18 @@ class ListWorkerEmergencies extends ListRecords
     protected function getHeaderActions(): array
     {
         return [];
+    }
+
+    protected function getTableQuery(): Builder
+    {
+        $query = parent::getTableQuery();
+
+        $status = data_get($this->tableFilters, 'status.status');
+
+        return match ($status) {
+            'active' => $query->unresolved(),
+            'resolved' => $query->resolved(),
+            default => $query,
+        };
     }
 }

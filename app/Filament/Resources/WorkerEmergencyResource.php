@@ -88,15 +88,6 @@ class WorkerEmergencyResource extends BaseResource
                             ])
                             ->placeholder('All'),
                     ])
-                    ->query(function ($query, array $data) {
-                        return $query->when($data['status'], function ($query, $status) {
-                            if ($status === 'active') {
-                                $query->unresolved();
-                            } elseif ($status === 'resolved') {
-                                $query->resolved();
-                            }
-                        });
-                    }),
             ])
             ->actions([
                 Tables\Actions\Action::make('viewOnMap')
