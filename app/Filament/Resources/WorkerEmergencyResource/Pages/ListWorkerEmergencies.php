@@ -4,6 +4,7 @@ namespace App\Filament\Resources\WorkerEmergencyResource\Pages;
 
 use App\Filament\Resources\WorkerEmergencyResource;
 use App\Services\AlertBannerService;
+use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
@@ -34,13 +35,20 @@ class ListWorkerEmergencies extends ListRecords
         return [];
     }
 
+    public function getTabs(): array
+    {
+        return [
+            'all' => Tab::make('All'),
+            'active' => Tab::make('Active'),
+            'resolved' => Tab::make('Resolved'),
+        ];
+    }
+
     protected function getTableQuery(): Builder
     {
         $query = parent::getTableQuery();
 
-        $status = data_get($this->tableFilters, 'status.status');
-
-        return match ($status) {
+        return match ($this->activeTab) {
             'active' => $query->unresolved(),
             'resolved' => $query->resolved(),
             default => $query,

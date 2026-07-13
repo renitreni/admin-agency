@@ -79,15 +79,7 @@ class WorkerEmergencyResource extends BaseResource
                     ->placeholder('—'),
             ])
             ->filters([
-                Tables\Filters\Filter::make('status')
-                    ->form([
-                        Forms\Components\Select::make('status')
-                            ->options([
-                                'active' => 'Active',
-                                'resolved' => 'Resolved',
-                            ])
-                            ->placeholder('All'),
-                    ])
+                //
             ])
             ->actions([
                 Tables\Actions\Action::make('viewOnMap')
