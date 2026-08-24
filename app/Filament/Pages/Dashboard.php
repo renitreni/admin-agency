@@ -38,7 +38,7 @@ class Dashboard extends BaseDashboard
         return Actions\Action::make('submitMonitoringReport')
             ->label('Submit Report')
             ->modalHeading('Submit Monitoring Report')
-            ->modalDescription(function ($arguments): string {
+            ->modalDescription(function (array $arguments): string {
                 $workerId = $arguments['worker_id'] ?? null;
                 $worker = Worker::find($workerId);
 
