@@ -11,6 +11,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Notifications\Notification;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Illuminate\Contracts\View\View;
+use Livewire\Attributes\On;
 
 class Dashboard extends BaseDashboard
 {
@@ -29,11 +30,10 @@ class Dashboard extends BaseDashboard
         return view('filament.pages.dashboard-header', $alerts);
     }
 
-    protected $listeners = ['open-monitoring-report-modal' => 'openReportModal'];
-
-    public function openReportModal(array $data): void
+    #[On('open-monitoring-report-modal')]
+    public function openReportModal($worker_id): void
     {
-        $this->mountAction('submitMonitoringReport', ['worker_id' => $data['worker_id']]);
+        $this->mountAction('submitMonitoringReport', ['worker_id' => $worker_id]);
     }
 
 
