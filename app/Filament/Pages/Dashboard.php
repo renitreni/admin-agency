@@ -38,7 +38,7 @@ class Dashboard extends BaseDashboard
         return Actions\Action::make('submitMonitoringReport')
             ->label('Submit Report')
             ->modalHeading('Submit Monitoring Report')
-            ->modalDescription(function (array $arguments): string {
+            ->modalDescription(function ($arguments): string {
                 $workerId = $arguments['worker_id'] ?? null;
                 $worker = Worker::find($workerId);
 
@@ -48,7 +48,7 @@ class Dashboard extends BaseDashboard
                         'user_id' => auth()->id(),
                     ]);
 
-                    return 'Worker not found. Please close this modal and try again from a valid worker record.';
+                    return 'Worker not found. Please close this modal and try again from a valid worker record.' . json_encode($arguments);
                 }
 
                 return "Submit a monitoring report on behalf of {$worker->fullname}.";
