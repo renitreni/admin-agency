@@ -1,6 +1,7 @@
 <div class="flex flex-col gap-y-8">
     @include('filament.resources.worker-resource.pages.monitoring-alert-banner', [
         'workersNeedingMonitoring' => $workersNeedingMonitoring,
+        'showSubmitReportButton' => true,
     ])
 
     <header class="fi-header flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

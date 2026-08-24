@@ -19,6 +19,7 @@ class Monitoring extends Model
         'report',
         'latitude',
         'longitude',
+        'reported_by',
     ];
 
     protected function casts(): array
@@ -37,6 +38,11 @@ class Monitoring extends Model
     public function worker(): BelongsTo
     {
         return $this->belongsTo(Worker::class);
+    }
+
+    public function reportedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'reported_by');
     }
 
     public function scopeTenant($query)

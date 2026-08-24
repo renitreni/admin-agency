@@ -55,6 +55,10 @@ class MonitoringResource extends BaseResource
                 TextColumn::make('report')
                     ->limit(60)
                     ->wrap(),
+                TextColumn::make('reportedBy.name')
+                    ->label('Reported By')
+                    ->placeholder('Worker Self-Report')
+                    ->sortable(),
                 TextColumn::make('created_at')->dateTime()->sortable(),
             ])
             ->filters([])
@@ -101,6 +105,9 @@ class MonitoringResource extends BaseResource
                     ->label('Secret Code'),
                 TextEntry::make('latitude')->placeholder('—'),
                 TextEntry::make('longitude')->placeholder('—'),
+                TextEntry::make('reportedBy.name')
+                    ->label('Reported By')
+                    ->placeholder('Worker Self-Report'),
                 TextEntry::make('report')
                     ->columnSpanFull(),
                 TextEntry::make('created_at')
