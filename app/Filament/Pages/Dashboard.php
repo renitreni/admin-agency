@@ -40,15 +40,15 @@ class Dashboard extends BaseDashboard
             ->modalHeading('Submit Monitoring Report')
             ->modalDescription(function (array $arguments): string {
                 $workerId = $arguments['worker_id'] ?? null;
-
-                if (blank($workerId)) {
-                    return 'Submit a monitoring report on behalf of this worker.';
-                }
-
                 $worker = Worker::find($workerId);
 
                 if (! $worker) {
-                    return 'Submit a monitoring report on behalf of this worker.';
+                    logger()->warning('Dashboard submit monitoring report opened with missing or invalid worker.', [
+                        'worker_id' => $workerId,
+                        'user_id' => auth()->id(),
+                    ]);
+
+                    return 'Worker not found. Please close this modal and try again from a valid worker record.';
                 }
 
                 return "Submit a monitoring report on behalf of {$worker->fullname}.";
@@ -69,9 +69,18 @@ class Dashboard extends BaseDashboard
                 return $user instanceof User && $user->user_type !== User::TYPE_FRA;
             })
             ->action(function (array $arguments, array $data): void {
-                $worker = Worker::find($arguments['worker_id'] ?? null);
+                $workerId = $arguments['worker_id'] ?? null;
+                $worker = Worker::find($workerId);
+                $hasActiveDeployment = $worker?->hasActiveDeployment() ?? false;
 
-                if (! $worker || ! $worker->hasActiveDeployment()) {
+                if (! $worker || ! $hasActiveDeployment) {
+                    logger()->warning('Dashboard submit monitoring report failed due to invalid worker state.', [
+                        'worker_id' => $workerId,
+                        'user_id' => auth()->id(),
+                        'worker_exists' => (bool) $worker,
+                        'has_active_deployment' => $hasActiveDeployment,
+                    ]);
+
                     Notification::make()
                         ->title('Error')
                         ->body('Worker not found or not currently deployed.')
