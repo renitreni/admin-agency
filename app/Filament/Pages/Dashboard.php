@@ -42,16 +42,16 @@ class Dashboard extends BaseDashboard
                 $workerId = $arguments['worker_id'] ?? null;
 
                 if (blank($workerId)) {
-                    return 'Submit a monitoring report on behalf of this worker.';
+                    return 'Submit a monitoring report on behalf of this worker.' . json_encode($arguments);
                 }
 
                 $worker = Worker::find($workerId);
 
                 if (! $worker) {
-                    return 'Submit a monitoring report on behalf of this worker.';
+                    return 'Submit a monitoring report on behalf of this worker.'. json_encode($arguments);
                 }
 
-                return "Submit a monitoring report on behalf of {$worker->fullname}.";
+                return "Submit a monitoring report on behalf of {$worker->fullname}." . json_encode($arguments);
             })
             ->modalSubmitActionLabel('Submit Report')
             ->form([
