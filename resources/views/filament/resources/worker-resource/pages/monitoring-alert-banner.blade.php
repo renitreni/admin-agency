@@ -41,7 +41,7 @@
                         @if (!empty($showSubmitReportButton))
                             <button
                                 type="button"
-                                wire:click="mountAction('submitMonitoringReport', { 'worker_id': {{ $worker->id }} })"
+                                wire:click="mountAction('submitMonitoringReport', ['worker_id' => 47])"
                                 class="mt-2 inline-flex items-center gap-1 rounded-md bg-primary-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                                     <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />

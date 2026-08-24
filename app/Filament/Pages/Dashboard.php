@@ -54,6 +54,14 @@ class Dashboard extends BaseDashboard
                 return "Submit a monitoring report on behalf of {$worker->fullname}.";
             })
             ->modalSubmitActionLabel('Submit Report')
+            ->modalSubmitAction(function (\Filament\Actions\StaticAction $action, array $arguments): \Filament\Actions\StaticAction {
+                $workerExists = Worker::query()->whereKey($arguments['worker_id'] ?? null)->exists();
+
+                return $action->disabled(! $workerExists);
+            })
+            ->disabledForm(function (array $arguments): bool {
+                return ! Worker::query()->whereKey($arguments['worker_id'] ?? null)->exists();
+            })
             ->form([
                 Textarea::make('report')
                     ->label('Report')
