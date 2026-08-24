@@ -30,6 +30,14 @@
                         @endif
                         Please follow up immediately.
 
+                        @if (!empty($showWorkerLink))
+                            <a
+                                href="{{ \App\Filament\Resources\WorkerResource::getUrl('edit', ['record' => $worker]) }}"
+                                class="ml-2 inline-flex items-center rounded bg-danger-100 px-2 py-0.5 text-xs font-medium text-danger-700 hover:bg-danger-200">
+                                View Worker →
+                            </a>
+                        @endif
+
                         @if (!empty($showSubmitReportButton))
                             <button
                                 type="button"
