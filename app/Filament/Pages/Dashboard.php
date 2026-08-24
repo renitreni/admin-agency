@@ -29,6 +29,14 @@ class Dashboard extends BaseDashboard
         return view('filament.pages.dashboard-header', $alerts);
     }
 
+    protected $listeners = ['open-monitoring-report-modal' => 'openReportModal'];
+
+    public function openReportModal(array $data): void
+    {
+        $this->mountAction('submitMonitoringReport', ['worker_id' => $data['worker_id']]);
+    }
+
+
     /**
      * Filament Action: Submit a monitoring report on behalf of a worker.
      * This action is visible only to agency and superadmin users (non-FRA).
@@ -70,7 +78,7 @@ class Dashboard extends BaseDashboard
                     ->maxLength(10000)
                     ->rows(4),
             ])
-            ->arguments(['worker_id' => null])
+
             ->visible(function (): bool {
                 $user = auth()->user();
 
