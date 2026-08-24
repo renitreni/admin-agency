@@ -3,7 +3,7 @@
      - Workers with previous reports: Show alert after config('monitoring.subsequent_report_threshold_days', 15) days without a report
 -->
 <div class="monitoring-alert-banner rounded-lg bg-danger-50 p-4 text-danger-600">
-    <p class="text-base font-bold">⚠ Monitoring Alert</p>
+    <p class="text-base font-bold">Monitoring Alert</p>
 
     <div class="mt-2 space-y-1 text-sm font-medium">
         <div class="carousel-container overflow-hidden relative" style="min-height: 40px;">
