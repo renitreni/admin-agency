@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Dashboard monitoring modal context.** The `submitMonitoringReport` action modal on the Filament dashboard now includes the selected worker's `fullname` in the modal description when available, with a safe fallback message when the worker cannot be resolved.
 
+### Fixed
+
+- **Dashboard modal SQL error for worker name lookup.** Replaced a direct `value('fullname')` query (invalid because `fullname` is an accessor, not a database column) with guarded model resolution using `worker_id` and accessor-based display (`$worker->fullname`), preventing `Unknown column 'fullname'` exceptions.
+
 ## [0.1.0] - 2026-08-24
 
 ### Added

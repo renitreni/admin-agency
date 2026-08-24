@@ -39,15 +39,19 @@ class Dashboard extends BaseDashboard
             ->label('Submit Report')
             ->modalHeading('Submit Monitoring Report')
             ->modalDescription(function (array $arguments): string {
-                $workerName = Worker::query()
-                    ->whereKey($arguments['worker_id'] ?? null)
-                    ->value('fullname');
+                $workerId = $arguments['worker_id'] ?? null;
 
-                if (blank($workerName)) {
+                if (blank($workerId)) {
                     return 'Submit a monitoring report on behalf of this worker.';
                 }
 
-                return "Submit a monitoring report on behalf of {$workerName}.";
+                $worker = Worker::find($workerId);
+
+                if (! $worker) {
+                    return 'Submit a monitoring report on behalf of this worker.';
+                }
+
+                return "Submit a monitoring report on behalf of {$worker->fullname}.";
             })
             ->modalSubmitActionLabel('Submit Report')
             ->form([
