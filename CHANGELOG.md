@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Dashboard monitoring modal context.** The `submitMonitoringReport` action modal on the Filament dashboard now includes the selected worker's `fullname` in the modal description when available, with a safe fallback message when the worker cannot be resolved.
+
 ## [0.1.0] - 2026-08-24
 
 ### Added
