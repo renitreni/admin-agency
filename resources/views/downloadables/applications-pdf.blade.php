@@ -19,7 +19,7 @@
     <tbody>
         @foreach ($records as $record)
             <tr>
-                <td>{{ $record->jobPost->title ?? 'None' }}</td>
+                <td>{{ $record->jobPost->title ?? 'General CV submission' }}</td>
                 <td>{{ $record->first_name }}</td>
                 <td>{{ $record->last_name }}</td>
                 <td>{{ $record->middle_name }}</td>

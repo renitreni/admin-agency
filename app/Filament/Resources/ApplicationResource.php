@@ -40,7 +40,7 @@ class ApplicationResource extends BaseResource
         return $table
             ->defaultSort('id', 'desc')
             ->columns([
-                TextColumn::make('jobPost.title')->label('Position Applied')->sortable()->searchable(),
+                TextColumn::make('jobPost.title')->default('General CV submission')->label('Position Applied')->sortable()->searchable(),
                 TextColumn::make('id')->sortable()->searchable(),
                 TextColumn::make('first_name')->sortable()->searchable(),
                 TextColumn::make('last_name')->sortable()->searchable(),
@@ -52,7 +52,7 @@ class ApplicationResource extends BaseResource
                 //
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -103,7 +103,7 @@ class ApplicationResource extends BaseResource
                 TextEntry::make('middle_name'),
                 TextEntry::make('contact_number'),
                 TextEntry::make('email'),
-                TextEntry::make('jobPost.title'),
+                TextEntry::make('jobPost.title')->default('General CV submission')->label('Position Applied'),
                 TextEntry::make('cover_letter')
                     ->columnSpanFull(),
             ]);

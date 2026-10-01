@@ -29,6 +29,12 @@ return [
     */
 
     'disks' => [
+        'private_cv' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private/cvs'),
+            'visibility' => 'private',
+            'throw' => true,
+        ],
 
         'local' => [
             'driver' => 'local',

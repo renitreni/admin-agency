@@ -17,17 +17,25 @@ class ApplicationController extends Controller
 
     public function store(ApplicationStoreRequest $request, Agency $agency)
     {
-        $jobId = JobPost::where('uuid', $request->get('job_id'))->first();
+        $job = $request->filled('job_id')
+            ? $agency->jobPosts()->published()->where('uuid', $request->input('job_id'))->firstOrFail()
+            : null;
 
-        $application = NewApplicationAction::process($request, $agency, $jobId->id ?? null);
-
-        return response()->json($application);
+        return $this->submit($request, $agency, $job);
     }
 
     public function storeWithJob(ApplicationStoreRequest $request, Agency $agency, JobPost $jobPost)
     {
-        $application = NewApplicationAction::process($request, $agency, $jobPost->id);
+        return $this->submit($request, $agency, $jobPost);
+    }
 
-        return response()->json($application);
+    private function submit(ApplicationStoreRequest $request, Agency $agency, ?JobPost $job)
+    {
+        $application = NewApplicationAction::process($request, $agency, $job?->id);
+
+        return response()->json([
+            'message' => 'Your CV has been submitted. Our recruitment team will contact you if there is a suitable opportunity.',
+            'application_id' => $application->id,
+        ], 201);
     }
 }

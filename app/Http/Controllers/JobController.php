@@ -13,7 +13,7 @@ class JobController extends Controller
     {
         $jobPost = JobPost::where('agency_id', $agency->id)
             ->published()
-            ->paginate(10);
+            ->orderByDesc('id')->paginate(10);
 
         return JobPostResource::collection($jobPost);
     }

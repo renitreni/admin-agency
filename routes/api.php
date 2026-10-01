@@ -18,8 +18,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('api')->prefix('v1')->group(function () {
     Route::apiResource('application', ApplicationController::class)->only('index');
-    Route::post('/application/{agency}', [ApplicationController::class, 'store']);
-    Route::post('/application/{agency}/job/{jobPost}', [ApplicationController::class, 'storeWithJob'])->name('application.store.job');
+    Route::post('/application/{agency}', [ApplicationController::class, 'store'])->middleware('throttle:applications');
+    Route::post('/application/{agency}/job/{jobPost}', [ApplicationController::class, 'storeWithJob'])->middleware('throttle:applications')->name('application.store.job');
 
     Route::apiResource('job-post/{agency}', JobController::class)->only('index');
     Route::get('/job-post/get/{jobPost}', [JobController::class, 'show']);

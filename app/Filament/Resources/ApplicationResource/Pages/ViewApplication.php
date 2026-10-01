@@ -19,8 +19,7 @@ class ViewApplication extends ViewRecord
             Action::make('download')
                 ->label('Download CV')
                 ->icon('heroicon-m-arrow-down-tray')
-                ->requiresConfirmation()
-                ->action(fn (Application $record) => redirect()->to($record->getFirstMediaUrl('*'))),
+                ->url(fn (Application $record) => route('applications.resume.download', ['agency' => $record->agency, 'application' => $record])),
         ];
     }
 }

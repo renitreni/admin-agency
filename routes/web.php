@@ -30,6 +30,9 @@ Route::get('/storage/{path}', function (string $path) {
     return response()->file(Storage::disk('public')->path($path));
 })->where('path', '.*')->name('storage.serve');
 
+Route::get('/admin/{agency}/applications/{application}/resume', \App\Http\Controllers\ApplicationResumeController::class)
+    ->middleware('auth')->name('applications.resume.download');
+
 Route::get('/complaints', [ComplaintController::class, 'show'])->name('complaints.form');
 Route::post('/complaints', [ComplaintController::class, 'store'])->middleware('throttle:complaints')->name('complaints.store');
 
