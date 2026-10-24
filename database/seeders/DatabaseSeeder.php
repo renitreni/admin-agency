@@ -93,5 +93,8 @@ class DatabaseSeeder extends Seeder
 
             $this->call([MonitoringSeeder::class, DeploymentSeeder::class]);
         }
+
+        // NEW: Add the 3 agencies from license documents (runs in all environments)
+        $this->call(NewAgenciesSeeder::class);
     }
 }
