@@ -33,8 +33,8 @@ Route::get('/storage/{path}', function (string $path) {
 Route::get('/admin/{agency}/applications/{application}/resume', \App\Http\Controllers\ApplicationResumeController::class)
     ->middleware('auth')->name('applications.resume.download');
 
-Route::get('/complaints', [ComplaintController::class, 'show'])->name('complaints.form');
-Route::post('/complaints', [ComplaintController::class, 'store'])->middleware('throttle:complaints')->name('complaints.store');
+Route::get('/complaints/{agency}', [ComplaintController::class, 'show'])->name('complaints.form');
+Route::post('/complaints/{agency}', [ComplaintController::class, 'store'])->middleware('throttle:complaints')->name('complaints.store');
 
 Route::middleware('monitoring.locale')->group(function () {
     Route::get('/monitoring/login', [MonitoringController::class, 'showLogin'])->name('monitoring.login.show');

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Agency;
 use App\Models\Complaint;
 use Illuminate\Database\Seeder;
 
@@ -12,8 +13,12 @@ class ComplaintSeeder extends Seeder
      */
     public function run(): void
     {
+        // Get the Yaramay agency created in DatabaseSeeder
+        $agency = Agency::where('name', 'Yaramay')->first();
+
         $complaints = [
             [
+                'agency_uuid' => $agency?->uuid,
                 'foreign_recruitment_agency' => 'Global Manpower Solutions Inc.',
                 'ofw_full_name' => 'Maria Santos',
                 'gender' => 'female',
@@ -31,6 +36,7 @@ class ComplaintSeeder extends Seeder
                 'complaint' => 'Withheld salary for three months. Agency did not provide contract copy upon deployment.',
             ],
             [
+                'agency_uuid' => $agency?->uuid,
                 'foreign_recruitment_agency' => 'Pacific Overseas Employment',
                 'ofw_full_name' => 'Roberto Cruz',
                 'gender' => 'male',
@@ -48,6 +54,7 @@ class ComplaintSeeder extends Seeder
                 'complaint' => 'Overcharging of placement fees. Working conditions differ from contract.',
             ],
             [
+                'agency_uuid' => $agency?->uuid,
                 'foreign_recruitment_agency' => 'Asia Pacific Recruitment Co.',
                 'ofw_full_name' => 'Lorna Dela Cruz',
                 'gender' => 'female',
@@ -65,6 +72,7 @@ class ComplaintSeeder extends Seeder
                 'complaint' => 'Agency failed to process OEC renewal on time. No support when employer changed terms.',
             ],
             [
+                'agency_uuid' => $agency?->uuid,
                 'foreign_recruitment_agency' => 'Metro International Agency',
                 'ofw_full_name' => 'Jose Ramirez',
                 'gender' => 'male',
@@ -82,6 +90,7 @@ class ComplaintSeeder extends Seeder
                 'complaint' => 'Unpaid overtime. Agency did not remit SSS and Pag-IBIG contributions.',
             ],
             [
+                'agency_uuid' => $agency?->uuid,
                 'foreign_recruitment_agency' => 'United Manpower Export',
                 'ofw_full_name' => 'Elena Reyes',
                 'gender' => 'female',

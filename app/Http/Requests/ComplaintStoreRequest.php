@@ -17,6 +17,7 @@ class ComplaintStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'agency_uuid' => 'required|uuid|exists:agencies,uuid',
             'foreign_recruitment_agency' => 'required|string|max:255',
             'ofw_full_name' => 'required|string|max:255',
             'gender' => 'required|string|in:male,female,other',
@@ -41,6 +42,7 @@ class ComplaintStoreRequest extends FormRequest
     public function attributes(): array
     {
         return [
+            'agency_uuid' => 'Agency',
             'foreign_recruitment_agency' => 'Foreign Recruitment Agency',
             'ofw_full_name' => "OFW's Full Name",
             'nation_id' => 'Nation ID',

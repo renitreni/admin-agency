@@ -37,8 +37,22 @@
                 </div>
             @endif
 
-            <form action="{{ route('complaints.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6 px-6 py-6 sm:px-8 sm:py-8">
+            {{-- Agency info display --}}
+            @isset($agency)
+                <div class="mx-6 mt-4 px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <p class="text-sm text-blue-800">
+                        <strong>Submitting for Agency:</strong> {{ $agency->name }} ({{ $agency->email }})
+                    </p>
+                </div>
+            @endisset
+
+            <form action="{{ route('complaints.store', ['agency' => $agency->uuid ?? '']) }}" method="POST" enctype="multipart/form-data" class="space-y-6 px-6 py-6 sm:px-8 sm:py-8">
                 @csrf
+
+                {{-- Agency UUID hidden field --}}
+                @isset($agency)
+                    <input type="hidden" name="agency_uuid" value="{{ $agency->uuid }}">
+                @endisset
 
                 {{-- Honeypot: hidden from users, bots often fill it --}}
                 <div class="absolute -left-[9999px] top-0" aria-hidden="true">
@@ -49,8 +63,14 @@
                 <div class="grid gap-6 sm:grid-cols-2">
                     <div class="sm:col-span-2">
                         <label for="foreign_recruitment_agency" class="block text-sm font-medium text-slate-700">Foreign Recruitment Agency *</label>
-                        <input type="text" name="foreign_recruitment_agency" id="foreign_recruitment_agency" value="{{ old('foreign_recruitment_agency') }}" required
-                            class="mt-1 block w-full rounded-lg border border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                        <input type="text" name="foreign_recruitment_agency" id="foreign_recruitment_agency" 
+                            value="{{ old('foreign_recruitment_agency', $agency->name ?? '') }}" 
+                            required
+                            @isset($agency) readonly @endisset
+                            class="mt-1 block w-full rounded-lg border border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @isset($agency) bg-slate-50 @endisset">
+                        @isset($agency)
+                            <p class="mt-1 text-xs text-slate-500">This field is pre-filled from the agency link.</p>
+                        @endisset
                     </div>
                     <div class="sm:col-span-2">
                         <label for="ofw_full_name" class="block text-sm font-medium text-slate-700">OFW's Full Name *</label>
@@ -136,7 +156,7 @@
                     <button type="submit" class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                         Submit Complaint
                     </button>
-                    <a href="{{ url('/') }}" class="text-sm text-slate-600 hover:text-slate-900">Cancel</a>
+                    <a href="{{ isset($agency) ? route('complaints.form', ['agency' => $agency->uuid]) : url('/') }}" class="text-sm text-slate-600 hover:text-slate-900">Cancel</a>
                 </div>
             </form>
         </div>

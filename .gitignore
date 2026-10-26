@@ -16,3 +16,6 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+# Server deployment details (contains credentials)
+SERVER_DEPLOYMENT_DETAILS.md
