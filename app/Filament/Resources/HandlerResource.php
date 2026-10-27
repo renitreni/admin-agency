@@ -7,9 +7,12 @@ use App\Models\Handler;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use App\Filament\Resources\BaseResource;
+use Filament\Notifications\Notification;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Collection;
 
 class HandlerResource extends BaseResource
 {
@@ -43,7 +46,34 @@ class HandlerResource extends BaseResource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->action(function (Collection $records) {
+                            $failed = [];
+                            foreach ($records as $record) {
+                                try {
+                                    $record->delete();
+                                } catch (QueryException $e) {
+                                    if ($e->getCode() === '23000') {
+                                        $failed[] = $record->name;
+                                    } else {
+                                        throw $e;
+                                    }
+                                }
+                            }
+                            if (!empty($failed)) {
+                                Notification::make()
+                                    ->danger()
+                                    ->title('Some handlers could not be deleted')
+                                    ->body('The following handlers have associated deployments: ' . implode(', ', $failed) . '. Please remove or reassign deployments first.')
+                                    ->persistent()
+                                    ->send();
+                            } else {
+                                Notification::make()
+                                    ->success()
+                                    ->title('Handlers deleted successfully')
+                                    ->send();
+                            }
+                        }),
                 ]),
             ])
             ->emptyStateActions([
