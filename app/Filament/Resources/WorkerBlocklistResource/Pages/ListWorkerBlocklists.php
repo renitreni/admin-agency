@@ -3,8 +3,8 @@
 namespace App\Filament\Resources\WorkerBlocklistResource\Pages;
 
 use App\Filament\Resources\WorkerBlocklistResource;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Tables\Actions\Action;
 use Illuminate\Support\Facades\Auth;
 
 class ListWorkerBlocklists extends ListRecords
