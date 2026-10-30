@@ -8,6 +8,7 @@ use App\Filament\Resources\WorkerDocumentResource\RelationManagers\WorkerDocumen
 use App\Filament\Resources\WorkerResource\Pages;
 use App\Filament\Resources\WorkHistoryResource\RelationManagers\WorkHistoryRelationManager;
 use App\Models\Worker;
+use App\Services\WorkerBlocklistService;
 use App\Services\WorkerService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms\Components\Actions\Action as FormAction;
@@ -23,13 +24,13 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Notifications\Notification;
-use App\Filament\Resources\BaseResource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
@@ -44,7 +45,6 @@ class WorkerResource extends BaseResource
     protected static ?string $navigationLabel = 'Assigned Workers';
 
     protected static ?int $navigationSort = 10;
-
 
     public static function getNavigationGroup(): ?string
     {
@@ -91,6 +91,48 @@ class WorkerResource extends BaseResource
         return Auth::check()
             && Auth::user() instanceof \App\Models\User
             && Auth::user()->user_type !== \App\Models\User::TYPE_FRA;
+    }
+
+    /**
+     * Check if worker matches any blocklist entries from other agencies.
+     */
+    public static function checkBlocklistMatches(Worker $worker): array
+    {
+        $service = app(WorkerBlocklistService::class);
+        $workerData = [
+            'first_name' => $worker->first_name,
+            'last_name' => $worker->last_name,
+            'middle_name' => $worker->middle_name,
+            'passport_number' => $worker->workerInformation?->passport_number,
+            'email' => $worker->workerInformation?->email,
+            'contact_number' => $worker->workerInformation?->contact_number,
+            'date_birth' => $worker->workerInformation?->date_birth,
+            'place_birth' => $worker->workerInformation?->place_birth,
+        ];
+
+        $agencyId = $worker->agency_id;
+
+        return $service->isBlocklisted($workerData, $agencyId);
+    }
+
+    /**
+     * Get blocklist badge for table display.
+     */
+    public static function getBlocklistBadge(Worker $worker): ?array
+    {
+        $result = static::checkBlocklistMatches($worker);
+
+        if ($result['is_blocklisted']) {
+            $match = $result['matches'][0] ?? null;
+            if ($match) {
+                return [
+                    'label' => 'Blocklisted by '.$match['entry']->agency->name,
+                    'confidence' => $match['confidence'],
+                ];
+            }
+        }
+
+        return null;
     }
 
     public static function form(Form $form): Form
@@ -242,6 +284,15 @@ class WorkerResource extends BaseResource
                 TextColumn::make('last_name')->sortable()->searchable(),
                 TextColumn::make('middle_name')->sortable()->searchable(),
                 TextColumn::make('agency.name')->sortable()->searchable(),
+                BadgeColumn::make('blocklist_status')
+                    ->label('Blocklist Status')
+                    ->getStateUsing(fn (Worker $record): ?array => static::getBlocklistBadge($record))
+                    ->colors([
+                        'danger' => fn ($state) => $state['confidence'] === 'high' ?? false,
+                        'warning' => fn ($state) => $state['confidence'] === 'medium' ?? false,
+                    ])
+                    ->formatStateUsing(fn ($state) => $state['label'] ?? 'Clean')
+                    ->visible(fn () => ! $isFra),
                 TextColumn::make('created_at')->dateTime(),
             ])
             ->filters([

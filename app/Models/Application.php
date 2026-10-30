@@ -24,6 +24,11 @@ class Application extends Model implements HasMedia
         'email',
         'cover_letter',
         'accepted_terms_and_condition',
+        'blocklist_matches',
+    ];
+
+    protected $casts = [
+        'blocklist_matches' => 'array',
     ];
 
     public function agency(): BelongsTo
